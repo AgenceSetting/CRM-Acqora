@@ -10,35 +10,53 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* ============================================================
-       CSS VARIABLES
+       CSS VARIABLES — Dark Premium Theme
     ============================================================ */
     :root {
-      --orange: #C94A1A;
-      --orange-mid: #E8622E;
-      --orange-light: #FDEEE7;
-      --orange-pale: #FFF8F5;
-      --dark: #141210;
-      --dark-2: #211D1A;
-      --mid: #6B5A52;
-      --gold: #D4920A;
-      --gold-light: #FDF3DC;
-      --cream: #FAF6F2;
-      --border: #E8E0D8;
-      --white: #FFFFFF;
-      --green: #166534;
-      --green-light: #DCFCE7;
-      --green-border: #86EFAC;
-      --red: #991B1B;
-      --red-light: #FEF2F2;
-      --red-border: #FECACA;
-      --blue: #1E3A5F;
-      --blue-light: #EFF6FF;
-      --blue-border: #BFDBFE;
-      --b2b: #4338CA;
-      --b2b-light: #EEF2FF;
-      --b2b-border: #C7D2FE;
-      --gray: #6B7280;
-      --gray-light: #F3F4F6;
+      /* === DARK BASE === */
+      --cream:       #08090F;       /* page background */
+      --white:       #111318;       /* card / surface */
+      --dark:        #F0F2F8;       /* primary text */
+      --dark-2:      #1D2130;
+      --mid:         #7C8298;       /* secondary text */
+      --border:      rgba(255,255,255,0.08);
+      --border-mid:  rgba(255,255,255,0.14);
+
+      /* === PRIMARY ACTION — Purple === */
+      --primary:     #7C3AED;
+      --primary-mid: #6D28D9;
+      --primary-lt:  rgba(124,58,237,0.18);
+      --primary-glow:0 0 24px rgba(124,58,237,0.35);
+
+      /* === BRAND ORANGE — B2C === */
+      --orange:      #F97316;
+      --orange-mid:  #FB923C;
+      --orange-light:rgba(249,115,22,0.12);
+      --orange-pale: rgba(249,115,22,0.06);
+
+      /* === B2B — Indigo === */
+      --b2b:        #818CF8;
+      --b2b-light:  rgba(129,140,248,0.10);
+      --b2b-border: rgba(129,140,248,0.28);
+
+      /* === STATUS COLORS === */
+      --green:       #10B981;
+      --green-light: rgba(16,185,129,0.12);
+      --green-border:rgba(16,185,129,0.30);
+      --red:         #F87171;
+      --red-light:   rgba(248,113,113,0.11);
+      --red-border:  rgba(248,113,113,0.28);
+      --gold:        #F59E0B;
+      --gold-light:  rgba(245,158,11,0.12);
+      --blue:        #60A5FA;
+      --blue-light:  rgba(96,165,250,0.10);
+      --blue-border: rgba(96,165,250,0.28);
+      --gray:        #9CA3AF;
+      --gray-light:  rgba(156,163,175,0.10);
+
+      /* === SIDEBAR === */
+      --sidebar-bg:  #07080E;
+      --sidebar-border: rgba(255,255,255,0.06);
     }
 
     /* ============================================================
@@ -63,6 +81,7 @@
       background: var(--cream);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      color-scheme: dark;
     }
 
     a {
@@ -122,22 +141,25 @@
     }
 
     .btn-primary {
-      background: var(--orange);
-      color: var(--white);
-      border-color: var(--orange);
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      box-shadow: 0 2px 12px rgba(124,58,237,0.4);
     }
     .btn-primary:hover:not(:disabled) {
-      background: var(--orange-mid);
-      border-color: var(--orange-mid);
+      background: var(--primary-mid);
+      border-color: var(--primary-mid);
+      box-shadow: 0 2px 18px rgba(124,58,237,0.55);
     }
 
     .btn-secondary {
-      background: var(--white);
+      background: rgba(255,255,255,0.06);
       color: var(--dark);
       border-color: var(--border);
     }
     .btn-secondary:hover:not(:disabled) {
-      background: var(--cream);
+      background: rgba(255,255,255,0.1);
+      border-color: var(--border-mid);
     }
 
     .btn-ghost {
@@ -146,7 +168,7 @@
       border-color: transparent;
     }
     .btn-ghost:hover:not(:disabled) {
-      background: var(--cream);
+      background: rgba(255,255,255,0.06);
       color: var(--dark);
     }
 
@@ -156,17 +178,18 @@
       border-color: var(--red-border);
     }
     .btn-danger:hover:not(:disabled) {
-      background: var(--red-border);
+      background: rgba(248,113,113,0.22);
     }
 
     .btn-b2b {
       background: var(--b2b);
-      color: var(--white);
+      color: #08090F;
       border-color: var(--b2b);
+      box-shadow: 0 2px 12px rgba(129,140,248,0.35);
     }
     .btn-b2b:hover:not(:disabled) {
-      background: #3730A3;
-      border-color: #3730A3;
+      background: #6366F1;
+      border-color: #6366F1;
     }
 
     .btn-sm {
@@ -212,7 +235,7 @@
     .badge-interesse {
       background: var(--gold-light);
       color: var(--gold);
-      border-color: #FCD34D;
+      border-color: rgba(245,158,11,0.3);
     }
     .badge-client_actif {
       background: var(--green-light);
@@ -222,7 +245,7 @@
     .badge-client_pause {
       background: var(--orange-light);
       color: var(--orange);
-      border-color: #FCA17D;
+      border-color: rgba(249,115,22,0.3);
     }
     .badge-perdu {
       background: var(--red-light);
@@ -234,7 +257,7 @@
     .badge-nouveau {
       background: var(--orange-light);
       color: var(--orange);
-      border-color: #FCA17D;
+      border-color: rgba(249,115,22,0.3);
     }
     .badge-en_cours {
       background: var(--blue-light);
@@ -249,12 +272,12 @@
     .badge-partiellement_qualifie {
       background: var(--gold-light);
       color: var(--gold);
-      border-color: #FCD34D;
+      border-color: rgba(245,158,11,0.3);
     }
     .badge-non_qualifie {
       background: var(--gray-light);
       color: var(--gray);
-      border-color: #D1D5DB;
+      border-color: rgba(156,163,175,0.25);
     }
     .badge-livre {
       background: var(--b2b-light);
@@ -281,9 +304,10 @@
        SIDEBAR
     ============================================================ */
     #sidebar {
-      width: 240px;
-      min-width: 240px;
-      background: var(--dark);
+      width: 242px;
+      min-width: 242px;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--sidebar-border);
       display: flex;
       flex-direction: column;
       height: 100vh;
@@ -348,13 +372,15 @@
     }
 
     .nav-item.active {
-      background: var(--orange);
-      color: var(--white);
-      font-weight: 500;
+      background: var(--primary-lt);
+      color: #C4B5FD;
+      font-weight: 600;
+      border-left: 2px solid var(--primary);
+      padding-left: calc(1.4rem - 2px);
     }
 
     .nav-item.active:hover {
-      background: var(--orange-mid);
+      background: rgba(124,58,237,0.25);
     }
 
     .nav-icon {
@@ -371,7 +397,7 @@
 
     .nav-badge {
       background: var(--orange);
-      color: var(--white);
+      color: #fff;
       font-family: 'DM Mono', monospace;
       font-size: 10px;
       font-weight: 500;
@@ -441,7 +467,8 @@
     #header {
       height: 58px;
       min-height: 58px;
-      background: var(--white);
+      background: rgba(17,19,24,0.92);
+      backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -571,12 +598,17 @@
        KPI CARDS
     ============================================================ */
     .kpi-card {
-      background: var(--white);
+      background: linear-gradient(135deg, #141720 0%, #0F1117 100%);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1.1rem;
+      border-radius: 8px;
+      padding: 1.25rem;
       position: relative;
       overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--border-mid);
     }
 
     .kpi-card::before {
@@ -586,6 +618,21 @@
       top: 0;
       bottom: 0;
       width: 3px;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .kpi-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: var(--card-glow, transparent);
+      filter: blur(30px);
+      opacity: 0.35;
+      pointer-events: none;
     }
 
     .kpi-label {
@@ -618,7 +665,7 @@
     .tbl-wrap {
       overflow-x: auto;
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: 8px;
       background: var(--white);
     }
 
@@ -634,8 +681,8 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--mid);
-      background: var(--cream);
-      padding: 9px 14px;
+      background: rgba(255,255,255,0.03);
+      padding: 10px 14px;
       text-align: left;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
@@ -646,6 +693,7 @@
       font-size: 13.5px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
+      color: var(--dark);
     }
 
     .tbl tr:last-child td {
@@ -658,7 +706,7 @@
     }
 
     .tbl tbody tr:hover {
-      background: var(--orange-pale);
+      background: rgba(124,58,237,0.05);
     }
 
     /* ============================================================
@@ -690,9 +738,9 @@
       align-items: center;
       gap: 8px;
       padding: 10px 12px;
-      background: var(--cream);
+      background: rgba(255,255,255,0.03);
       border: 1px solid var(--border);
-      border-radius: 4px 4px 0 0;
+      border-radius: 6px 6px 0 0;
       border-bottom: none;
     }
 
@@ -720,26 +768,25 @@
       flex-direction: column;
       gap: 0.6rem;
       padding: 0.6rem;
-      background: rgba(232,224,216,0.25);
+      background: rgba(255,255,255,0.02);
       border: 1px solid var(--border);
       border-top: none;
-      border-radius: 0 0 4px 4px;
+      border-radius: 0 0 6px 6px;
       min-height: 60px;
     }
 
     .kanban-card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: 6px;
       padding: 1rem;
       cursor: pointer;
-      transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
 
     .kanban-card:hover {
-      background: var(--orange-pale);
-      border-color: #FABBAA;
-      box-shadow: 0 2px 8px rgba(201,74,26,0.08);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary), 0 4px 16px rgba(124,58,237,0.15);
     }
 
     .kanban-card-title {
@@ -882,12 +929,12 @@
     }
 
     .crit-item:not(.checked) {
-      background: var(--cream);
+      background: rgba(255,255,255,0.03);
     }
 
     .crit-item:not(.checked):hover {
-      background: var(--orange-pale);
-      border-color: #FABBAA;
+      background: var(--primary-lt);
+      border-color: rgba(124,58,237,0.3);
     }
 
     .crit-icon {
@@ -933,7 +980,8 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(20,18,16,0.6);
+      background: rgba(4,5,10,0.8);
+      backdrop-filter: blur(4px);
       z-index: 400;
       display: none;
       align-items: center;
@@ -946,8 +994,10 @@
     }
 
     .modal {
-      background: var(--white);
-      border-radius: 4px;
+      background: #141720;
+      border: 1px solid var(--border-mid);
+      border-radius: 10px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
       padding: 1.5rem;
       width: 90%;
       max-width: 520px;
@@ -994,7 +1044,7 @@
     }
 
     .modal-close:hover {
-      background: var(--cream);
+      background: rgba(255,255,255,0.08);
       color: var(--dark);
     }
 
@@ -1028,32 +1078,40 @@
       width: 100%;
       padding: 8px 11px;
       border: 1px solid var(--border);
-      border-radius: 4px;
-      background: var(--white);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
       color: var(--dark);
       font-size: 13.5px;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
       outline: none;
     }
 
     .input::placeholder {
-      color: rgba(107,90,82,0.45);
+      color: var(--mid);
+      opacity: 0.6;
     }
 
     .input:focus,
     .select:focus,
     .textarea:focus {
-      border-color: var(--orange);
-      box-shadow: 0 0 0 3px rgba(201,74,26,0.1);
+      border-color: var(--primary);
+      background: rgba(124,58,237,0.06);
+      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
     }
 
     .select {
       appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236B5A52' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%237C8298' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 10px center;
+      background-color: rgba(255,255,255,0.04);
       padding-right: 28px;
       cursor: pointer;
+    }
+
+    .select option {
+      background: #1A1D28;
+      color: var(--dark);
     }
 
     .textarea {
@@ -1086,11 +1144,12 @@
     }
 
     .toast {
-      background: var(--white);
+      background: #1A1D28;
+      border: 1px solid var(--border-mid);
       border-left: 3px solid var(--orange);
-      border-radius: 4px;
-      padding: 0.8rem 1rem;
-      box-shadow: 0 4px 16px rgba(20,18,16,0.15);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
       min-width: 260px;
       max-width: 360px;
       animation: slide-in 0.25s ease-out;
@@ -1268,6 +1327,7 @@
       font-weight: 800;
       font-size: 16px;
       color: var(--dark);
+      letter-spacing: -.01em;
     }
 
     .section-actions {
@@ -1283,7 +1343,7 @@
     .card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: 8px;
       padding: 1.25rem;
     }
 
@@ -1415,8 +1475,8 @@
     }
 
     .tab-btn.active {
-      color: var(--orange);
-      border-bottom-color: var(--orange);
+      color: #C4B5FD;
+      border-bottom-color: var(--primary);
       font-weight: 600;
     }
 
@@ -1471,20 +1531,21 @@
       font-size: 12.5px;
       font-weight: 500;
       color: var(--mid);
-      background: var(--white);
+      background: rgba(255,255,255,0.04);
       cursor: pointer;
       transition: background 0.12s, color 0.12s, border-color 0.12s;
     }
 
     .filter-chip:hover {
-      background: var(--cream);
+      background: rgba(255,255,255,0.08);
       color: var(--dark);
+      border-color: var(--border-mid);
     }
 
     .filter-chip.active {
-      background: var(--orange);
-      color: var(--white);
-      border-color: var(--orange);
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
     }
 
     /* ============================================================
@@ -1526,16 +1587,17 @@
     .setter-card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1.1rem 1.25rem;
+      border-radius: 10px;
+      padding: 1.25rem;
       display: flex;
       align-items: center;
       gap: 1rem;
-      transition: border-color 0.12s;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
 
     .setter-card:hover {
-      border-color: var(--orange);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-lt), 0 4px 20px rgba(124,58,237,0.12);
     }
 
     .setter-avatar {
@@ -1576,24 +1638,24 @@
     .rdv-card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 4px;
+      border-radius: 8px;
       padding: 1rem 1.25rem;
       display: flex;
       align-items: flex-start;
       gap: 1rem;
       cursor: pointer;
-      transition: background 0.12s, border-color 0.12s;
+      transition: border-color 0.15s, box-shadow 0.15s;
     }
 
     .rdv-card:hover {
-      background: var(--orange-pale);
-      border-color: #FABBAA;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary-lt);
     }
 
     .rdv-date-badge {
       background: var(--orange-light);
       color: var(--orange);
-      border-radius: 4px;
+      border-radius: 6px;
       padding: 6px 10px;
       text-align: center;
       flex-shrink: 0;
@@ -1748,8 +1810,9 @@
        SIDEBAR
   ============================================================ -->
   <div id="sidebar">
-    <div class="sidebar-brand">
-      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);letter-spacing:-0.02em">acqora.</span>
+    <div class="sidebar-brand" style="background:linear-gradient(135deg,rgba(124,58,237,0.15) 0%,transparent 100%);padding:1.4rem 1.4rem 1.1rem">
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#fff;letter-spacing:-0.03em">acqora<span style="color:var(--primary)">.</span></span>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px">CRM · LEAD PLATFORM</div>
     </div>
     <nav class="sidebar-nav">
       <div class="nav-sep">OPÉRATIONS</div>
@@ -1779,7 +1842,11 @@
         <span class="nav-icon">⚙️</span><span class="nav-label">Paramètres</span>
       </a>
     </nav>
-    <div class="sidebar-footer">
+    <div class="sidebar-footer" style="padding:0.85rem 1.4rem 1rem;display:flex;flex-direction:column;gap:0.65rem">
+      <!-- Bouton déconnexion -->
+      <button onclick="logoutSetter()" id="sidebar-logout-btn" style="display:none;width:100%;padding:9px 14px;background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.2);border-radius:7px;color:#F87171;font-size:12.5px;font-weight:600;cursor:pointer;text-align:left;transition:background .15s" onmouseenter="this.style.background='rgba(248,113,113,0.18)'" onmouseleave="this.style.background='rgba(248,113,113,0.1)'">
+        <span id="sidebar-logout-label">↩ Déconnexion</span>
+      </button>
       <div class="sidebar-status">
         <div class="status-dot" id="status-dot"></div>
         <span class="status-text" id="status-text">CONNEXION...</span>
@@ -1838,7 +1905,7 @@
   </div>
 
   <!-- Panel backdrop -->
-  <div id="panel-backdrop" class="hidden" onclick="closePanels()" style="position:fixed;inset:0;background:rgba(20,18,16,.35);z-index:299"></div>
+  <div id="panel-backdrop" class="hidden" onclick="closePanels()" style="position:fixed;inset:0;background:rgba(4,5,10,.65);backdrop-filter:blur(4px);z-index:299"></div>
 
   <!-- ============================================================
        MODAL — ADD B2B CLIENT
@@ -2061,6 +2128,51 @@
   </div>
 
   <!-- ============================================================
+       MODAL — EDIT SETTER
+  ============================================================ -->
+  <div id="modal-edit-setter" class="modal-backdrop">
+    <div class="modal" style="max-width:440px">
+      <div class="modal-header">
+        <span class="modal-title">✏️ Modifier le setter</span>
+        <button class="modal-close" onclick="closeModal('modal-edit-setter')">✕</button>
+      </div>
+      <input type="hidden" id="edit-s-id" />
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Prénom *</label><input class="input" id="edit-s-prenom" /></div>
+        <div class="form-group"><label class="form-label">Nom *</label><input class="input" id="edit-s-nom" /></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="input" id="edit-s-email" type="email" /></div>
+        <div class="form-group"><label class="form-label">Téléphone</label><input class="input" id="edit-s-tel" /></div>
+        <div class="form-group"><label class="form-label">Pôle</label>
+          <select class="select" id="edit-s-pole">
+            <option value="b2c">B2C</option>
+            <option value="b2b">B2B</option>
+            <option value="both">Les deux</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Rôle</label>
+          <select class="select" id="edit-s-role">
+            <option value="setter">Setter</option>
+            <option value="closer">Closer</option>
+            <option value="manager">Manager</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Nouveau mot de passe <span style="color:var(--mid)">(laisser vide = inchangé)</span></label>
+          <input class="input" id="edit-s-password" type="password" placeholder="••••••••" autocomplete="new-password" />
+        </div>
+        <div class="form-group" style="grid-column:1/-1;flex-direction:row;align-items:center;gap:.75rem">
+          <input type="checkbox" id="edit-s-actif" style="width:16px;height:16px;accent-color:var(--primary);cursor:pointer" />
+          <label for="edit-s-actif" class="form-label" style="cursor:pointer;text-transform:none;font-size:13px;letter-spacing:0">Setter actif</label>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-edit-setter')">Annuler</button>
+        <button class="btn btn-primary" onclick="updateSetter()">💾 Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
        TOASTS
   ============================================================ -->
   <div class="toast-container" id="toasts"></div>
@@ -2072,13 +2184,16 @@
 <!-- ============================================================
      LOGIN OVERLAY (z-index 2000, above everything)
 ============================================================ -->
-<div id="login-overlay" style="display:none;position:fixed;inset:0;background:var(--cream);z-index:2000;align-items:center;justify-content:center">
-  <div style="width:100%;max-width:400px;padding:1.5rem">
-    <div style="text-align:center;margin-bottom:2rem">
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:38px;color:var(--orange);letter-spacing:-.02em;margin-bottom:.35rem">acqora.</div>
-      <div style="font-size:11px;color:var(--mid);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em">CRM — Connexion équipe</div>
+<div id="login-overlay" style="display:none;position:fixed;inset:0;background:#07080E;z-index:2000;align-items:center;justify-content:center;overflow:auto">
+  <!-- Background glow -->
+  <div style="position:absolute;top:20%;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,0.18) 0%,transparent 70%);pointer-events:none"></div>
+
+  <div style="width:100%;max-width:400px;padding:2rem;position:relative;z-index:1">
+    <div style="text-align:center;margin-bottom:2.5rem">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:42px;color:#fff;letter-spacing:-.03em;margin-bottom:.5rem">acqora<span style="color:#7C3AED">.</span></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.14em">LEAD PLATFORM · CONNEXION</div>
     </div>
-    <div class="card" style="padding:1.5rem;box-shadow:0 4px 24px rgba(20,18,16,.08)">
+    <div style="background:#141720;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:2rem;box-shadow:0 32px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(124,58,237,0.15)">
       <div class="form-group mb-2">
         <label class="form-label">Email</label>
         <input class="input" id="login-email" type="email" placeholder="prenom@acqora.fr" autocomplete="email" />
@@ -2088,12 +2203,12 @@
         <input class="input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"
           onkeydown="if(event.key==='Enter')doLogin()" />
       </div>
-      <div id="login-error" style="display:none;padding:.6rem .75rem;background:var(--red-light);border:1px solid var(--red-border);border-radius:4px;font-size:12.5px;color:var(--red);margin-bottom:.75rem"></div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;font-size:14px"
+      <div id="login-error" style="display:none;padding:.65rem .8rem;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.25);border-radius:7px;font-size:12.5px;color:#F87171;margin-bottom:.85rem"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:14.5px;border-radius:8px;letter-spacing:.01em"
         onclick="doLogin()" id="login-btn">Se connecter →</button>
     </div>
-    <p style="text-align:center;color:var(--mid);font-size:10px;margin-top:1rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
-      Usage interne uniquement
+    <p style="text-align:center;color:rgba(255,255,255,.2);font-size:9.5px;margin-top:1.25rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em">
+      Acqora · Usage interne uniquement
     </p>
   </div>
 </div>
@@ -2454,30 +2569,46 @@ function logoutSetter() {
   state.currentSetter = null
   state.b2cMyLeadsOnly = false
   localStorage.removeItem('crm_setter')
+  const logoutBtn = document.getElementById('sidebar-logout-btn')
+  if (logoutBtn) logoutBtn.style.display = 'none'
+  const el = document.getElementById('header-setter-info')
+  if (el) el.innerHTML = `<div class="header-avatar" style="background:rgba(255,255,255,.08);color:var(--mid)">?</div>`
   showLoginOverlay()
 }
 
 function updateHeaderSetter() {
   const setter = state.currentSetter
   const el = document.getElementById('header-setter-info')
+  const logoutBtn = document.getElementById('sidebar-logout-btn')
+  const logoutLabel = document.getElementById('sidebar-logout-label')
+
   if (!el) return
+
   if (!setter) {
-    el.innerHTML = `<div class="header-avatar" id="header-avatar-text">?</div>`
+    el.innerHTML = `<div class="header-avatar" id="header-avatar-text" style="background:rgba(255,255,255,.08);color:var(--mid)">?</div>`
+    if (logoutBtn) logoutBtn.style.display = 'none'
     return
   }
+
   const ini = ((setter.prenom||'?')[0] + (setter.nom||'?')[0]).toUpperCase()
-  const roleColors = { admin:'#C94A1A', manager:'#4338CA', setter:'#166534', closer:'#D4920A' }
-  const color = roleColors[setter.role] || 'var(--orange)'
+  const roleColors = { admin:'#F97316', manager:'#7C3AED', setter:'#10B981', closer:'#F59E0B' }
+  const color = roleColors[setter.role] || '#7C3AED'
+
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:8px">
-      <div style="width:30px;height:30px;border-radius:50%;background:${color};color:white;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;flex-shrink:0" title="${escHtml(setter.prenom)} ${escHtml(setter.nom)}">${ini}</div>
-      <div style="line-height:1.25">
-        <div style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,.92)">${escHtml(setter.prenom)}</div>
-        <div style="font-size:10px;color:rgba(255,255,255,.45);font-family:'DM Mono',monospace;text-transform:uppercase">${setter.role}</div>
+      <div style="width:32px;height:32px;border-radius:8px;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;flex-shrink:0;box-shadow:0 2px 8px ${color}55" title="${escHtml(setter.prenom)} ${escHtml(setter.nom)}">${ini}</div>
+      <div style="line-height:1.3">
+        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.92)">${escHtml(setter.prenom)}</div>
+        <div style="font-size:9.5px;color:rgba(255,255,255,.38);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em">${setter.role}</div>
       </div>
-      <button onclick="logoutSetter()" title="Déconnexion" style="padding:3px 7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.5);font-size:11px;cursor:pointer;margin-left:2px">↩</button>
     </div>
   `
+
+  // Afficher bouton déconnexion dans sidebar footer
+  if (logoutBtn) {
+    logoutBtn.style.display = 'block'
+    if (logoutLabel) logoutLabel.textContent = `↩ ${escHtml(setter.prenom)} — Déconnexion`
+  }
 }
 
 /* ============================================================
@@ -2530,8 +2661,8 @@ function renderDashboard() {
 
   el.innerHTML = `
     <div class="grid-4 mb-3">
-      <div class="kpi-card" style="--accent:var(--b2b)">
-        <style>.kpi-card:nth-child(1)::before{background:var(--b2b)}.kpi-card:nth-child(2)::before{background:var(--orange)}.kpi-card:nth-child(3)::before{background:var(--green)}.kpi-card:nth-child(4)::before{background:var(--gold)}</style>
+      <div class="kpi-card" style="--card-glow:var(--b2b)">
+        <style>.kpi-card:nth-child(1)::before{background:var(--b2b)}.kpi-card:nth-child(2)::before{background:var(--orange)}.kpi-card:nth-child(3)::before{background:var(--green)}.kpi-card:nth-child(4)::before{background:var(--gold)}.kpi-card:nth-child(1)::after{background:var(--b2b)}.kpi-card:nth-child(2)::after{background:var(--orange)}.kpi-card:nth-child(3)::after{background:var(--green)}.kpi-card:nth-child(4)::after{background:var(--gold)}</style>
         <div class="kpi-label">🏢 Prospects B2B</div>
         <div class="kpi-value">${totalB2B}</div>
         <div class="kpi-sub">à appeler / qualifier</div>
@@ -2558,7 +2689,7 @@ function renderDashboard() {
           <span class="section-title" style="color:var(--b2b)">🏢 Derniers prospects B2B</span>
           <button class="btn btn-b2b btn-sm" onclick="navigate('b2b')">Voir tout →</button>
         </div>
-        <div class="tbl-wrap" style="border-color:var(--b2b-border);background:var(--b2b-light)">
+        <div class="tbl-wrap" style="border-color:var(--b2b-border)">
           <table class="tbl">
             <thead><tr><th>Entreprise</th><th>Secteur</th><th>Statut</th><th>Entrée</th></tr></thead>
             <tbody id="dash-b2b-rows"></tbody>
@@ -2570,7 +2701,7 @@ function renderDashboard() {
           <span class="section-title" style="color:var(--orange)">🔥 Derniers leads B2C</span>
           <button class="btn btn-primary btn-sm" onclick="navigate('b2c')">Voir tout →</button>
         </div>
-        <div class="tbl-wrap" style="border-color:#FCA17D;background:var(--orange-light)">
+        <div class="tbl-wrap" style="border-color:rgba(249,115,22,0.3)">
           <table class="tbl">
             <thead><tr><th>Nom</th><th>Travaux</th><th>Statut</th><th>Entrée</th></tr></thead>
             <tbody id="dash-b2c-rows"></tbody>
@@ -2648,7 +2779,7 @@ function drawDashChart() {
     ctx.fillRect(x, 65 - h, barW, h)
   })
   ctx.globalAlpha = 1
-  ctx.fillStyle = '#6B5A52'
+  ctx.fillStyle = '#7C8298'
   ctx.font = '9px DM Mono, monospace'
   ctx.textAlign = 'center'
   labels.forEach((l,i) => {
@@ -2670,7 +2801,7 @@ const B2B_COLUMNS = [
 function renderB2B() {
   const el = document.getElementById('view-b2b')
   el.innerHTML = `
-    <div class="pole-banner" style="background:var(--b2b-light);color:var(--b2b)">
+    <div class="pole-banner" style="background:var(--b2b-light);color:var(--b2b);border:1px solid var(--b2b-border);border-radius:10px">
       <span class="pole-banner-icon">🏢</span>
       <div>
         <div class="pole-banner-title">PÔLE B2B — ACQUISITION CLIENTS ARTISANS</div>
@@ -2981,7 +3112,7 @@ function renderB2C() {
     : 0
 
   el.innerHTML = `
-    <div class="pole-banner" style="background:var(--orange-light);color:var(--orange)">
+    <div class="pole-banner" style="background:var(--orange-light);color:var(--orange);border:1px solid rgba(249,115,22,0.25);border-radius:10px">
       <span class="pole-banner-icon">🔥</span>
       <div>
         <div class="pole-banner-title">PÔLE B2C — LEADS PARTICULIERS</div>
@@ -3446,10 +3577,10 @@ async function renderSetters() {
 
   el.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
-      <h2>👤 Setters</h2>
+      <h2>👤 Équipe setters</h2>
       <button class="btn btn-primary" onclick="openModal('modal-add-setter')">➕ Ajouter setter</button>
     </div>
-    <div style="display:flex;flex-direction:column;gap:.75rem">
+    <div style="display:flex;flex-direction:column;gap:.85rem">
       ${state.setters.map(s => {
         const leadsTraites = leads.filter(l => l.setter_id === s.id).length
         const leadsQual = leads.filter(l => l.setter_id === s.id && l.statut === 'qualifie').length
@@ -3457,31 +3588,40 @@ async function renderSetters() {
         const prospectsTraites = state.clients.filter(c => c.setter_id === s.id).length
         const clientsSigne = state.clients.filter(c => c.setter_id === s.id && c.statut_client === 'client_actif').length
         const tauxSign = prospectsTraites > 0 ? Math.round(clientsSigne/prospectsTraites*100) : 0
-        const avatarColors = ['#C94A1A','#4338CA','#166534','#D4920A','#1E3A5F']
+        const avatarColors = ['#7C3AED','#F97316','#10B981','#F59E0B','#60A5FA','#F87171']
         const color = avatarColors[state.setters.indexOf(s) % avatarColors.length]
+        const isMe = state.currentSetter?.id === s.id
         return `
-          <div class="setter-card" style="border-left:3px solid ${color}">
-            <div class="setter-avatar" style="background:${color}">${initials(s.prenom,s.nom)}</div>
+          <div class="setter-card" style="border-left:3px solid ${color};${isMe ? 'box-shadow:0 0 0 1px rgba(124,58,237,0.3),0 4px 20px rgba(124,58,237,0.12)' : ''}">
+            <div class="setter-avatar" style="background:${color};border-radius:10px;width:44px;height:44px;font-size:16px">${initials(s.prenom,s.nom)}</div>
             <div class="setter-info">
-              <div class="setter-name">${escHtml(s.prenom)} ${escHtml(s.nom)}</div>
-              <div class="setter-meta">${s.role} · ${s.pole === 'both' ? 'B2B + B2C' : s.pole.toUpperCase()} · ${escHtml(s.email||'')}</div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="setter-name">${escHtml(s.prenom)} ${escHtml(s.nom)}</div>
+                ${isMe ? `<span style="font-family:'DM Mono',monospace;font-size:8px;background:var(--primary-lt);color:#C4B5FD;border:1px solid rgba(124,58,237,0.3);border-radius:10px;padding:2px 7px;text-transform:uppercase;letter-spacing:.08em">Vous</span>` : ''}
+                ${!s.actif ? `<span class="badge badge-perdu">Inactif</span>` : ''}
+              </div>
+              <div class="setter-meta">${s.role} · ${s.pole === 'both' ? 'B2B + B2C' : s.pole.toUpperCase()}${s.email ? ' · '+escHtml(s.email) : ''}</div>
             </div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-left:auto;flex-shrink:0">
               <div style="text-align:center">
                 <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--orange);letter-spacing:.07em;margin-bottom:4px">B2C</div>
-                <div style="font-size:18px;font-family:'Syne',sans-serif;font-weight:800">${leadsTraites}</div>
+                <div style="font-size:20px;font-family:'Syne',sans-serif;font-weight:800;color:var(--dark)">${leadsTraites}</div>
                 <div style="font-size:11px;color:var(--mid)">${leadsQual} qualifiés (${tauxQual}%)</div>
               </div>
               <div style="text-align:center">
                 <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--b2b);letter-spacing:.07em;margin-bottom:4px">B2B</div>
-                <div style="font-size:18px;font-family:'Syne',sans-serif;font-weight:800">${prospectsTraites}</div>
+                <div style="font-size:20px;font-family:'Syne',sans-serif;font-weight:800;color:var(--dark)">${prospectsTraites}</div>
                 <div style="font-size:11px;color:var(--mid)">${clientsSigne} signés (${tauxSign}%)</div>
               </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;margin-left:.5rem">
+              <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();editSetter('${s.id}')" title="Modifier">✏️</button>
+              <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();deleteSetter('${s.id}')" title="Supprimer"  style="${isMe?'opacity:.4;pointer-events:none':''}">🗑️</button>
             </div>
           </div>
         `
       }).join('')}
-      ${state.setters.length === 0 ? `<div class="empty-state"><div class="empty-state-icon">👤</div><div class="empty-state-title">Aucun setter</div><div class="empty-state-sub">Ajoutez votre équipe</div></div>` : ''}
+      ${state.setters.length === 0 ? `<div class="empty-state"><div class="empty-state-icon">👤</div><div class="empty-state-title">Aucun setter</div><div class="empty-state-sub">Ajoutez votre équipe ci-dessus</div></div>` : ''}
     </div>
   `
 }
@@ -3509,6 +3649,71 @@ async function submitNewSetter() {
   await reloadSetters()
   renderSetters()
   toast('👤 Setter créé', `${prenom} ${nom}`, 'success')
+}
+
+/* ============================================================
+   EDIT / DELETE SETTER
+============================================================ */
+function editSetter(id) {
+  const s = state.setters.find(x => x.id === id)
+  if (!s) return
+  document.getElementById('edit-s-id').value = id
+  document.getElementById('edit-s-prenom').value = s.prenom || ''
+  document.getElementById('edit-s-nom').value = s.nom || ''
+  document.getElementById('edit-s-email').value = s.email || ''
+  document.getElementById('edit-s-tel').value = s.telephone || ''
+  document.getElementById('edit-s-pole').value = s.pole || 'b2c'
+  document.getElementById('edit-s-role').value = s.role || 'setter'
+  document.getElementById('edit-s-password').value = ''
+  document.getElementById('edit-s-actif').checked = s.actif !== false
+  openModal('modal-edit-setter')
+}
+
+async function updateSetter() {
+  const id      = document.getElementById('edit-s-id').value
+  const prenom  = document.getElementById('edit-s-prenom').value.trim()
+  const nom     = document.getElementById('edit-s-nom').value.trim()
+  const password= document.getElementById('edit-s-password').value.trim()
+  if (!prenom || !nom) { toast('Prénom et nom requis', '', 'error'); return }
+  if (!db || !id) return
+
+  const updates = {
+    prenom, nom,
+    email:     document.getElementById('edit-s-email').value.trim() || null,
+    telephone: document.getElementById('edit-s-tel').value.trim() || null,
+    pole:      document.getElementById('edit-s-pole').value,
+    role:      document.getElementById('edit-s-role').value,
+    actif:     document.getElementById('edit-s-actif').checked,
+  }
+  if (password) updates.password = password
+
+  const { error } = await db.from('setters').update(updates).eq('id', id)
+  if (error) { toast('Erreur', error.message, 'error'); return }
+
+  // Si c'est le setter connecté, mettre à jour localStorage
+  if (state.currentSetter?.id === id) {
+    state.currentSetter = { ...state.currentSetter, ...updates }
+    localStorage.setItem('crm_setter', JSON.stringify(state.currentSetter))
+    updateHeaderSetter()
+  }
+
+  closeModal('modal-edit-setter')
+  await reloadSetters()
+  renderSetters()
+  toast('✅ Setter mis à jour', `${prenom} ${nom}`, 'success')
+}
+
+async function deleteSetter(id) {
+  const s = state.setters.find(x => x.id === id)
+  if (!s) return
+  if (!confirm(`Supprimer définitivement ${s.prenom} ${s.nom} ? Cette action est irréversible.`)) return
+  if (!db) return
+  const { error } = await db.from('setters').delete().eq('id', id)
+  if (error) { toast('Erreur', error.message, 'error'); return }
+  if (state.currentSetter?.id === id) logoutSetter()
+  await reloadSetters()
+  renderSetters()
+  toast('🗑️ Setter supprimé', `${s.prenom} ${s.nom}`, 'info')
 }
 
 /* ============================================================
@@ -3607,7 +3812,7 @@ function drawB2CChart() {
     ctx.fillRect(x, 105 - h, barW, h)
   })
   ctx.globalAlpha = 1
-  ctx.fillStyle = '#6B5A52'
+  ctx.fillStyle = '#7C8298'
   ctx.font = '8px DM Mono, monospace'
   ctx.textAlign = 'center'
   labels.forEach((l,i) => { if (l) ctx.fillText(l, gap * i + gap/2, 118) })
@@ -3635,11 +3840,11 @@ function drawFunnelChart() {
     ctx.roundRect(labelW, y, w, barH, 3)
     ctx.fill()
     ctx.globalAlpha = 1
-    ctx.fillStyle = '#141210'
+    ctx.fillStyle = '#7C8298'
     ctx.font = '10px DM Sans, sans-serif'
     ctx.textAlign = 'right'
     ctx.fillText(s.label, labelW - 6, y + 16)
-    ctx.fillStyle = '#fff'
+    ctx.fillStyle = '#F0F2F8'
     ctx.textAlign = 'left'
     ctx.fillText(s.val, labelW + w + 6, y + 16)
   })
@@ -3665,9 +3870,9 @@ function drawSettersChart() {
     ctx.globalAlpha = 0.75
     ctx.beginPath(); ctx.roundRect(labelW, y, w, barH, 3); ctx.fill()
     ctx.globalAlpha = 1
-    ctx.fillStyle = '#141210'; ctx.font = '10px DM Sans'; ctx.textAlign = 'right'
+    ctx.fillStyle = '#7C8298'; ctx.font = '10px DM Sans'; ctx.textAlign = 'right'
     ctx.fillText(s.name, labelW - 6, y + 15)
-    ctx.fillStyle = '#6B5A52'; ctx.textAlign = 'left'
+    ctx.fillStyle = '#F0F2F8'; ctx.textAlign = 'left'
     ctx.fillText(s.rate + '%', labelW + w + 6, y + 15)
   })
 }
@@ -3680,7 +3885,7 @@ function drawRDVChart(honores, noshows) {
   const cx = W/2, cy = 46, r = 38
   const total = honores + noshows
   if (total === 0) {
-    ctx.fillStyle = '#E8E0D8'; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill()
+    ctx.fillStyle = 'rgba(255,255,255,0.07)'; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill()
     return
   }
   const startAngle = -Math.PI/2
@@ -3693,8 +3898,8 @@ function drawRDVChart(honores, noshows) {
     angle += sweep
   })
   ctx.globalAlpha = 1
-  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill()
-  ctx.fillStyle = '#141210'; ctx.font = 'bold 11px DM Mono'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillStyle = '#141720'; ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill()
+  ctx.fillStyle = '#F0F2F8'; ctx.font = 'bold 11px DM Mono'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
   ctx.fillText(total > 0 ? Math.round(honores/total*100)+'%' : '—', cx, cy)
 }
 
@@ -3748,7 +3953,7 @@ function renderSettings() {
         <div style="font-size:13px;color:var(--mid);margin-bottom:.75rem">
           Exécutez ce SQL dans <strong>Supabase → SQL Editor</strong> pour ajouter les colonnes manquantes (note étoiles + statut contact client) :
         </div>
-        <pre id="sql-migration" style="background:var(--dark);color:#E2E8F0;border-radius:4px;padding:.9rem;font-family:'DM Mono',monospace;font-size:11px;overflow-x:auto;line-height:1.6">-- Colonne note étoiles sur les clients B2B
+        <pre id="sql-migration" style="background:#0A0B12;color:#C4B5FD;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:.9rem;font-family:'DM Mono',monospace;font-size:11px;overflow-x:auto;line-height:1.6">-- Colonne note étoiles sur les clients B2B
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS score_interet INTEGER DEFAULT 0;
 
 -- Colonne statut de contact côté espace client
