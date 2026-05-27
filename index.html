@@ -1,0 +1,4104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>acqora. CRM</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* ============================================================
+       CSS VARIABLES
+    ============================================================ */
+    :root {
+      --orange: #C94A1A;
+      --orange-mid: #E8622E;
+      --orange-light: #FDEEE7;
+      --orange-pale: #FFF8F5;
+      --dark: #141210;
+      --dark-2: #211D1A;
+      --mid: #6B5A52;
+      --gold: #D4920A;
+      --gold-light: #FDF3DC;
+      --cream: #FAF6F2;
+      --border: #E8E0D8;
+      --white: #FFFFFF;
+      --green: #166534;
+      --green-light: #DCFCE7;
+      --green-border: #86EFAC;
+      --red: #991B1B;
+      --red-light: #FEF2F2;
+      --red-border: #FECACA;
+      --blue: #1E3A5F;
+      --blue-light: #EFF6FF;
+      --blue-border: #BFDBFE;
+      --b2b: #4338CA;
+      --b2b-light: #EEF2FF;
+      --b2b-border: #C7D2FE;
+      --gray: #6B7280;
+      --gray-light: #F3F4F6;
+    }
+
+    /* ============================================================
+       RESET & BASE
+    ============================================================ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: 'DM Sans', system-ui, sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--dark);
+      background: var(--cream);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    input, select, textarea {
+      font-family: inherit;
+      font-size: inherit;
+    }
+
+    ul, ol {
+      list-style: none;
+    }
+
+    /* ============================================================
+       TYPOGRAPHY
+    ============================================================ */
+    h1, h2, h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 17px; }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 4px;
+      border: 1px solid transparent;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 1;
+      transition: background 0.15s, color 0.15s, border-color 0.15s, opacity 0.15s;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--orange);
+      color: var(--white);
+      border-color: var(--orange);
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: var(--orange-mid);
+      border-color: var(--orange-mid);
+    }
+
+    .btn-secondary {
+      background: var(--white);
+      color: var(--dark);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--cream);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--mid);
+      border-color: transparent;
+    }
+    .btn-ghost:hover:not(:disabled) {
+      background: var(--cream);
+      color: var(--dark);
+    }
+
+    .btn-danger {
+      background: var(--red-light);
+      color: var(--red);
+      border-color: var(--red-border);
+    }
+    .btn-danger:hover:not(:disabled) {
+      background: var(--red-border);
+    }
+
+    .btn-b2b {
+      background: var(--b2b);
+      color: var(--white);
+      border-color: var(--b2b);
+    }
+    .btn-b2b:hover:not(:disabled) {
+      background: #3730A3;
+      border-color: #3730A3;
+    }
+
+    .btn-sm {
+      padding: 5px 11px;
+      font-size: 12px;
+    }
+
+    .btn-icon {
+      padding: 7px;
+      aspect-ratio: 1;
+      justify-content: center;
+    }
+
+    /* ============================================================
+       BADGES
+    ============================================================ */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 7px;
+      border-radius: 3px;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      border: 1px solid transparent;
+    }
+
+    /* B2B client statuses */
+    .badge-prospect_b2b {
+      background: var(--b2b-light);
+      color: var(--b2b);
+      border-color: var(--b2b-border);
+    }
+    .badge-en_qualification {
+      background: var(--blue-light);
+      color: var(--blue);
+      border-color: var(--blue-border);
+    }
+    .badge-interesse {
+      background: var(--gold-light);
+      color: var(--gold);
+      border-color: #FCD34D;
+    }
+    .badge-client_actif {
+      background: var(--green-light);
+      color: var(--green);
+      border-color: var(--green-border);
+    }
+    .badge-client_pause {
+      background: var(--orange-light);
+      color: var(--orange);
+      border-color: #FCA17D;
+    }
+    .badge-perdu {
+      background: var(--red-light);
+      color: var(--red);
+      border-color: var(--red-border);
+    }
+
+    /* B2C lead statuses */
+    .badge-nouveau {
+      background: var(--orange-light);
+      color: var(--orange);
+      border-color: #FCA17D;
+    }
+    .badge-en_cours {
+      background: var(--blue-light);
+      color: var(--blue);
+      border-color: var(--blue-border);
+    }
+    .badge-qualifie {
+      background: var(--green-light);
+      color: var(--green);
+      border-color: var(--green-border);
+    }
+    .badge-partiellement_qualifie {
+      background: var(--gold-light);
+      color: var(--gold);
+      border-color: #FCD34D;
+    }
+    .badge-non_qualifie {
+      background: var(--gray-light);
+      color: var(--gray);
+      border-color: #D1D5DB;
+    }
+    .badge-livre {
+      background: var(--b2b-light);
+      color: var(--b2b);
+      border-color: var(--b2b-border);
+    }
+    .badge-injoignable {
+      background: var(--red-light);
+      color: var(--red);
+      border-color: var(--red-border);
+    }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    #app {
+      display: flex;
+      flex-direction: row;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       SIDEBAR
+    ============================================================ */
+    #sidebar {
+      width: 240px;
+      min-width: 240px;
+      background: var(--dark);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      z-index: 200;
+      transition: transform 0.25s ease;
+    }
+
+    .sidebar-brand {
+      padding: 1.25rem 1.4rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0.5rem 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.08) transparent;
+    }
+
+    .sidebar-nav::-webkit-scrollbar {
+      width: 4px;
+    }
+    .sidebar-nav::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .sidebar-nav::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+    }
+
+    .nav-sep {
+      padding: 1rem 1.4rem 0.35rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.28);
+      text-transform: uppercase;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 1.4rem;
+      margin: 1px 8px;
+      border-radius: 4px;
+      color: rgba(255,255,255,0.6);
+      font-size: 13.5px;
+      font-weight: 400;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+      position: relative;
+    }
+
+    .nav-item:hover {
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.88);
+    }
+
+    .nav-item.active {
+      background: var(--orange);
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .nav-item.active:hover {
+      background: var(--orange-mid);
+    }
+
+    .nav-icon {
+      font-size: 15px;
+      flex-shrink: 0;
+      width: 18px;
+      text-align: center;
+    }
+
+    .nav-label {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .nav-badge {
+      background: var(--orange);
+      color: var(--white);
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      padding: 1px 6px;
+      border-radius: 10px;
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .nav-item.active .nav-badge {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .sidebar-footer {
+      padding: 1rem 1.4rem;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0;
+    }
+
+    .sidebar-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gray);
+      flex-shrink: 0;
+      transition: background 0.3s;
+    }
+
+    .status-dot.connected {
+      background: #22C55E;
+      box-shadow: 0 0 6px rgba(34,197,94,0.5);
+    }
+
+    .status-dot.error {
+      background: var(--red);
+    }
+
+    .status-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      color: rgba(255,255,255,0.35);
+      text-transform: uppercase;
+    }
+
+    /* ============================================================
+       MAIN AREA
+    ============================================================ */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    #header {
+      height: 58px;
+      min-height: 58px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0 1.4rem;
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    #hamburger {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: var(--dark);
+      padding: 4px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    #hamburger:hover {
+      background: var(--cream);
+    }
+
+    .header-left {
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 17px;
+      color: var(--dark);
+      letter-spacing: -0.01em;
+    }
+
+    .header-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+
+    .search-wrap {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .search-wrap .input {
+      width: 100%;
+      background: var(--cream);
+      border-color: var(--border);
+    }
+
+    .search-wrap .input:focus {
+      background: var(--white);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .header-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--orange);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       CONTENT & VIEWS
+    ============================================================ */
+    #content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.75rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    #content::-webkit-scrollbar {
+      width: 6px;
+    }
+    #content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    #content::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .view {
+      display: block;
+    }
+
+    .view.hidden {
+      display: none;
+    }
+
+    /* ============================================================
+       GRIDS
+    ============================================================ */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    /* ============================================================
+       KPI CARDS
+    ============================================================ */
+    .kpi-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+    }
+
+    .kpi-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 6px;
+    }
+
+    .kpi-value {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+
+    .kpi-sub {
+      font-size: 12px;
+      color: var(--mid);
+    }
+
+    /* ============================================================
+       TABLE
+    ============================================================ */
+    .tbl-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--white);
+    }
+
+    .tbl {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .tbl th {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--mid);
+      background: var(--cream);
+      padding: 9px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+
+    .tbl td {
+      padding: 10px 14px;
+      font-size: 13.5px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    .tbl tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tbl tbody tr {
+      transition: background 0.1s;
+      cursor: pointer;
+    }
+
+    .tbl tbody tr:hover {
+      background: var(--orange-pale);
+    }
+
+    /* ============================================================
+       KANBAN
+    ============================================================ */
+    .kanban-wrap {
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+
+    .kanban-board {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      min-width: max-content;
+      align-items: flex-start;
+    }
+
+    .kanban-col {
+      width: 280px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .kanban-col-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: var(--cream);
+      border: 1px solid var(--border);
+      border-radius: 4px 4px 0 0;
+      border-bottom: none;
+    }
+
+    .kanban-col-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--mid);
+      flex: 1;
+    }
+
+    .kanban-col-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--mid);
+      background: var(--border);
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+
+    .kanban-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      padding: 0.6rem;
+      background: rgba(232,224,216,0.25);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 4px 4px;
+      min-height: 60px;
+    }
+
+    .kanban-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
+    }
+
+    .kanban-card:hover {
+      background: var(--orange-pale);
+      border-color: #FABBAA;
+      box-shadow: 0 2px 8px rgba(201,74,26,0.08);
+    }
+
+    .kanban-card-title {
+      font-weight: 600;
+      font-size: 13.5px;
+      margin-bottom: 4px;
+      color: var(--dark);
+    }
+
+    .kanban-card-meta {
+      font-size: 12px;
+      color: var(--mid);
+    }
+
+    /* ============================================================
+       SIDE PANELS
+    ============================================================ */
+    .side-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      height: 100vh;
+      width: 480px;
+      background: var(--white);
+      box-shadow: -4px 0 24px rgba(20,18,16,0.12);
+      transform: translateX(100%);
+      transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .side-panel.open {
+      transform: translateX(0);
+    }
+
+    .side-panel.hidden {
+      display: none;
+    }
+
+    .panel-header {
+      background: var(--dark-2);
+      padding: 1.25rem 1.4rem;
+      flex-shrink: 0;
+    }
+
+    .panel-header-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .panel-header-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .panel-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .panel-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.4rem;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: rgba(255,255,255,0.7);
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+
+    .panel-close:hover {
+      background: rgba(255,255,255,0.18);
+      color: var(--white);
+    }
+
+    .panel-body {
+      overflow-y: auto;
+      flex: 1;
+      padding: 1.4rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .panel-body::-webkit-scrollbar {
+      width: 4px;
+    }
+    .panel-body::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .panel-footer {
+      border-top: 1px solid var(--border);
+      padding: 1rem 1.4rem;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       CRITERIA GRID
+    ============================================================ */
+    .crit-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+
+    .crit-item {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .crit-item.checked {
+      background: var(--green-light);
+      border-color: var(--green-border);
+    }
+
+    .crit-item:not(.checked) {
+      background: var(--cream);
+    }
+
+    .crit-item:not(.checked):hover {
+      background: var(--orange-pale);
+      border-color: #FABBAA;
+    }
+
+    .crit-icon {
+      font-size: 16px;
+      flex-shrink: 0;
+      width: 22px;
+      text-align: center;
+    }
+
+    .crit-label {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .crit-check {
+      font-size: 14px;
+      color: var(--green);
+      flex-shrink: 0;
+    }
+
+    /* ============================================================
+       PROGRESS BAR
+    ============================================================ */
+    .progress-bar {
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--green);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    /* ============================================================
+       MODALS
+    ============================================================ */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(20,18,16,0.6);
+      z-index: 400;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--white);
+      border-radius: 4px;
+      padding: 1.5rem;
+      width: 90%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .modal::-webkit-scrollbar {
+      width: 4px;
+    }
+    .modal::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.25rem;
+      gap: 1rem;
+    }
+
+    .modal-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--dark);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--mid);
+      font-size: 16px;
+      padding: 4px 6px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+      flex-shrink: 0;
+    }
+
+    .modal-close:hover {
+      background: var(--cream);
+      color: var(--dark);
+    }
+
+    /* ============================================================
+       FORMS
+    ============================================================ */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .form-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+
+    .input,
+    .select,
+    .textarea {
+      width: 100%;
+      padding: 8px 11px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--white);
+      color: var(--dark);
+      font-size: 13.5px;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
+    }
+
+    .input::placeholder {
+      color: rgba(107,90,82,0.45);
+    }
+
+    .input:focus,
+    .select:focus,
+    .textarea:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(201,74,26,0.1);
+    }
+
+    .select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236B5A52' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+      cursor: pointer;
+    }
+
+    .textarea {
+      resize: vertical;
+      min-height: 72px;
+      line-height: 1.5;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ============================================================
+       TOASTS
+    ============================================================ */
+    .toast-container {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--white);
+      border-left: 3px solid var(--orange);
+      border-radius: 4px;
+      padding: 0.8rem 1rem;
+      box-shadow: 0 4px 16px rgba(20,18,16,0.15);
+      min-width: 260px;
+      max-width: 360px;
+      animation: slide-in 0.25s ease-out;
+      pointer-events: auto;
+      font-size: 13.5px;
+      color: var(--dark);
+    }
+
+    .toast.success {
+      border-left-color: var(--green);
+    }
+
+    .toast.error {
+      border-left-color: var(--red);
+    }
+
+    .toast.info {
+      border-left-color: var(--blue);
+    }
+
+    .toast-title {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .toast-msg {
+      font-size: 12.5px;
+      color: var(--mid);
+    }
+
+    @keyframes slide-in {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slide-out {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+    }
+
+    .toast.removing {
+      animation: slide-out 0.2s ease-in forwards;
+    }
+
+    /* ============================================================
+       POLE BANNER
+    ============================================================ */
+    .pole-banner {
+      padding: 1rem 1.4rem;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pole-banner-icon {
+      font-size: 28px;
+      flex-shrink: 0;
+    }
+
+    .pole-banner-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 17px;
+    }
+
+    .pole-banner-sub {
+      font-size: 12.5px;
+      opacity: 0.75;
+      margin-top: 2px;
+    }
+
+    /* ============================================================
+       SCORE BAR
+    ============================================================ */
+    .score-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .score-bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .score-bar-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--mid);
+      min-width: 36px;
+      text-align: right;
+    }
+
+    /* ============================================================
+       DELIVERY BOX
+    ============================================================ */
+    .deliver-box {
+      background: var(--green-light);
+      border: 1px solid var(--green-border);
+      border-radius: 4px;
+      padding: 1.1rem;
+    }
+
+    .deliver-box-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    /* ============================================================
+       STARS
+    ============================================================ */
+    .stars {
+      display: flex;
+      gap: 2px;
+    }
+
+    .star {
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--border);
+      transition: color 0.1s;
+      line-height: 1;
+    }
+
+    .star.filled {
+      color: var(--gold);
+    }
+
+    .star:hover {
+      color: var(--gold);
+    }
+
+    /* ============================================================
+       SECTION HEADERS
+    ============================================================ */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--dark);
+    }
+
+    .section-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================================
+       GENERIC CARD
+    ============================================================ */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.25rem;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 1rem 0;
+    }
+
+    .text-mono {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+    }
+
+    .text-muted {
+      color: var(--mid);
+    }
+
+    .text-small {
+      font-size: 12px;
+    }
+
+    /* ============================================================
+       TIMELINE / ACTIVITY FEED
+    ============================================================ */
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .timeline-item {
+      display: flex;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .timeline-item:last-child {
+      border-bottom: none;
+    }
+
+    .timeline-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--orange);
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .timeline-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .timeline-text {
+      font-size: 13px;
+      color: var(--dark);
+      line-height: 1.4;
+    }
+
+    .timeline-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      color: var(--mid);
+      margin-top: 2px;
+    }
+
+    /* ============================================================
+       INFO ROWS
+    ============================================================ */
+    .info-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-row-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--mid);
+      min-width: 100px;
+      padding-top: 1px;
+    }
+
+    .info-row-value {
+      flex: 1;
+      font-size: 13.5px;
+      color: var(--dark);
+    }
+
+    /* ============================================================
+       TABS
+    ============================================================ */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+      gap: 0;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--mid);
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color 0.12s, border-color 0.12s;
+      margin-bottom: -1px;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--dark);
+    }
+
+    .tab-btn.active {
+      color: var(--orange);
+      border-bottom-color: var(--orange);
+      font-weight: 600;
+    }
+
+    /* ============================================================
+       EMPTY STATE
+    ============================================================ */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--mid);
+    }
+
+    .empty-state-icon {
+      font-size: 40px;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .empty-state-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+
+    .empty-state-sub {
+      font-size: 13px;
+      color: var(--mid);
+      max-width: 280px;
+    }
+
+    /* ============================================================
+       FILTER BAR
+    ============================================================ */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .filter-chip {
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--mid);
+      background: var(--white);
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s, border-color 0.12s;
+    }
+
+    .filter-chip:hover {
+      background: var(--cream);
+      color: var(--dark);
+    }
+
+    .filter-chip.active {
+      background: var(--orange);
+      color: var(--white);
+      border-color: var(--orange);
+    }
+
+    /* ============================================================
+       NOTE INPUT
+    ============================================================ */
+    .note-input-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      margin-top: 0.75rem;
+    }
+
+    .note-input-wrap .textarea {
+      flex: 1;
+    }
+
+    /* ============================================================
+       SETTINGS PAGE
+    ============================================================ */
+    .settings-section {
+      margin-bottom: 2rem;
+    }
+
+    .settings-section-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.75rem;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ============================================================
+       SETTER CARD
+    ============================================================ */
+    .setter-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1.1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: border-color 0.12s;
+    }
+
+    .setter-card:hover {
+      border-color: var(--orange);
+    }
+
+    .setter-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--orange);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .setter-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .setter-name {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .setter-meta {
+      font-size: 12px;
+      color: var(--mid);
+      margin-top: 2px;
+    }
+
+    /* ============================================================
+       RDV CARD
+    ============================================================ */
+    .rdv-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      cursor: pointer;
+      transition: background 0.12s, border-color 0.12s;
+    }
+
+    .rdv-card:hover {
+      background: var(--orange-pale);
+      border-color: #FABBAA;
+    }
+
+    .rdv-date-badge {
+      background: var(--orange-light);
+      color: var(--orange);
+      border-radius: 4px;
+      padding: 6px 10px;
+      text-align: center;
+      flex-shrink: 0;
+      min-width: 52px;
+    }
+
+    .rdv-date-day {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .rdv-date-month {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 2px;
+    }
+
+    .rdv-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .rdv-prospect {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--dark);
+    }
+
+    .rdv-client {
+      font-size: 12.5px;
+      color: var(--mid);
+      margin-top: 2px;
+    }
+
+    .rdv-status-badges {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* ============================================================
+       MOBILE / RESPONSIVE
+    ============================================================ */
+    @media (max-width: 768px) {
+      #hamburger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        transform: translateX(-100%);
+        z-index: 200;
+      }
+
+      #sidebar.mobile-open {
+        transform: translateX(0);
+      }
+
+      #sidebar-overlay {
+        z-index: 199;
+      }
+
+      #main {
+        width: 100%;
+      }
+
+      #content {
+        padding: 1rem;
+      }
+
+      .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .side-panel {
+        width: 100%;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .header-center {
+        display: none;
+      }
+
+      .kanban-col {
+        width: 240px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .grid-4 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      #header {
+        padding: 0 1rem;
+        gap: 0.75rem;
+      }
+
+      #content {
+        padding: 0.85rem;
+      }
+
+      .kpi-value {
+        font-size: 22px;
+      }
+    }
+
+    /* ============================================================
+       UTILITIES
+    ============================================================ */
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-1 { gap: 0.5rem; }
+    .gap-2 { gap: 1rem; }
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .mb-1 { margin-bottom: 0.5rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 1.5rem; }
+    .w-full { width: 100%; }
+    .hidden { display: none !important; }
+    .truncate {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <!-- ============================================================
+       SIDEBAR
+  ============================================================ -->
+  <div id="sidebar">
+    <div class="sidebar-brand">
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);letter-spacing:-0.02em">acqora.</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-sep">OPÉRATIONS</div>
+      <a class="nav-item active" data-view="dashboard" onclick="navigate('dashboard')">
+        <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
+      </a>
+      <a class="nav-item" data-view="b2b" onclick="navigate('b2b')">
+        <span class="nav-icon">🏢</span><span class="nav-label">Pôle B2B — Clients</span>
+        <span class="nav-badge" id="badge-b2b">0</span>
+      </a>
+      <a class="nav-item" data-view="b2c" onclick="navigate('b2c')">
+        <span class="nav-icon">🔥</span><span class="nav-label">Pôle B2C — Leads</span>
+        <span class="nav-badge" id="badge-b2c">0</span>
+      </a>
+      <a class="nav-item" data-view="rdv" onclick="navigate('rdv')">
+        <span class="nav-icon">📅</span><span class="nav-label">Rendez-vous</span>
+      </a>
+      <div class="nav-sep">ÉQUIPE</div>
+      <a class="nav-item" data-view="setters" onclick="navigate('setters')">
+        <span class="nav-icon">👤</span><span class="nav-label">Setters</span>
+      </a>
+      <a class="nav-item" data-view="stats" onclick="navigate('stats')">
+        <span class="nav-icon">📈</span><span class="nav-label">Statistiques</span>
+      </a>
+      <div class="nav-sep">SYSTÈME</div>
+      <a class="nav-item" data-view="settings" onclick="navigate('settings')">
+        <span class="nav-icon">⚙️</span><span class="nav-label">Paramètres</span>
+      </a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-status">
+        <div class="status-dot" id="status-dot"></div>
+        <span class="status-text" id="status-text">CONNEXION...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MAIN
+  ============================================================ -->
+  <div id="main">
+    <div id="header">
+      <button id="hamburger" onclick="toggleSidebar()">☰</button>
+      <div class="header-left">
+        <span class="header-title" id="page-title">Dashboard</span>
+      </div>
+      <div class="header-center">
+        <div class="search-wrap">
+          <input class="input" id="global-search" placeholder="Rechercher…" oninput="handleSearch(this.value)" />
+        </div>
+      </div>
+      <div class="header-right">
+        <div id="header-setter-info" style="display:flex;align-items:center;gap:8px">
+          <div class="header-avatar" id="header-avatar-text">?</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="content">
+      <div id="view-dashboard" class="view"></div>
+      <div id="view-b2b" class="view hidden"></div>
+      <div id="view-b2c" class="view hidden"></div>
+      <div id="view-rdv" class="view hidden"></div>
+      <div id="view-setters" class="view hidden"></div>
+      <div id="view-stats" class="view hidden"></div>
+      <div id="view-settings" class="view hidden"></div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       PANEL B2B CLIENT
+  ============================================================ -->
+  <div id="panel-b2b" class="side-panel hidden">
+    <div class="panel-header" id="panel-b2b-header"></div>
+    <div class="panel-body" id="panel-b2b-body"></div>
+    <div class="panel-footer" id="panel-b2b-footer"></div>
+  </div>
+
+  <!-- ============================================================
+       PANEL B2C LEAD
+  ============================================================ -->
+  <div id="panel-b2c" class="side-panel hidden">
+    <div class="panel-header" id="panel-b2c-header"></div>
+    <div class="panel-body" id="panel-b2c-body"></div>
+    <div class="panel-footer" id="panel-b2c-footer"></div>
+  </div>
+
+  <!-- Panel backdrop -->
+  <div id="panel-backdrop" class="hidden" onclick="closePanels()" style="position:fixed;inset:0;background:rgba(20,18,16,.35);z-index:299"></div>
+
+  <!-- ============================================================
+       MODAL — ADD B2B CLIENT
+  ============================================================ -->
+  <div id="modal-add-b2b" class="modal-backdrop">
+    <div class="modal" style="max-width:540px">
+      <div class="modal-header">
+        <span class="modal-title">🏢 Ajouter un prospect B2B</span>
+        <button class="modal-close" onclick="closeModal('modal-add-b2b')">✕</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Entreprise *</label><input class="input" id="b2b-entreprise" placeholder="Plomberie Martin" /></div>
+        <div class="form-group"><label class="form-label">Prénom dirigeant</label><input class="input" id="b2b-prenom" placeholder="Marc" /></div>
+        <div class="form-group"><label class="form-label">Nom dirigeant</label><input class="input" id="b2b-nom" placeholder="Martin" /></div>
+        <div class="form-group"><label class="form-label">Téléphone</label><input class="input" id="b2b-tel" placeholder="+33 6 00 00 00 00" /></div>
+        <div class="form-group"><label class="form-label">Email *</label><input class="input" id="b2b-email" type="email" placeholder="marc@entreprise.fr" /></div>
+        <div class="form-group"><label class="form-label">Secteur</label>
+          <select class="select" id="b2b-secteur">
+            <option value="autre">Autre</option>
+            <option value="plomberie">Plomberie</option>
+            <option value="electricite">Électricité</option>
+            <option value="hvac">HVAC</option>
+            <option value="menuiserie">Menuiserie</option>
+            <option value="peinture">Peinture</option>
+            <option value="couverture">Couverture</option>
+            <option value="maconnerie">Maçonnerie</option>
+            <option value="isolation">Isolation</option>
+            <option value="photovoltaique">Photovoltaïque</option>
+            <option value="pac">PAC</option>
+            <option value="renovation_globale">Réno. globale</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Zone d'intervention</label><input class="input" id="b2b-zone" placeholder="Bordeaux + 30km" /></div>
+        <div class="form-group"><label class="form-label">Setter assigné</label>
+          <select class="select" id="b2b-setter"></select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-add-b2b')">Annuler</button>
+        <button class="btn btn-b2b" onclick="submitNewB2B()">➕ Créer prospect</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL — ADD B2C LEAD
+  ============================================================ -->
+  <div id="modal-add-b2c" class="modal-backdrop">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <span class="modal-title">🔥 Ajouter un lead B2C</span>
+        <button class="modal-close" onclick="closeModal('modal-add-b2c')">✕</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nom complet *</label><input class="input" id="b2c-nom" placeholder="Jean Dupont" /></div>
+        <div class="form-group"><label class="form-label">Téléphone</label><input class="input" id="b2c-tel" placeholder="+33 6 00 00 00 00" /></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="input" id="b2c-email" type="email" /></div>
+        <div class="form-group"><label class="form-label">Zone</label><input class="input" id="b2c-zone" placeholder="Bordeaux" /></div>
+        <div class="form-group"><label class="form-label">Type de travaux</label>
+          <select class="select" id="b2c-travaux">
+            <option value="autre">Autre</option>
+            <option value="pac">PAC</option>
+            <option value="isolation">Isolation</option>
+            <option value="photovoltaique">Photovoltaïque</option>
+            <option value="plomberie">Plomberie</option>
+            <option value="electricite">Électricité</option>
+            <option value="hvac">HVAC</option>
+            <option value="renovation_globale">Réno. globale</option>
+            <option value="chauffage">Chauffage</option>
+            <option value="couverture">Couverture</option>
+            <option value="menuiserie">Menuiserie</option>
+            <option value="peinture">Peinture</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Setter assigné</label>
+          <select class="select" id="b2c-setter"></select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-add-b2c')">Annuler</button>
+        <button class="btn btn-primary" onclick="submitNewB2C()">➕ Créer lead</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL — BOOK RDV
+  ============================================================ -->
+  <div id="modal-book-rdv" class="modal-backdrop">
+    <div class="modal" style="max-width:500px">
+      <div class="modal-header">
+        <span class="modal-title">📅 Nouveau rendez-vous</span>
+        <button class="modal-close" onclick="closeModal('modal-book-rdv')">✕</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Lead B2C (qualifié)</label>
+          <select class="select" id="rdv-lead-id"><option value="">Saisir manuellement →</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Nom prospect *</label><input class="input" id="rdv-prospect-nom" placeholder="Jean Dupont" /></div>
+        <div class="form-group"><label class="form-label">Téléphone prospect</label><input class="input" id="rdv-prospect-tel" /></div>
+        <div class="form-group"><label class="form-label">Client artisan *</label>
+          <select class="select" id="rdv-client-id"><option value="">— Sélectionner —</option></select>
+        </div>
+        <div class="form-group"><label class="form-label">Date *</label><input class="input" id="rdv-date" type="date" /></div>
+        <div class="form-group"><label class="form-label">Heure *</label><input class="input" id="rdv-heure" type="time" /></div>
+        <div class="form-group"><label class="form-label">Type</label>
+          <select class="select" id="rdv-type">
+            <option value="telephone">Téléphone</option>
+            <option value="visio">Visio</option>
+            <option value="physique">Physique</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Setter</label>
+          <select class="select" id="rdv-setter-id"></select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1"><label class="form-label">Prix facturation (€)</label><input class="input" id="rdv-prix" type="number" value="116" /></div>
+        <div class="form-group" style="grid-column:1/-1"><label class="form-label">Notes</label><textarea class="textarea" id="rdv-notes" rows="2"></textarea></div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-book-rdv')">Annuler</button>
+        <button class="btn btn-primary" id="btn-submit-rdv" onclick="submitRDV()">✅ Confirmer RDV</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL — DELIVER LEAD
+  ============================================================ -->
+  <div id="modal-deliver" class="modal-backdrop">
+    <div class="modal" style="max-width:440px">
+      <div class="modal-header">
+        <span class="modal-title">📦 Livrer ce lead</span>
+        <button class="modal-close" onclick="closeModal('modal-deliver')">✕</button>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Client artisan destinataire *</label>
+        <select class="select" id="deliver-client-id"><option value="">— Sélectionner —</option></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Prix de facturation (€)</label>
+        <input class="input" id="deliver-prix" type="number" value="89" step="0.01" />
+      </div>
+      <div id="deliver-lead-id" style="display:none"></div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-deliver')">Annuler</button>
+        <button class="btn btn-primary" onclick="submitDeliverLead()">📦 Livrer ce lead →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL — SIGN CLIENT
+  ============================================================ -->
+  <div id="modal-sign" class="modal-backdrop">
+    <div class="modal" style="max-width:440px">
+      <div class="modal-header">
+        <span class="modal-title">✅ Signer comme client</span>
+        <button class="modal-close" onclick="closeModal('modal-sign')">✕</button>
+      </div>
+      <div style="padding:.5rem 0 1rem">
+        <div id="sign-client-name" style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;margin-bottom:.5rem"></div>
+        <div style="font-size:13px;color:var(--mid);line-height:1.6">Cette action va :<br>• Passer le statut à <strong>Client actif</strong><br>• Générer un lien d'accès unique à l'espace client<br>• Enregistrer la date de signature</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Offre souscrite</label>
+        <select class="select" id="sign-offre">
+          <option value="decouverte">Découverte</option>
+          <option value="mensuel_leads">Mensuel Leads</option>
+          <option value="mensuel_rdv">Mensuel RDV</option>
+          <option value="sur_mesure">Sur mesure</option>
+        </select>
+      </div>
+      <div id="sign-client-id" style="display:none"></div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-sign')">Annuler</button>
+        <button class="btn btn-b2b" onclick="submitSignClient()">✅ Confirmer la signature</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL — ADD SETTER
+  ============================================================ -->
+  <div id="modal-add-setter" class="modal-backdrop">
+    <div class="modal" style="max-width:440px">
+      <div class="modal-header">
+        <span class="modal-title">👤 Ajouter un setter</span>
+        <button class="modal-close" onclick="closeModal('modal-add-setter')">✕</button>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Prénom *</label><input class="input" id="s-prenom" /></div>
+        <div class="form-group"><label class="form-label">Nom *</label><input class="input" id="s-nom" /></div>
+        <div class="form-group"><label class="form-label">Email</label><input class="input" id="s-email" type="email" /></div>
+        <div class="form-group"><label class="form-label">Téléphone</label><input class="input" id="s-tel" /></div>
+        <div class="form-group"><label class="form-label">Pôle</label>
+          <select class="select" id="s-pole">
+            <option value="b2c">B2C</option>
+            <option value="b2b">B2B</option>
+            <option value="both">Les deux</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Rôle</label>
+          <select class="select" id="s-role">
+            <option value="setter">Setter</option>
+            <option value="closer">Closer</option>
+            <option value="manager">Manager</option>
+          </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1">
+          <label class="form-label">Mot de passe <span style="color:var(--red)">*</span></label>
+          <input class="input" id="s-password" type="password" placeholder="••••••••" autocomplete="new-password" />
+          <div style="font-size:11.5px;color:var(--mid);margin-top:3px">Le setter utilisera ce mot de passe pour se connecter au CRM</div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-ghost" onclick="closeModal('modal-add-setter')">Annuler</button>
+        <button class="btn btn-primary" onclick="submitNewSetter()">➕ Créer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TOASTS
+  ============================================================ -->
+  <div class="toast-container" id="toasts"></div>
+
+  <!-- Mobile sidebar overlay -->
+  <div id="sidebar-overlay" onclick="toggleSidebar()" style="display:none;position:fixed;inset:0;background:rgba(20,18,16,.55);z-index:199"></div>
+</div>
+
+<!-- ============================================================
+     LOGIN OVERLAY (z-index 2000, above everything)
+============================================================ -->
+<div id="login-overlay" style="display:none;position:fixed;inset:0;background:var(--cream);z-index:2000;align-items:center;justify-content:center">
+  <div style="width:100%;max-width:400px;padding:1.5rem">
+    <div style="text-align:center;margin-bottom:2rem">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:38px;color:var(--orange);letter-spacing:-.02em;margin-bottom:.35rem">acqora.</div>
+      <div style="font-size:11px;color:var(--mid);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em">CRM — Connexion équipe</div>
+    </div>
+    <div class="card" style="padding:1.5rem;box-shadow:0 4px 24px rgba(20,18,16,.08)">
+      <div class="form-group mb-2">
+        <label class="form-label">Email</label>
+        <input class="input" id="login-email" type="email" placeholder="prenom@acqora.fr" autocomplete="email" />
+      </div>
+      <div class="form-group mb-2">
+        <label class="form-label">Mot de passe</label>
+        <input class="input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')doLogin()" />
+      </div>
+      <div id="login-error" style="display:none;padding:.6rem .75rem;background:var(--red-light);border:1px solid var(--red-border);border-radius:4px;font-size:12.5px;color:var(--red);margin-bottom:.75rem"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;font-size:14px"
+        onclick="doLogin()" id="login-btn">Se connecter →</button>
+    </div>
+    <p style="text-align:center;color:var(--mid);font-size:10px;margin-top:1rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+      Usage interne uniquement
+    </p>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIG SUPABASE
+============================================================ */
+const SUPABASE_URL      = localStorage.getItem('sb_url') || 'https://vorjdpcdxcwhyrgsirsi.supabase.co'
+const SUPABASE_ANON_KEY = localStorage.getItem('sb_key') || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZvcmpkcGNkeGN3aHlyZ3NpcnNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk0NzgzNDksImV4cCI6MjA5NTA1NDM0OX0.dGAZOnUETx5f7lJGwz2hOU59C8a2FPKkSe6lFbUQL8k'
+let db = null
+
+function initSupabase() {
+  try {
+    const url = localStorage.getItem('sb_url') || SUPABASE_URL
+    const key = localStorage.getItem('sb_key') || SUPABASE_ANON_KEY
+    if (!url) {
+      setStatus('error', 'NON CONFIGURÉ')
+      setTimeout(() => navigate('settings'), 300)
+      return
+    }
+    db = window.supabase.createClient(url, key)
+    setStatus('loading', 'CONNEXION...')
+    loadAll()
+  } catch(e) { setStatus('error', 'ERREUR'); console.error('Supabase init error:', e) }
+}
+
+/* ============================================================
+   STATE
+============================================================ */
+const state = {
+  view: 'dashboard',
+  clients: [], leads: [], rdvs: [], setters: [],
+  activeClient: null, activeLead: null,
+  b2cFilters: { statut: '', travaux: '', setter: '', zone: '' },
+  b2bFilters: { statut: '' },
+  currentSetter: null,      // setter actuellement connecté
+  b2cMyLeadsOnly: false,    // filtre "mon pipeline" B2C
+}
+
+/* ============================================================
+   HELPERS
+============================================================ */
+const SECTEUR_LABELS = {
+  plomberie:'Plomberie', electricite:'Électricité', hvac:'HVAC', menuiserie:'Menuiserie',
+  peinture:'Peinture', couverture:'Couverture', maconnerie:'Maçonnerie', isolation:'Isolation',
+  photovoltaique:'Photovoltaïque', pac:'PAC', renovation_globale:'Réno. globale', autre:'Autre',
+  chauffage:'Chauffage'
+}
+const STATUT_B2B_LABELS = {
+  prospect_b2b:'Prospect', en_qualification:'En qualification', interesse:'Intéressé',
+  client_actif:'Client actif', client_pause:'En pause', perdu:'Perdu'
+}
+const STATUT_B2C_LABELS = {
+  nouveau:'Nouveau', en_cours:'En cours', qualifie:'Qualifié',
+  partiellement_qualifie:'Part. qualifié', non_qualifie:'Non qualifié',
+  livre:'Livré', injoignable:'Injoignable'
+}
+const OFFRE_LABELS = { decouverte:'Découverte', mensuel_leads:'Mensuel Leads', mensuel_rdv:'Mensuel RDV', sur_mesure:'Sur mesure' }
+
+function fmtDate(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' })
+}
+function fmtDateShort(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleDateString('fr-FR', { day:'2-digit', month:'short' })
+}
+function fmtDateTime(d) {
+  if (!d) return '—'
+  return new Date(d).toLocaleString('fr-FR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+}
+function fmtHeure(t) {
+  if (!t) return ''
+  return t.slice(0,5)
+}
+function badge(cls, label) {
+  return `<span class="badge badge-${cls}">${label}</span>`
+}
+function badgeStatutB2B(s) { return badge(s, STATUT_B2B_LABELS[s] || s) }
+function badgeStatutB2C(s) { return badge(s, STATUT_B2C_LABELS[s] || s) }
+function escHtml(str) {
+  if (!str) return ''
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+function initials(p, n) {
+  return ((p||'?')[0]+(n||'?')[0]).toUpperCase()
+}
+function scoreColor(n, max) {
+  if (n === max) return 'var(--green)'
+  if (n >= max * 0.66) return 'var(--gold)'
+  return 'var(--orange)'
+}
+function generateToken() {
+  return Array.from(crypto.getRandomValues(new Uint8Array(24)))
+    .map(b => b.toString(16).padStart(2,'0')).join('')
+}
+
+/* ============================================================
+   STATUS DOT
+============================================================ */
+function setStatus(state, text) {
+  const dot = document.getElementById('status-dot')
+  const txt = document.getElementById('status-text')
+  dot.className = 'status-dot' + (state === 'ok' ? ' connected' : state === 'error' ? ' error' : '')
+  txt.textContent = text
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+function toast(title, msg='', type='default', duration=4000) {
+  const c = document.getElementById('toasts')
+  const el = document.createElement('div')
+  el.className = 'toast' + (type === 'success' ? ' success' : type === 'error' ? ' error' : type === 'info' ? ' info' : '')
+  el.innerHTML = `<div class="toast-title">${escHtml(title)}</div>${msg ? `<div class="toast-msg">${escHtml(msg)}</div>` : ''}`
+  c.appendChild(el)
+  setTimeout(() => {
+    el.classList.add('removing')
+    setTimeout(() => el.remove(), 200)
+  }, duration)
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+const PAGE_TITLES = {
+  dashboard: 'Dashboard', b2b: 'Pôle B2B — Clients', b2c: 'Pôle B2C — Leads',
+  rdv: 'Rendez-vous', setters: 'Setters', stats: 'Statistiques', settings: 'Paramètres & Intégrations'
+}
+function navigate(view) {
+  closePanels()
+  document.querySelectorAll('.nav-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.view === view)
+  })
+  document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'))
+  document.getElementById('view-' + view).classList.remove('hidden')
+  document.getElementById('page-title').textContent = PAGE_TITLES[view] || view
+  state.view = view
+  const renders = { dashboard: renderDashboard, b2b: renderB2B, b2c: renderB2C,
+                    rdv: renderRDV, setters: renderSetters, stats: renderStats, settings: renderSettings }
+  if (renders[view]) renders[view]()
+  document.getElementById('sidebar').classList.remove('mobile-open')
+  document.getElementById('sidebar-overlay').style.display = 'none'
+}
+
+function toggleSidebar() {
+  const s = document.getElementById('sidebar')
+  const ov = document.getElementById('sidebar-overlay')
+  const open = s.classList.toggle('mobile-open')
+  ov.style.display = open ? 'block' : 'none'
+}
+
+/* ============================================================
+   PANELS
+============================================================ */
+function closePanels() {
+  document.getElementById('panel-b2b').classList.remove('open')
+  document.getElementById('panel-b2c').classList.remove('open')
+  document.getElementById('panel-b2b').classList.add('hidden')
+  document.getElementById('panel-b2c').classList.add('hidden')
+  document.getElementById('panel-backdrop').classList.add('hidden')
+  state.activeClient = null
+  state.activeLead = null
+}
+
+function openPanelB2B(clientId) {
+  const client = state.clients.find(c => c.id === clientId)
+  if (!client) return
+  state.activeClient = client
+  document.getElementById('panel-b2b').classList.remove('hidden')
+  document.getElementById('panel-b2b').classList.add('open')
+  document.getElementById('panel-backdrop').classList.remove('hidden')
+  renderPanelB2B(client)
+}
+
+function openPanelB2C(leadId) {
+  const lead = state.leads.find(l => l.id === leadId)
+  if (!lead) return
+  state.activeLead = lead
+  document.getElementById('panel-b2c').classList.remove('hidden')
+  document.getElementById('panel-b2c').classList.add('open')
+  document.getElementById('panel-backdrop').classList.remove('hidden')
+  renderPanelB2C(lead)
+}
+
+/* ============================================================
+   MODALS
+============================================================ */
+function openModal(id) { document.getElementById(id).classList.add('open') }
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+
+/* ============================================================
+   SUPABASE — LOAD ALL
+============================================================ */
+async function loadAll() {
+  if (!db) return
+  try {
+    const [c, l, r, s] = await Promise.all([
+      db.from('clients').select('*').order('created_at', { ascending: false }),
+      db.from('leads_b2c').select('*').order('created_at', { ascending: false }),
+      db.from('rdv').select('*').order('date_rdv', { ascending: false }),
+      db.from('setters').select('*').order('prenom')
+    ])
+    if (c.error) { console.error('clients error:', c.error); toast('Erreur table clients', c.error.message, 'error'); setStatus('error', 'ERREUR TABLE'); return }
+    if (l.error) { console.error('leads_b2c error:', l.error); toast('Erreur table leads_b2c', l.error.message, 'error'); setStatus('error', 'ERREUR TABLE'); return }
+    state.clients = c.data || []
+    state.leads = l.data || []
+    state.rdvs = r.data || []
+    state.setters = s.data || []
+    setStatus('ok', `CONNECTÉ · ${state.clients.length} clients · ${state.leads.length} leads`)
+    updateBadges()
+    populateSetterSelects()
+    navigate(state.view)
+  } catch(e) {
+    console.error('loadAll error:', e)
+    setStatus('error', 'ERREUR')
+    toast('Erreur Supabase', String(e.message || e), 'error')
+  }
+}
+
+async function reloadClients() {
+  if (!db) return
+  const { data } = await db.from('clients').select('*').order('created_at', { ascending: false })
+  state.clients = data || []
+}
+async function reloadLeads() {
+  if (!db) return
+  const { data } = await db.from('leads_b2c').select('*').order('created_at', { ascending: false })
+  state.leads = data || []
+}
+async function reloadRDVs() {
+  if (!db) return
+  const { data } = await db.from('rdv').select('*').order('date_rdv', { ascending: false })
+  state.rdvs = data || []
+}
+async function reloadSetters() {
+  if (!db) return
+  const { data } = await db.from('setters').select('*').order('prenom')
+  state.setters = data || []
+  populateSetterSelects()
+}
+
+function updateBadges() {
+  const b2bNew = state.clients.filter(c => c.statut_client === 'prospect_b2b').length
+  const b2cNew = state.leads.filter(l => l.statut === 'nouveau').length
+  document.getElementById('badge-b2b').textContent = b2bNew
+  document.getElementById('badge-b2c').textContent = b2cNew
+}
+
+function populateSetterSelects() {
+  const selects = ['b2b-setter','b2c-setter','rdv-setter-id']
+  selects.forEach(id => {
+    const el = document.getElementById(id)
+    if (!el) return
+    el.innerHTML = '<option value="">— Setter —</option>'
+    state.setters.forEach(s => {
+      el.innerHTML += `<option value="${s.id}">${escHtml(s.prenom)} ${escHtml(s.nom)}</option>`
+    })
+  })
+}
+
+function setterName(id) {
+  const s = state.setters.find(x => x.id === id)
+  return s ? `${s.prenom} ${s.nom}` : '—'
+}
+function clientName(id) {
+  const c = state.clients.find(x => x.id === id)
+  return c ? c.nom_entreprise : '—'
+}
+
+/* ============================================================
+   LOG
+============================================================ */
+async function log(type, id, action, details = null) {
+  if (!db) return
+  try {
+    const setterId = state.currentSetter?.id || state.setters[0]?.id || null
+    await db.from('historique').insert({ type_cible: type, cible_id: id, action, details, setter_id: setterId })
+  } catch(e) {}
+}
+
+/* ============================================================
+   SETTER AUTHENTICATION
+============================================================ */
+function showLoginOverlay() {
+  const el = document.getElementById('login-overlay')
+  if (!el) return
+  el.style.display = 'flex'
+  setTimeout(() => document.getElementById('login-email')?.focus(), 120)
+}
+
+function hideLoginOverlay() {
+  const el = document.getElementById('login-overlay')
+  if (el) el.style.display = 'none'
+}
+
+async function doLogin() {
+  const email    = (document.getElementById('login-email')?.value || '').trim().toLowerCase()
+  const password = (document.getElementById('login-password')?.value || '')
+  const btn    = document.getElementById('login-btn')
+  const errEl  = document.getElementById('login-error')
+
+  errEl.style.display = 'none'
+
+  if (!email || !password) {
+    errEl.textContent = 'Email et mot de passe requis'
+    errEl.style.display = 'block'
+    return
+  }
+
+  // Bypass admin si Supabase pas encore configuré
+  if (!db) {
+    if (email === 'admin@acqora.fr' && password === 'admin') {
+      loginSuccess({ id: null, prenom: 'Admin', nom: '', email, role: 'admin', pole: 'both', actif: true })
+      navigate('settings')
+      return
+    }
+    errEl.textContent = 'Supabase non configuré — utilisez admin@acqora.fr / admin'
+    errEl.style.display = 'block'
+    return
+  }
+
+  btn.textContent = 'Connexion…'
+  btn.disabled = true
+
+  const { data, error } = await db
+    .from('setters')
+    .select('*')
+    .eq('email', email)
+    .eq('password', password)
+    .eq('actif', true)
+    .maybeSingle()
+
+  btn.textContent = 'Se connecter →'
+  btn.disabled = false
+
+  if (error || !data) {
+    errEl.textContent = 'Email ou mot de passe incorrect'
+    errEl.style.display = 'block'
+    document.getElementById('login-password').value = ''
+    return
+  }
+
+  loginSuccess(data)
+}
+
+function loginSuccess(setter) {
+  state.currentSetter = setter
+  localStorage.setItem('crm_setter', JSON.stringify(setter))
+  updateHeaderSetter()
+  hideLoginOverlay()
+  // Les setters voient uniquement leur pipeline par défaut
+  state.b2cMyLeadsOnly = setter.role === 'setter'
+}
+
+function logoutSetter() {
+  state.currentSetter = null
+  state.b2cMyLeadsOnly = false
+  localStorage.removeItem('crm_setter')
+  showLoginOverlay()
+}
+
+function updateHeaderSetter() {
+  const setter = state.currentSetter
+  const el = document.getElementById('header-setter-info')
+  if (!el) return
+  if (!setter) {
+    el.innerHTML = `<div class="header-avatar" id="header-avatar-text">?</div>`
+    return
+  }
+  const ini = ((setter.prenom||'?')[0] + (setter.nom||'?')[0]).toUpperCase()
+  const roleColors = { admin:'#C94A1A', manager:'#4338CA', setter:'#166534', closer:'#D4920A' }
+  const color = roleColors[setter.role] || 'var(--orange)'
+  el.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:30px;height:30px;border-radius:50%;background:${color};color:white;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;flex-shrink:0" title="${escHtml(setter.prenom)} ${escHtml(setter.nom)}">${ini}</div>
+      <div style="line-height:1.25">
+        <div style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,.92)">${escHtml(setter.prenom)}</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.45);font-family:'DM Mono',monospace;text-transform:uppercase">${setter.role}</div>
+      </div>
+      <button onclick="logoutSetter()" title="Déconnexion" style="padding:3px 7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:3px;color:rgba(255,255,255,.5);font-size:11px;cursor:pointer;margin-left:2px">↩</button>
+    </div>
+  `
+}
+
+/* ============================================================
+   AUTO-ASSIGN LEAD B2C (round-robin par charge)
+============================================================ */
+async function autoAssignLead(leadId) {
+  if (!db) return null
+  // Setters actifs sur le pôle B2C
+  const b2cSetters = state.setters.filter(s => s.actif !== false && (s.pole === 'b2c' || s.pole === 'both'))
+  if (b2cSetters.length === 0) return null
+
+  // Comptage des leads actifs (non terminés) par setter
+  const counts = {}
+  b2cSetters.forEach(s => { counts[s.id] = 0 })
+  state.leads.forEach(l => {
+    if (['nouveau','en_cours','partiellement_qualifie'].includes(l.statut) && l.setter_id && counts[l.setter_id] !== undefined) {
+      counts[l.setter_id]++
+    }
+  })
+
+  // Setter avec le moins de leads (ties → ordre dans la liste = round-robin)
+  const assignee = b2cSetters.reduce((min, s) =>
+    (counts[s.id] < counts[min.id] ? s : min)
+  )
+
+  const { error } = await db.from('leads_b2c').update({ setter_id: assignee.id }).eq('id', leadId)
+  if (!error) {
+    toast(`📋 Lead assigné à ${assignee.prenom}`, `Répartition automatique`, 'info', 3500)
+  }
+  return assignee
+}
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+function renderDashboard() {
+  const el = document.getElementById('view-dashboard')
+  const totalB2B = state.clients.filter(c => ['prospect_b2b','en_qualification','interesse'].includes(c.statut_client)).length
+  const totalB2C = state.leads.filter(l => ['nouveau','en_cours','partiellement_qualifie'].includes(l.statut)).length
+  const actifs = state.clients.filter(c => c.statut_client === 'client_actif').length
+  const now = new Date()
+  const moisRDV = state.rdvs.filter(r => {
+    const d = new Date(r.date_rdv)
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+  })
+  const rdvHonores = moisRDV.filter(r => r.statut === 'honore').length
+
+  const last5B2B = state.clients.slice(0,5)
+  const last5B2C = state.leads.slice(0,5)
+
+  el.innerHTML = `
+    <div class="grid-4 mb-3">
+      <div class="kpi-card" style="--accent:var(--b2b)">
+        <style>.kpi-card:nth-child(1)::before{background:var(--b2b)}.kpi-card:nth-child(2)::before{background:var(--orange)}.kpi-card:nth-child(3)::before{background:var(--green)}.kpi-card:nth-child(4)::before{background:var(--gold)}</style>
+        <div class="kpi-label">🏢 Prospects B2B</div>
+        <div class="kpi-value">${totalB2B}</div>
+        <div class="kpi-sub">à appeler / qualifier</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">🔥 Leads B2C</div>
+        <div class="kpi-value">${totalB2C}</div>
+        <div class="kpi-sub">à qualifier</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">✅ Clients actifs</div>
+        <div class="kpi-value">${actifs}</div>
+        <div class="kpi-sub">abonnements en cours</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">📅 RDV ce mois</div>
+        <div class="kpi-value">${rdvHonores}/${moisRDV.length}</div>
+        <div class="kpi-sub">honorés / total</div>
+      </div>
+    </div>
+    <div class="grid-2 mb-3">
+      <div>
+        <div class="section-header">
+          <span class="section-title" style="color:var(--b2b)">🏢 Derniers prospects B2B</span>
+          <button class="btn btn-b2b btn-sm" onclick="navigate('b2b')">Voir tout →</button>
+        </div>
+        <div class="tbl-wrap" style="border-color:var(--b2b-border);background:var(--b2b-light)">
+          <table class="tbl">
+            <thead><tr><th>Entreprise</th><th>Secteur</th><th>Statut</th><th>Entrée</th></tr></thead>
+            <tbody id="dash-b2b-rows"></tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="section-header">
+          <span class="section-title" style="color:var(--orange)">🔥 Derniers leads B2C</span>
+          <button class="btn btn-primary btn-sm" onclick="navigate('b2c')">Voir tout →</button>
+        </div>
+        <div class="tbl-wrap" style="border-color:#FCA17D;background:var(--orange-light)">
+          <table class="tbl">
+            <thead><tr><th>Nom</th><th>Travaux</th><th>Statut</th><th>Entrée</th></tr></thead>
+            <tbody id="dash-b2c-rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-header mb-2"><span class="section-title">Activité — 7 jours</span></div>
+      <canvas id="dash-chart" height="80"></canvas>
+    </div>
+  `
+
+  // B2B rows
+  const b2bTbody = document.getElementById('dash-b2b-rows')
+  if (last5B2B.length === 0) {
+    b2bTbody.innerHTML = `<tr><td colspan="4" class="text-muted text-small" style="text-align:center;padding:1rem">Aucun prospect</td></tr>`
+  } else {
+    last5B2B.forEach(c => {
+      const tr = document.createElement('tr')
+      tr.onclick = () => openPanelB2B(c.id)
+      tr.innerHTML = `<td><strong>${escHtml(c.nom_entreprise)}</strong></td><td>${escHtml(SECTEUR_LABELS[c.secteur]||'—')}</td><td>${badgeStatutB2B(c.statut_client)}</td><td class="text-small text-muted">${fmtDateShort(c.created_at)}</td>`
+      b2bTbody.appendChild(tr)
+    })
+  }
+
+  // B2C rows
+  const b2cTbody = document.getElementById('dash-b2c-rows')
+  if (last5B2C.length === 0) {
+    b2cTbody.innerHTML = `<tr><td colspan="4" class="text-muted text-small" style="text-align:center;padding:1rem">Aucun lead</td></tr>`
+  } else {
+    last5B2C.forEach(l => {
+      const tr = document.createElement('tr')
+      tr.onclick = () => openPanelB2C(l.id)
+      tr.innerHTML = `<td><strong>${escHtml(l.nom_complet)}</strong></td><td>${escHtml(SECTEUR_LABELS[l.type_travaux]||'—')}</td><td>${badgeStatutB2C(l.statut)}</td><td class="text-small text-muted">${fmtDateShort(l.created_at)}</td>`
+      b2cTbody.appendChild(tr)
+    })
+  }
+
+  drawDashChart()
+}
+
+function drawDashChart() {
+  const canvas = document.getElementById('dash-chart')
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  const W = canvas.offsetWidth; canvas.width = W; canvas.height = 80
+  const days = 7
+  const labels = []
+  const b2cData = []
+  const b2bData = []
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i)
+    const ds = d.toISOString().slice(0,10)
+    labels.push(d.toLocaleDateString('fr-FR', { weekday:'short', day:'numeric' }))
+    b2cData.push(state.leads.filter(l => l.created_at?.slice(0,10) === ds).length)
+    b2bData.push(state.clients.filter(c => c.created_at?.slice(0,10) === ds).length)
+  }
+  const maxVal = Math.max(...b2cData, ...b2bData, 1)
+  const barW = (W / days) * 0.3
+  const gap = W / days
+  ctx.clearRect(0,0,W,80)
+  b2cData.forEach((v,i) => {
+    const h = (v / maxVal) * 55
+    const x = gap * i + gap * 0.15
+    ctx.fillStyle = '#C94A1A'
+    ctx.globalAlpha = 0.8
+    ctx.fillRect(x, 65 - h, barW, h)
+  })
+  b2bData.forEach((v,i) => {
+    const h = (v / maxVal) * 55
+    const x = gap * i + gap * 0.15 + barW + 2
+    ctx.fillStyle = '#4338CA'
+    ctx.globalAlpha = 0.8
+    ctx.fillRect(x, 65 - h, barW, h)
+  })
+  ctx.globalAlpha = 1
+  ctx.fillStyle = '#6B5A52'
+  ctx.font = '9px DM Mono, monospace'
+  ctx.textAlign = 'center'
+  labels.forEach((l,i) => {
+    ctx.fillText(l, gap * i + gap / 2, 78)
+  })
+}
+
+/* ============================================================
+   B2B VIEW — KANBAN
+============================================================ */
+const B2B_COLUMNS = [
+  { key: 'prospect_b2b', label: 'Nouveau', color: 'var(--b2b)' },
+  { key: 'en_qualification', label: 'En qualification', color: 'var(--blue)' },
+  { key: 'interesse', label: 'Intéressé', color: 'var(--gold)' },
+  { key: 'client_actif', label: 'Client actif', color: 'var(--green)' },
+  { key: 'perdu', label: 'Perdu', color: 'var(--red)' },
+]
+
+function renderB2B() {
+  const el = document.getElementById('view-b2b')
+  el.innerHTML = `
+    <div class="pole-banner" style="background:var(--b2b-light);color:var(--b2b)">
+      <span class="pole-banner-icon">🏢</span>
+      <div>
+        <div class="pole-banner-title">PÔLE B2B — ACQUISITION CLIENTS ARTISANS</div>
+        <div class="pole-banner-sub">Ces prospects sont des artisans et PME captés via Meta Ads. Objectif : qualifier, présenter nos offres, signer.</div>
+      </div>
+      <div style="margin-left:auto;flex-shrink:0">
+        <button class="btn btn-b2b btn-sm" onclick="openModal('modal-add-b2b')">➕ Ajouter</button>
+      </div>
+    </div>
+    <div class="kanban-wrap">
+      <div class="kanban-board" id="kanban-b2b"></div>
+    </div>
+  `
+  const board = document.getElementById('kanban-b2b')
+  B2B_COLUMNS.forEach(col => {
+    const clients = state.clients.filter(c => c.statut_client === col.key)
+    board.innerHTML += `
+      <div class="kanban-col">
+        <div class="kanban-col-header" style="border-top:3px solid ${col.color}">
+          <span class="kanban-col-title">${col.label}</span>
+          <span class="kanban-col-count">${clients.length}</span>
+        </div>
+        <div class="kanban-cards" id="kcol-${col.key}">
+          ${clients.length === 0 ? `<div class="text-muted text-small" style="text-align:center;padding:.75rem">Aucun</div>` :
+            clients.map(c => kanbanCardB2B(c)).join('')}
+        </div>
+      </div>
+    `
+  })
+}
+
+function kanbanCardB2B(c) {
+  const setter = state.setters.find(s => s.id === c.setter_id)
+  const stars = [1,2,3,4,5].map(n => `<span class="star ${(c.score_interet||0) >= n ? 'filled' : ''}">★</span>`).join('')
+  return `
+    <div class="kanban-card" onclick="openPanelB2B('${c.id}')">
+      <div class="kanban-card-title">${escHtml(c.nom_entreprise)}</div>
+      <div class="kanban-card-meta" style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px">
+        ${c.secteur ? `<span class="badge badge-non_qualifie">${SECTEUR_LABELS[c.secteur]||c.secteur}</span>` : ''}
+        ${c.zone_intervention ? `<span class="badge badge-non_qualifie">${escHtml(c.zone_intervention)}</span>` : ''}
+      </div>
+      <div style="display:flex;gap:4px;margin-bottom:6px">${stars}</div>
+      <div class="kanban-card-meta">
+        ${c.telephone ? `<a href="tel:${c.telephone}" onclick="event.stopPropagation()" style="color:var(--orange)">📱 ${escHtml(c.telephone)}</a>` : ''}
+        ${setter ? `<div style="margin-top:3px">👤 ${escHtml(setter.prenom)}</div>` : ''}
+        <div style="margin-top:3px;color:var(--mid)">${fmtDateShort(c.created_at)}</div>
+      </div>
+    </div>
+  `
+}
+
+/* ============================================================
+   PANEL B2B
+============================================================ */
+async function renderPanelB2B(client) {
+  const header = document.getElementById('panel-b2b-header')
+  const body = document.getElementById('panel-b2b-body')
+  const footer = document.getElementById('panel-b2b-footer')
+  const setter = state.setters.find(s => s.id === client.setter_id)
+  const setterOpts = state.setters.map(s =>
+    `<option value="${s.id}" ${s.id === client.setter_id ? 'selected':''}>${escHtml(s.prenom)} ${escHtml(s.nom)}</option>`
+  ).join('')
+  const offreOpts = Object.entries(OFFRE_LABELS).map(([k,v]) =>
+    `<option value="${k}" ${k === client.offre ? 'selected':''}>${v}</option>`
+  ).join('')
+  const stars = [1,2,3,4,5].map(n =>
+    `<span class="star ${(client.score_interet||0)>=n?'filled':''}" onclick="rateClient('${client.id}',${n})" style="font-size:22px">★</span>`
+  ).join('')
+
+  header.innerHTML = `
+    <button class="panel-close" onclick="closePanels()">✕</button>
+    <div class="panel-header-title">${escHtml(client.nom_entreprise)}</div>
+    <div class="panel-header-sub">${SECTEUR_LABELS[client.secteur]||'—'} · ${escHtml(client.zone_intervention||'—')}</div>
+    <div class="panel-header-actions">
+      ${badgeStatutB2B(client.statut_client)}
+    </div>
+  `
+
+  // Load history + notes
+  let history = [], notes = []
+  if (db) {
+    const [h, n] = await Promise.all([
+      db.from('historique').select('*').eq('type_cible','client').eq('cible_id', client.id).order('created_at', { ascending: false }).limit(15),
+      db.from('notes').select('*').eq('type_cible','client').eq('cible_id', client.id).order('created_at', { ascending: false })
+    ])
+    history = h.data || []
+    notes = n.data || []
+  }
+
+  body.innerHTML = `
+    <!-- Infos entreprise -->
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">INFORMATIONS</div>
+      <div class="info-row"><span class="info-row-label">Dirigeant</span><span class="info-row-value">${escHtml((client.prenom_dirigeant||'')+ ' ' +(client.nom_dirigeant||''))||'—'}</span></div>
+      <div class="info-row"><span class="info-row-label">Téléphone</span><span class="info-row-value">${client.telephone ? `<a href="tel:${client.telephone}" style="color:var(--orange)">${escHtml(client.telephone)}</a>` : '—'}</span></div>
+      <div class="info-row"><span class="info-row-label">Email</span><span class="info-row-value">${escHtml(client.email)||'—'}</span></div>
+      <div class="info-row"><span class="info-row-label">SIRET</span><span class="info-row-value">${escHtml(client.siret)||'—'}</span></div>
+      <div class="info-row"><span class="info-row-label">Zone</span><span class="info-row-value">${escHtml(client.zone_intervention)||'—'}</span></div>
+      <div class="info-row"><span class="info-row-label">1er contact</span><span class="info-row-value">${fmtDate(client.date_premier_contact)}</span></div>
+      <div class="info-row"><span class="info-row-label">Signature</span><span class="info-row-value">${fmtDate(client.date_signature)}</span></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Qualification -->
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">QUALIFICATION COMMERCIALE</div>
+      <div style="margin-bottom:.5rem">Score intérêt : <span class="stars">${stars}</span></div>
+    </div>
+
+    <!-- Offre + Setter -->
+    <div style="margin-bottom:1rem">
+      <div class="form-group mb-1">
+        <label class="form-label">Offre proposée</label>
+        <select class="select" onchange="updateClientField('${client.id}','offre',this.value)">
+          <option value="">— Aucune —</option>${offreOpts}
+        </select>
+      </div>
+      <div class="form-group mb-1">
+        <label class="form-label">Statut</label>
+        <select class="select" onchange="updateClientStatut('${client.id}',this.value)">
+          ${Object.entries(STATUT_B2B_LABELS).map(([k,v]) => `<option value="${k}" ${k===client.statut_client?'selected':''}>${v}</option>`).join('')}
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Setter assigné</label>
+        <select class="select" onchange="updateClientField('${client.id}','setter_id',this.value)">
+          <option value="">— Aucun —</option>${setterOpts}
+        </select>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Token espace client -->
+    ${client.token_acces ? `
+    <div style="margin-bottom:1rem;padding:.75rem;background:var(--green-light);border:1px solid var(--green-border);border-radius:4px">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--green);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">ESPACE CLIENT</div>
+      <div style="font-size:12px;word-break:break-all;margin-bottom:6px">
+        <a href="client.html?token=${escHtml(client.token_acces)}" target="_blank" style="color:var(--green)">client.html?token=${escHtml(client.token_acces.slice(0,16))}…</a>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="(() => { const base = location.href.replace(/\/[^\/]*(\?.*)?$/, ''); navigator.clipboard.writeText(base+'/client.html?token=${escHtml(client.token_acces)}'); toast('Copié !','Lien espace client copié','success'); })()">📋 Copier le lien</button>
+    </div>` : ''}
+
+    <!-- Notes -->
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">NOTES</div>
+      ${notes.map(n => `<div style="padding:.5rem;background:var(--cream);border-radius:3px;margin-bottom:.4rem;font-size:13px">${escHtml(n.contenu)}<div class="timeline-date">${fmtDateTime(n.created_at)}</div></div>`).join('')}
+      <div class="note-input-wrap">
+        <textarea class="textarea" id="b2b-note-input" rows="2" placeholder="Ajouter une note…"></textarea>
+        <button class="btn btn-secondary btn-sm" onclick="addNoteB2B('${client.id}')">Ajouter</button>
+      </div>
+    </div>
+
+    <!-- Historique -->
+    ${history.length > 0 ? `
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">HISTORIQUE</div>
+      <div class="timeline">
+        ${history.map(h => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div class="timeline-text">${escHtml(h.action)}</div>${h.details?`<div class="text-small text-muted">${escHtml(h.details)}</div>`:''}<div class="timeline-date">${fmtDateTime(h.created_at)}</div></div></div>`).join('')}
+      </div>
+    </div>` : ''}
+  `
+
+  footer.innerHTML = `
+    <a href="https://wa.me/${(client.telephone||'').replace(/\D/g,'')}" target="_blank" class="btn btn-secondary btn-sm">💬 WhatsApp</a>
+    <a href="mailto:${escHtml(client.email)}" class="btn btn-secondary btn-sm">📧 Email</a>
+    ${client.statut_client !== 'client_actif' ? `<button class="btn btn-b2b btn-sm" onclick="openSignModal('${client.id}')">✅ Signer client</button>` : `<button class="btn btn-secondary btn-sm" onclick="openClientSpace('${client.id}')">🔗 Espace client →</button>`}
+    <button class="btn btn-danger btn-sm" onclick="updateClientStatut('${client.id}','perdu')">✗ Perdu</button>
+  `
+}
+
+async function rateClient(id, score) {
+  if (!db) return
+  const { error } = await db.from('clients').update({ score_interet: score }).eq('id', id)
+  if (error) {
+    if (error.message?.includes('score_interet')) {
+      toast('Colonne manquante', 'Exécutez le SQL migration dans Paramètres → SQL Colonnes requises', 'error', 6000)
+    }
+    return
+  }
+  await reloadClients()
+  const c = state.clients.find(x => x.id === id)
+  if (c) { state.activeClient = c; renderPanelB2B(c) }
+}
+
+async function updateClientStatut(id, statut) {
+  if (!db) return
+  await db.from('clients').update({ statut_client: statut }).eq('id', id)
+  await log('client', id, `Statut → ${STATUT_B2B_LABELS[statut]||statut}`)
+  await reloadClients()
+  updateBadges()
+  if (state.view === 'b2b') renderB2B()
+  const c = state.clients.find(x => x.id === id)
+  if (c && state.activeClient?.id === id) { state.activeClient = c; renderPanelB2B(c) }
+  toast('Statut mis à jour', STATUT_B2B_LABELS[statut]||statut, 'success')
+}
+
+async function updateClientField(id, field, val) {
+  if (!db) return
+  await db.from('clients').update({ [field]: val || null }).eq('id', id)
+  await reloadClients()
+  if (state.view === 'b2b') renderB2B()
+}
+
+function openSignModal(id) {
+  const client = state.clients.find(c => c.id === id)
+  if (!client) return
+  document.getElementById('sign-client-name').textContent = client.nom_entreprise
+  document.getElementById('sign-client-id').textContent = id
+  if (client.offre) document.getElementById('sign-offre').value = client.offre
+  openModal('modal-sign')
+}
+
+async function submitSignClient() {
+  const id = document.getElementById('sign-client-id').textContent
+  const offre = document.getElementById('sign-offre').value
+  if (!id || !db) return
+  const token = generateToken()
+  await db.from('clients').update({
+    statut_client: 'client_actif', token_acces: token,
+    date_signature: new Date().toISOString(), offre: offre || null
+  }).eq('id', id)
+  await log('client', id, 'Client signé', `Offre: ${OFFRE_LABELS[offre]||offre} · Token généré`)
+  closeModal('modal-sign')
+  await reloadClients()
+  updateBadges()
+  if (state.view === 'b2b') renderB2B()
+  const c = state.clients.find(x => x.id === id)
+  if (c) { state.activeClient = c; renderPanelB2B(c) }
+  toast('🎉 Client signé !', `Lien espace client généré pour ${c?.nom_entreprise||''}`, 'success', 6000)
+}
+
+function openClientSpace(id) {
+  const c = state.clients.find(x => x.id === id)
+  if (c?.token_acces) window.open(`client.html?token=${c.token_acces}`, '_blank')
+}
+
+async function addNoteB2B(clientId) {
+  const el = document.getElementById('b2b-note-input')
+  const contenu = el?.value?.trim()
+  if (!contenu || !db) return
+  await db.from('notes').insert({ type_cible: 'client', cible_id: clientId, contenu })
+  await log('client', clientId, 'Note ajoutée', contenu.slice(0,80))
+  el.value = ''
+  const c = state.clients.find(x => x.id === clientId)
+  if (c) renderPanelB2B(c)
+  toast('Note enregistrée', '', 'success')
+}
+
+/* ============================================================
+   ADD B2B MODAL
+============================================================ */
+async function submitNewB2B() {
+  const entreprise = document.getElementById('b2b-entreprise').value.trim()
+  const email = document.getElementById('b2b-email').value.trim()
+  if (!entreprise || !email) { toast('Champs requis', 'Entreprise et email obligatoires', 'error'); return }
+  if (!db) { toast('Non connecté', '', 'error'); return }
+  const { data, error } = await db.from('clients').insert({
+    nom_entreprise: entreprise,
+    prenom_dirigeant: document.getElementById('b2b-prenom').value.trim() || null,
+    nom_dirigeant: document.getElementById('b2b-nom').value.trim() || null,
+    telephone: document.getElementById('b2b-tel').value.trim() || null,
+    email, secteur: document.getElementById('b2b-secteur').value || 'autre',
+    zone_intervention: document.getElementById('b2b-zone').value.trim() || null,
+    setter_id: document.getElementById('b2b-setter').value || null,
+    statut_client: 'prospect_b2b', source: 'manual'
+  }).select().single()
+  if (error) { toast('Erreur', error.message, 'error'); return }
+  closeModal('modal-add-b2b')
+  document.getElementById('b2b-entreprise').value = ''
+  document.getElementById('b2b-email').value = ''
+  await reloadClients(); updateBadges()
+  if (state.view === 'b2b') renderB2B()
+  if (state.view === 'dashboard') renderDashboard()
+  toast('🏢 Prospect créé', entreprise, 'success')
+}
+
+/* ============================================================
+   B2C VIEW — TABLE
+============================================================ */
+function toggleMyLeads() {
+  state.b2cMyLeadsOnly = !state.b2cMyLeadsOnly
+  renderB2C()
+}
+
+function renderB2C() {
+  const el = document.getElementById('view-b2c')
+  const f = state.b2cFilters
+  let leads = [...state.leads]
+
+  // Filtre "Mon pipeline" — uniquement les leads assignés au setter connecté
+  const myFilter = state.b2cMyLeadsOnly && state.currentSetter
+  if (myFilter) {
+    leads = leads.filter(l => l.setter_id === state.currentSetter.id)
+  }
+
+  if (f.statut) leads = leads.filter(l => l.statut === f.statut)
+  if (f.travaux) leads = leads.filter(l => l.type_travaux === f.travaux)
+  if (f.setter) leads = leads.filter(l => l.setter_id === f.setter)
+  if (f.zone) leads = leads.filter(l => (l.zone||'').toLowerCase().includes(f.zone.toLowerCase()))
+
+  const setterOpts = state.setters.map(s => `<option value="${s.id}" ${s.id===f.setter?'selected':''}>${escHtml(s.prenom)} ${escHtml(s.nom)}</option>`).join('')
+
+  const myFilterActive = state.b2cMyLeadsOnly && state.currentSetter
+  const myLeadCount = state.currentSetter
+    ? state.leads.filter(l => l.setter_id === state.currentSetter.id && ['nouveau','en_cours','partiellement_qualifie'].includes(l.statut)).length
+    : 0
+
+  el.innerHTML = `
+    <div class="pole-banner" style="background:var(--orange-light);color:var(--orange)">
+      <span class="pole-banner-icon">🔥</span>
+      <div>
+        <div class="pole-banner-title">PÔLE B2C — LEADS PARTICULIERS</div>
+        <div class="pole-banner-sub">Particuliers captés via Meta Ads. Qualifier sur 6 critères, puis livrer au bon artisan.</div>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:.5rem;flex-shrink:0;align-items:center">
+        ${state.currentSetter ? `
+        <button class="btn btn-sm" style="background:${myFilterActive?'var(--orange)':'rgba(201,74,26,.1)'};color:${myFilterActive?'white':'var(--orange)'};border-color:${myFilterActive?'var(--orange)':'rgba(201,74,26,.3)'}"
+          onclick="toggleMyLeads()" title="${myFilterActive?'Voir tous les leads':'Voir uniquement mon pipeline'}">
+          ${myFilterActive ? `👤 Mon pipeline (${myLeadCount})` : '👥 Tous les leads'}
+        </button>` : ''}
+        <button class="btn btn-secondary btn-sm" onclick="exportCSV_B2C()">↓ CSV</button>
+        <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-b2c')">➕ Ajouter</button>
+      </div>
+    </div>
+    <div class="filter-bar">
+      <select class="select" style="width:auto;padding:5px 28px 5px 10px;font-size:12.5px" onchange="setB2CFilter('statut',this.value)">
+        <option value="">Tous statuts</option>
+        ${Object.entries(STATUT_B2C_LABELS).map(([k,v]) => `<option value="${k}" ${k===f.statut?'selected':''}>${v}</option>`).join('')}
+      </select>
+      <select class="select" style="width:auto;padding:5px 28px 5px 10px;font-size:12.5px" onchange="setB2CFilter('travaux',this.value)">
+        <option value="">Tous travaux</option>
+        ${Object.entries(SECTEUR_LABELS).map(([k,v]) => `<option value="${k}" ${k===f.travaux?'selected':''}>${v}</option>`).join('')}
+      </select>
+      <select class="select" style="width:auto;padding:5px 28px 5px 10px;font-size:12.5px" onchange="setB2CFilter('setter',this.value)">
+        <option value="">Tous setters</option>${setterOpts}
+      </select>
+      <input class="input" style="width:140px;padding:5px 10px;font-size:12.5px" placeholder="Zone…" value="${escHtml(f.zone)}" oninput="setB2CFilter('zone',this.value)" />
+    </div>
+    <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Nom</th><th>Téléphone</th><th>Travaux</th><th>Zone</th><th>Statut</th><th>Score</th><th>Setter</th><th>Entrée</th><th>Actions</th></tr></thead>
+        <tbody id="b2c-tbody"></tbody>
+      </table>
+    </div>
+    ${leads.length === 0 ? `<div class="empty-state"><div class="empty-state-icon">🔥</div><div class="empty-state-title">Aucun lead</div><div class="empty-state-sub">Aucun résultat pour ces filtres</div></div>` : ''}
+  `
+
+  const tbody = document.getElementById('b2c-tbody')
+  if (!tbody) return
+  leads.forEach(l => {
+    const score = [l.crit_identite,l.crit_besoin,l.crit_decideur,l.crit_budget,l.crit_delai,l.crit_decision_proche].filter(Boolean).length
+    const setter = state.setters.find(s => s.id === l.setter_id)
+    const tr = document.createElement('tr')
+    tr.onclick = () => openPanelB2C(l.id)
+    tr.innerHTML = `
+      <td><strong>${escHtml(l.nom_complet)}</strong></td>
+      <td><a href="tel:${escHtml(l.telephone||'')}" onclick="event.stopPropagation()" style="color:var(--orange)">${escHtml(l.telephone||'—')}</a></td>
+      <td>${escHtml(SECTEUR_LABELS[l.type_travaux]||'—')}</td>
+      <td>${escHtml(l.zone||'—')}</td>
+      <td>${badgeStatutB2C(l.statut)}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${score/6*100}%;background:${scoreColor(score,6)}"></div></div>
+          <span class="text-mono" style="color:${scoreColor(score,6)}">${score}/6</span>
+        </div>
+      </td>
+      <td>${setter ? `<span class="text-small">${escHtml(setter.prenom)}</span>` : '<span class="text-muted">—</span>'}</td>
+      <td class="text-small text-muted">${fmtDateShort(l.created_at)}</td>
+      <td onclick="event.stopPropagation()">
+        <a href="https://wa.me/${(l.telephone||'').replace(/\D/g,'')}" target="_blank" class="btn btn-secondary btn-sm btn-icon" title="WhatsApp">💬</a>
+      </td>
+    `
+    tbody.appendChild(tr)
+  })
+}
+
+function setB2CFilter(key, val) {
+  state.b2cFilters[key] = val
+  renderB2C()
+}
+
+/* ============================================================
+   PANEL B2C
+============================================================ */
+async function renderPanelB2C(lead) {
+  const header = document.getElementById('panel-b2c-header')
+  const body = document.getElementById('panel-b2c-body')
+  const footer = document.getElementById('panel-b2c-footer')
+  const score = [lead.crit_identite,lead.crit_besoin,lead.crit_decideur,lead.crit_budget,lead.crit_delai,lead.crit_decision_proche].filter(Boolean).length
+  const setterOpts = state.setters.map(s => `<option value="${s.id}" ${s.id===lead.setter_id?'selected':''}>${escHtml(s.prenom)} ${escHtml(s.nom)}</option>`).join('')
+  const clientsActifs = state.clients.filter(c => c.statut_client === 'client_actif')
+
+  header.innerHTML = `
+    <button class="panel-close" onclick="closePanels()">✕</button>
+    <div class="panel-header-title">${escHtml(lead.nom_complet)}</div>
+    <div class="panel-header-sub">${escHtml(SECTEUR_LABELS[lead.type_travaux]||'—')} · ${escHtml(lead.zone||'—')} · Tentatives : ${lead.nb_tentatives_appel||0}</div>
+    <div class="panel-header-actions">${badgeStatutB2C(lead.statut)}</div>
+  `
+
+  let history = [], notes = []
+  if (db) {
+    const [h, n] = await Promise.all([
+      db.from('historique').select('*').eq('type_cible','lead_b2c').eq('cible_id', lead.id).order('created_at', { ascending: false }).limit(15),
+      db.from('notes').select('*').eq('type_cible','lead_b2c').eq('cible_id', lead.id).order('created_at', { ascending: false })
+    ])
+    history = h.data || []
+    notes = n.data || []
+  }
+
+  const criteres = [
+    { key: 'crit_identite', label: 'Identité vérifiée', desc: 'Nom + tel confirmés par appel direct' },
+    { key: 'crit_besoin', label: 'Besoin technique confirmé', desc: 'Type de travaux précis validé' },
+    { key: 'crit_decideur', label: 'Décideur propriétaire', desc: 'Propriétaire du bien + peut signer' },
+    { key: 'crit_budget', label: 'Budget confirmé', desc: 'Fourchette budget confirmée' },
+    { key: 'crit_delai', label: 'Délai < 90 jours', desc: 'Projet dans les 3 prochains mois' },
+    { key: 'crit_decision_proche', label: "Pas encore signé ailleurs", desc: 'Ne compare pas encore' },
+  ]
+
+  body.innerHTML = `
+    <!-- Coordonnées -->
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">COORDONNÉES</div>
+      <div class="info-row"><span class="info-row-label">📱 Tél</span><span class="info-row-value"><a href="tel:${escHtml(lead.telephone||'')}" style="color:var(--orange)">${escHtml(lead.telephone||'—')}</a> <button class="btn btn-secondary btn-sm" style="padding:2px 8px;font-size:11px;margin-left:4px" onclick="navigator.clipboard.writeText('${escHtml(lead.telephone||'')}');toast('Copié','','success')">Copier</button></span></div>
+      <div class="info-row"><span class="info-row-label">📧 Email</span><span class="info-row-value">${escHtml(lead.email||'—')}</span></div>
+      <div class="info-row"><span class="info-row-label">📍 Zone</span><span class="info-row-value">${escHtml(lead.zone||'—')}</span></div>
+      <div class="info-row"><span class="info-row-label">🏠 Logement</span><span class="info-row-value">${escHtml(lead.type_logement||'—')} ${lead.surface_m2 ? '· '+escHtml(lead.surface_m2)+'m²' : ''}</span></div>
+    </div>
+    <div class="divider"></div>
+
+    <!-- Score -->
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">QUALIFICATION — Score ${score}/6</div>
+      <div class="score-bar mb-1">
+        <div class="score-bar-track"><div class="score-bar-fill" style="width:${score/6*100}%;background:${scoreColor(score,6)}"></div></div>
+        <span class="score-bar-label" style="color:${scoreColor(score,6)}">${Math.round(score/6*100)}%</span>
+      </div>
+      <div class="crit-grid">
+        ${criteres.map(c => `
+          <div class="crit-item ${lead[c.key] ? 'checked' : ''}" onclick="toggleCritere('${lead.id}','${c.key}',${!lead[c.key]})">
+            <span class="crit-icon">${lead[c.key] ? '✅' : '☐'}</span>
+            <div class="crit-label">
+              <div>${c.label}</div>
+              <div style="font-size:11px;color:var(--mid);font-weight:400;margin-top:1px">${c.desc}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+      ${score >= 4 ? `
+        <div class="mt-1">
+          <div class="form-group mb-1"><label class="form-label">Budget estimé</label><input class="input" value="${escHtml(lead.budget_estime||'')}" placeholder="8000-12000€" onblur="updateLeadField('${lead.id}','budget_estime',this.value)" /></div>
+          <div class="form-group"><label class="form-label">Délai projet</label><input class="input" value="${escHtml(lead.delai_projet||'')}" placeholder="< 2 mois" onblur="updateLeadField('${lead.id}','delai_projet',this.value)" /></div>
+        </div>
+      ` : ''}
+    </div>
+
+    <!-- Livraison si qualifié -->
+    ${score === 6 && lead.statut !== 'livre' ? `
+    <div class="deliver-box mb-2">
+      <div class="deliver-box-title">✅ PRÊT À LIVRER</div>
+      <div style="font-size:13px;color:var(--green);margin-bottom:8px">Ce lead remplit les 6 critères.</div>
+      <button class="btn btn-sm" style="background:var(--green);color:white;border-color:var(--green)" onclick="openDeliverModal('${lead.id}')">📦 Livrer ce lead →</button>
+    </div>` : ''}
+    ${lead.statut === 'livre' ? `
+    <div style="padding:.75rem;background:var(--b2b-light);border:1px solid var(--b2b-border);border-radius:4px;margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--b2b);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">📦 LIVRÉ</div>
+      <div style="font-size:13px">Transmis à <strong>${escHtml(clientName(lead.client_id))}</strong> le ${fmtDate(lead.date_livraison)}</div>
+    </div>` : ''}
+
+    <div class="divider"></div>
+
+    <!-- Setter + tentatives -->
+    <div style="margin-bottom:1rem">
+      <div class="form-group mb-1">
+        <label class="form-label">Setter assigné</label>
+        <select class="select" onchange="updateLeadField('${lead.id}','setter_id',this.value)">
+          <option value="">— Aucun —</option>${setterOpts}
+        </select>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.4rem">TENTATIVES D'APPEL (${lead.nb_tentatives_appel||0}/3)</div>
+      <button class="btn btn-secondary btn-sm" onclick="enregistrerTentative('${lead.id}')">📞 Enregistrer tentative</button>
+      ${lead.derniere_tentative ? `<div class="text-small text-muted mt-1">Dernière : ${fmtDateTime(lead.derniere_tentative)}</div>` : ''}
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Notes -->
+    <div style="margin-bottom:1rem">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">NOTES</div>
+      ${notes.map(n => `<div style="padding:.5rem;background:var(--cream);border-radius:3px;margin-bottom:.4rem;font-size:13px">${escHtml(n.contenu)}<div class="timeline-date">${fmtDateTime(n.created_at)}</div></div>`).join('')}
+      <div class="note-input-wrap">
+        <textarea class="textarea" id="b2c-note-input" rows="2" placeholder="Ajouter une note…"></textarea>
+        <button class="btn btn-secondary btn-sm" onclick="addNoteB2C('${lead.id}')">Ajouter</button>
+      </div>
+    </div>
+
+    <!-- Historique -->
+    ${history.length > 0 ? `
+    <div>
+      <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">HISTORIQUE</div>
+      <div class="timeline">
+        ${history.map(h => `<div class="timeline-item"><div class="timeline-dot" style="background:var(--orange)"></div><div class="timeline-content"><div class="timeline-text">${escHtml(h.action)}</div>${h.details?`<div class="text-small text-muted">${escHtml(h.details)}</div>`:''}<div class="timeline-date">${fmtDateTime(h.created_at)}</div></div></div>`).join('')}
+      </div>
+    </div>` : ''}
+  `
+
+  footer.innerHTML = `
+    <a href="https://wa.me/${(lead.telephone||'').replace(/\D/g,'')}" target="_blank" class="btn btn-secondary btn-sm">💬 WhatsApp</a>
+    ${score === 6 && lead.statut !== 'livre' ? `<button class="btn btn-primary btn-sm" onclick="openDeliverModal('${lead.id}')">📦 Livrer</button>` : ''}
+    <button class="btn btn-danger btn-sm" onclick="updateLeadStatut('${lead.id}','non_qualifie')">✗ Non qualifié</button>
+  `
+}
+
+async function toggleCritere(leadId, critere, valeur) {
+  if (!db) return
+  await db.from('leads_b2c').update({ [critere]: valeur }).eq('id', leadId)
+  const { data } = await db.from('leads_b2c').select('*').eq('id', leadId).single()
+  if (data) {
+    const score = [data.crit_identite,data.crit_besoin,data.crit_decideur,data.crit_budget,data.crit_delai,data.crit_decision_proche].filter(Boolean).length
+    const statut = score === 6 ? 'qualifie' : score >= 4 ? 'partiellement_qualifie' : score > 0 ? 'en_cours' : 'nouveau'
+    if (statut !== data.statut) await db.from('leads_b2c').update({ statut }).eq('id', leadId)
+    await log('lead_b2c', leadId, `Critère ${critere} → ${valeur ? 'validé':'retiré'}`, `Score: ${score}/6`)
+    await reloadLeads()
+    updateBadges()
+    if (state.view === 'b2c') renderB2C()
+    const l = state.leads.find(x => x.id === leadId)
+    if (l) { state.activeLead = l; renderPanelB2C(l) }
+  }
+}
+
+async function updateLeadStatut(id, statut) {
+  if (!db) return
+  await db.from('leads_b2c').update({ statut }).eq('id', id)
+  await log('lead_b2c', id, `Statut → ${STATUT_B2C_LABELS[statut]||statut}`)
+  await reloadLeads(); updateBadges()
+  if (state.view === 'b2c') renderB2C()
+  const l = state.leads.find(x => x.id === id)
+  if (l && state.activeLead?.id === id) { state.activeLead = l; renderPanelB2C(l) }
+  toast('Statut mis à jour', STATUT_B2C_LABELS[statut]||statut, 'success')
+}
+
+async function updateLeadField(id, field, val) {
+  if (!db) return
+  await db.from('leads_b2c').update({ [field]: val || null }).eq('id', id)
+  await reloadLeads()
+  if (state.view === 'b2c') renderB2C()
+}
+
+async function enregistrerTentative(leadId) {
+  if (!db) return
+  const { data } = await db.from('leads_b2c').select('nb_tentatives_appel').eq('id', leadId).single()
+  const nb = (data?.nb_tentatives_appel || 0) + 1
+  const updates = { nb_tentatives_appel: nb, derniere_tentative: new Date().toISOString() }
+  if (nb >= 3) updates.statut = 'injoignable'
+  await db.from('leads_b2c').update(updates).eq('id', leadId)
+  await log('lead_b2c', leadId, `Tentative d'appel #${nb}`, nb >= 3 ? 'Lead marqué injoignable' : null)
+  await reloadLeads(); updateBadges()
+  if (state.view === 'b2c') renderB2C()
+  const l = state.leads.find(x => x.id === leadId)
+  if (l) { state.activeLead = l; renderPanelB2C(l) }
+  toast(nb >= 3 ? '📵 Injoignable' : `📞 Tentative #${nb}`, nb >= 3 ? 'Lead marqué injoignable' : '')
+}
+
+function openDeliverModal(leadId) {
+  const clientOpts = state.clients.filter(c => c.statut_client === 'client_actif')
+    .map(c => `<option value="${c.id}">${escHtml(c.nom_entreprise)} (${SECTEUR_LABELS[c.secteur]||'—'})</option>`).join('')
+  document.getElementById('deliver-client-id').innerHTML = `<option value="">— Sélectionner —</option>${clientOpts}`
+  document.getElementById('deliver-lead-id').textContent = leadId
+  document.getElementById('deliver-prix').value = '89'
+  openModal('modal-deliver')
+}
+
+async function submitDeliverLead() {
+  const leadId = document.getElementById('deliver-lead-id').textContent
+  const clientId = document.getElementById('deliver-client-id').value
+  const prix = parseFloat(document.getElementById('deliver-prix').value) || 89
+  if (!clientId) { toast('Client requis', 'Sélectionner un client', 'error'); return }
+  if (!db) return
+  await db.from('leads_b2c').update({
+    statut: 'livre', client_id: clientId,
+    date_livraison: new Date().toISOString(), prix_facturation: prix
+  }).eq('id', leadId)
+  await log('lead_b2c', leadId, `Lead livré à ${clientName(clientId)}`, `Prix: ${prix}€`)
+  closeModal('modal-deliver')
+  await reloadLeads(); updateBadges()
+  if (state.view === 'b2c') renderB2C()
+  const l = state.leads.find(x => x.id === leadId)
+  if (l) { state.activeLead = l; renderPanelB2C(l) }
+  toast('📦 Lead livré !', `Transmis à ${clientName(clientId)}`, 'success')
+}
+
+async function addNoteB2C(leadId) {
+  const el = document.getElementById('b2c-note-input')
+  const contenu = el?.value?.trim()
+  if (!contenu || !db) return
+  await db.from('notes').insert({ type_cible: 'lead_b2c', cible_id: leadId, contenu })
+  await log('lead_b2c', leadId, 'Note ajoutée', contenu.slice(0,80))
+  el.value = ''
+  const l = state.leads.find(x => x.id === leadId)
+  if (l) renderPanelB2C(l)
+  toast('Note enregistrée', '', 'success')
+}
+
+/* ============================================================
+   ADD B2C MODAL
+============================================================ */
+async function submitNewB2C() {
+  const nom = document.getElementById('b2c-nom').value.trim()
+  if (!nom) { toast('Nom requis', '', 'error'); return }
+  if (!db) { toast('Non connecté', '', 'error'); return }
+  const { error } = await db.from('leads_b2c').insert({
+    nom_complet: nom,
+    telephone: document.getElementById('b2c-tel').value.trim() || null,
+    email: document.getElementById('b2c-email').value.trim() || null,
+    zone: document.getElementById('b2c-zone').value.trim() || null,
+    type_travaux: document.getElementById('b2c-travaux').value || 'autre',
+    setter_id: document.getElementById('b2c-setter').value || null,
+    statut: 'nouveau', source: 'manual'
+  })
+  if (error) { toast('Erreur', error.message, 'error'); return }
+  closeModal('modal-add-b2c')
+  document.getElementById('b2c-nom').value = ''
+  await reloadLeads(); updateBadges()
+  if (state.view === 'b2c') renderB2C()
+  if (state.view === 'dashboard') renderDashboard()
+  toast('🔥 Lead créé', nom, 'success')
+}
+
+/* ============================================================
+   RDV VIEW
+============================================================ */
+function renderRDV() {
+  const el = document.getElementById('view-rdv')
+  const now = new Date()
+  const todayStr = now.toISOString().slice(0,10)
+  const rdvToday = state.rdvs.filter(r => r.date_rdv === todayStr)
+  const upcoming = state.rdvs.filter(r => r.date_rdv >= todayStr && r.statut === 'confirme').sort((a,b) => a.date_rdv.localeCompare(b.date_rdv)).slice(0,20)
+  const past = state.rdvs.filter(r => r.date_rdv < todayStr).sort((a,b) => b.date_rdv.localeCompare(a.date_rdv)).slice(0,20)
+
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+      <h2>📅 Rendez-vous</h2>
+      <button class="btn btn-primary" onclick="openBookRDVModal()">➕ Nouveau RDV</button>
+    </div>
+    <div class="grid-2 mb-3">
+      <div>
+        <div class="section-header"><span class="section-title">Aujourd'hui (${rdvToday.length})</span></div>
+        ${rdvToday.length === 0 ? `<div class="card"><div class="empty-state" style="padding:1.5rem"><div class="empty-state-icon">📅</div><div class="empty-state-title">Aucun RDV aujourd'hui</div></div></div>` :
+          rdvToday.map(r => rdvCard(r)).join('')}
+      </div>
+      <div>
+        <div class="section-header"><span class="section-title">À venir</span></div>
+        ${upcoming.length === 0 ? `<div class="card"><div class="empty-state" style="padding:1.5rem"><div class="empty-state-icon">🗓️</div><div class="empty-state-title">Aucun RDV à venir</div></div></div>` :
+          upcoming.map(r => rdvCard(r)).join('')}
+      </div>
+    </div>
+    <div class="section-header"><span class="section-title">Historique récent</span></div>
+    ${past.length === 0 ? '' : `<div style="display:flex;flex-direction:column;gap:.5rem">${past.map(r => rdvCard(r)).join('')}</div>`}
+  `
+}
+
+function rdvCard(r) {
+  const d = new Date(r.date_rdv)
+  const day = d.getDate()
+  const month = d.toLocaleDateString('fr-FR', { month: 'short' })
+  const clientN = clientName(r.client_id)
+  const typeIcon = { telephone:'📱', visio:'💻', physique:'🏠' }[r.type_rdv] || '📅'
+  const statutBadges = {
+    confirme: `<span class="badge badge-en_qualification">Confirmé</span>`,
+    honore: `<span class="badge badge-client_actif">Honoré ✓</span>`,
+    no_show: `<span class="badge badge-perdu">No-show</span>`,
+    annule_prospect: `<span class="badge badge-non_qualifie">Annulé (prospect)</span>`,
+    annule_client: `<span class="badge badge-non_qualifie">Annulé (client)</span>`,
+  }
+  return `
+    <div class="rdv-card">
+      <div class="rdv-date-badge">
+        <div class="rdv-date-day">${day}</div>
+        <div class="rdv-date-month">${month}</div>
+        <div class="rdv-date-month">${fmtHeure(r.heure_rdv)}</div>
+      </div>
+      <div class="rdv-info">
+        <div class="rdv-prospect">${escHtml(r.prospect_nom)} ${typeIcon}</div>
+        <div class="rdv-client">${escHtml(clientN)}</div>
+        ${r.prospect_telephone ? `<div class="rdv-client"><a href="tel:${escHtml(r.prospect_telephone)}" style="color:var(--orange)">${escHtml(r.prospect_telephone)}</a></div>` : ''}
+        <div class="rdv-status-badges">${statutBadges[r.statut]||''}</div>
+      </div>
+      ${r.statut === 'confirme' ? `
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <button class="btn btn-sm" style="background:var(--green);color:white;border-color:var(--green);font-size:11px" onclick="updateRDVStatut('${r.id}','honore')">✓ Honoré</button>
+        <button class="btn btn-danger btn-sm" style="font-size:11px" onclick="updateRDVStatut('${r.id}','no_show')">✗ No-show</button>
+        <button class="btn btn-ghost btn-sm" style="font-size:11px" onclick="updateRDVStatut('${r.id}','annule_prospect')">Annuler</button>
+      </div>` : ''}
+    </div>
+  `
+}
+
+async function updateRDVStatut(id, statut) {
+  if (!db) return
+  const updates = { statut }
+  if (statut === 'no_show') updates.facturable = false
+  await db.from('rdv').update(updates).eq('id', id)
+  await log('rdv', id, `RDV → ${statut}`)
+  await reloadRDVs()
+  renderRDV()
+  toast('RDV mis à jour', statut === 'honore' ? '✓ Honoré' : statut === 'no_show' ? 'No-show enregistré' : 'Annulé', 'success')
+}
+
+function openBookRDVModal() {
+  const leadsQ = state.leads.filter(l => l.statut === 'qualifie')
+  const leadsOpts = leadsQ.map(l => `<option value="${l.id}">${escHtml(l.nom_complet)} — ${SECTEUR_LABELS[l.type_travaux]||'—'}</option>`).join('')
+  document.getElementById('rdv-lead-id').innerHTML = `<option value="">Saisir manuellement →</option>${leadsOpts}`
+  const clientsOpts = state.clients.filter(c => c.statut_client === 'client_actif')
+    .map(c => `<option value="${c.id}">${escHtml(c.nom_entreprise)}</option>`).join('')
+  document.getElementById('rdv-client-id').innerHTML = `<option value="">— Sélectionner —</option>${clientsOpts}`
+  document.getElementById('rdv-date').value = new Date().toISOString().slice(0,10)
+  document.getElementById('rdv-heure').value = '10:00'
+  document.getElementById('rdv-prospect-nom').value = ''
+  document.getElementById('rdv-prospect-tel').value = ''
+  document.getElementById('rdv-notes').value = ''
+  document.getElementById('rdv-prix').value = '116'
+  populateSetterSelects()
+  document.getElementById('rdv-lead-id').onchange = function() {
+    const lead = state.leads.find(l => l.id === this.value)
+    if (lead) {
+      document.getElementById('rdv-prospect-nom').value = lead.nom_complet
+      document.getElementById('rdv-prospect-tel').value = lead.telephone || ''
+    }
+  }
+  openModal('modal-book-rdv')
+}
+
+async function submitRDV() {
+  const clientId = document.getElementById('rdv-client-id').value
+  const prospectNom = document.getElementById('rdv-prospect-nom').value.trim()
+  const date = document.getElementById('rdv-date').value
+  const heure = document.getElementById('rdv-heure').value
+  if (!clientId || !prospectNom || !date || !heure) { toast('Champs requis', 'Client, nom, date et heure sont obligatoires', 'error'); return }
+  if (!db) return
+  const { error } = await db.from('rdv').insert({
+    lead_b2c_id: document.getElementById('rdv-lead-id').value || null,
+    client_id: clientId,
+    setter_id: document.getElementById('rdv-setter-id').value || null,
+    prospect_nom: prospectNom,
+    prospect_telephone: document.getElementById('rdv-prospect-tel').value.trim() || null,
+    date_rdv: date, heure_rdv: heure,
+    type_rdv: document.getElementById('rdv-type').value,
+    prix_facturation: parseFloat(document.getElementById('rdv-prix').value) || 116,
+    notes: document.getElementById('rdv-notes').value.trim() || null,
+    statut: 'confirme'
+  })
+  if (error) { toast('Erreur', error.message, 'error'); return }
+  closeModal('modal-book-rdv')
+  await reloadRDVs()
+  renderRDV()
+  toast('📅 RDV créé', `${prospectNom} — ${date}`, 'success')
+}
+
+/* ============================================================
+   SETTERS VIEW
+============================================================ */
+async function renderSetters() {
+  const el = document.getElementById('view-setters')
+  if (!db) return
+
+  const [h, l] = await Promise.all([
+    db.from('historique').select('setter_id,type_cible').limit(1000),
+    db.from('leads_b2c').select('setter_id,statut').limit(1000)
+  ])
+  const hist = h.data || []
+  const leads = l.data || []
+
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem">
+      <h2>👤 Setters</h2>
+      <button class="btn btn-primary" onclick="openModal('modal-add-setter')">➕ Ajouter setter</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:.75rem">
+      ${state.setters.map(s => {
+        const leadsTraites = leads.filter(l => l.setter_id === s.id).length
+        const leadsQual = leads.filter(l => l.setter_id === s.id && l.statut === 'qualifie').length
+        const tauxQual = leadsTraites > 0 ? Math.round(leadsQual/leadsTraites*100) : 0
+        const prospectsTraites = state.clients.filter(c => c.setter_id === s.id).length
+        const clientsSigne = state.clients.filter(c => c.setter_id === s.id && c.statut_client === 'client_actif').length
+        const tauxSign = prospectsTraites > 0 ? Math.round(clientsSigne/prospectsTraites*100) : 0
+        const avatarColors = ['#C94A1A','#4338CA','#166534','#D4920A','#1E3A5F']
+        const color = avatarColors[state.setters.indexOf(s) % avatarColors.length]
+        return `
+          <div class="setter-card" style="border-left:3px solid ${color}">
+            <div class="setter-avatar" style="background:${color}">${initials(s.prenom,s.nom)}</div>
+            <div class="setter-info">
+              <div class="setter-name">${escHtml(s.prenom)} ${escHtml(s.nom)}</div>
+              <div class="setter-meta">${s.role} · ${s.pole === 'both' ? 'B2B + B2C' : s.pole.toUpperCase()} · ${escHtml(s.email||'')}</div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-left:auto;flex-shrink:0">
+              <div style="text-align:center">
+                <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--orange);letter-spacing:.07em;margin-bottom:4px">B2C</div>
+                <div style="font-size:18px;font-family:'Syne',sans-serif;font-weight:800">${leadsTraites}</div>
+                <div style="font-size:11px;color:var(--mid)">${leadsQual} qualifiés (${tauxQual}%)</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--b2b);letter-spacing:.07em;margin-bottom:4px">B2B</div>
+                <div style="font-size:18px;font-family:'Syne',sans-serif;font-weight:800">${prospectsTraites}</div>
+                <div style="font-size:11px;color:var(--mid)">${clientsSigne} signés (${tauxSign}%)</div>
+              </div>
+            </div>
+          </div>
+        `
+      }).join('')}
+      ${state.setters.length === 0 ? `<div class="empty-state"><div class="empty-state-icon">👤</div><div class="empty-state-title">Aucun setter</div><div class="empty-state-sub">Ajoutez votre équipe</div></div>` : ''}
+    </div>
+  `
+}
+
+async function submitNewSetter() {
+  const prenom   = document.getElementById('s-prenom').value.trim()
+  const nom      = document.getElementById('s-nom').value.trim()
+  const password = document.getElementById('s-password').value.trim()
+  if (!prenom || !nom) { toast('Prénom et nom requis', '', 'error'); return }
+  if (!password) { toast('Mot de passe requis', 'Le setter en aura besoin pour se connecter', 'error'); return }
+  if (!db) return
+  const { error } = await db.from('setters').insert({
+    prenom, nom, password,
+    email:     document.getElementById('s-email').value.trim() || null,
+    telephone: document.getElementById('s-tel').value.trim() || null,
+    pole:      document.getElementById('s-pole').value,
+    role:      document.getElementById('s-role').value,
+    actif:     true
+  })
+  if (error) { toast('Erreur', error.message, 'error'); return }
+  closeModal('modal-add-setter')
+  document.getElementById('s-prenom').value = ''
+  document.getElementById('s-nom').value = ''
+  document.getElementById('s-password').value = ''
+  await reloadSetters()
+  renderSetters()
+  toast('👤 Setter créé', `${prenom} ${nom}`, 'success')
+}
+
+/* ============================================================
+   STATS VIEW
+============================================================ */
+function renderStats() {
+  const el = document.getElementById('view-stats')
+  const now = new Date()
+  const moisDebut = new Date(now.getFullYear(), now.getMonth(), 1).toISOString()
+
+  const leadsB2CMois = state.leads.filter(l => l.created_at >= moisDebut)
+  const leadsQualMois = state.leads.filter(l => l.created_at >= moisDebut && l.statut === 'qualifie')
+  const tauxQual = leadsB2CMois.length > 0 ? Math.round(leadsQualMois.length / leadsB2CMois.length * 100) : 0
+
+  const prospectsB2BMois = state.clients.filter(c => c.created_at >= moisDebut)
+  const clientsSignesMois = state.clients.filter(c => c.date_signature >= moisDebut && c.statut_client === 'client_actif')
+  const tauxConv = prospectsB2BMois.length > 0 ? Math.round(clientsSignesMois.length / prospectsB2BMois.length * 100) : 0
+
+  const rdvMois = state.rdvs.filter(r => r.created_at >= moisDebut)
+  const rdvHonores = rdvMois.filter(r => r.statut === 'honore')
+  const rdvNoShow = rdvMois.filter(r => r.statut === 'no_show')
+  const caLeads = state.leads.filter(l => l.statut === 'livre').reduce((s, l) => s + (parseFloat(l.prix_facturation)||0), 0)
+  const caRDV = state.rdvs.filter(r => r.statut === 'honore' && r.facturable).reduce((s, r) => s + (parseFloat(r.prix_facturation)||0), 0)
+
+  el.innerHTML = `
+    <div style="margin-bottom:1.5rem"><h2>📈 Statistiques</h2></div>
+    <div class="grid-4 mb-3">
+      <div class="kpi-card"><div class="kpi-label">🔥 Leads B2C ce mois</div><div class="kpi-value">${leadsB2CMois.length}</div><div class="kpi-sub">reçus total</div></div>
+      <div class="kpi-card"><div class="kpi-label">✅ Taux qualification B2C</div><div class="kpi-value">${tauxQual}%</div><div class="kpi-sub">objectif 25%</div></div>
+      <div class="kpi-card"><div class="kpi-label">🏢 Prospects B2B ce mois</div><div class="kpi-value">${prospectsB2BMois.length}</div><div class="kpi-sub">nouveaux</div></div>
+      <div class="kpi-card"><div class="kpi-label">🎯 Taux conversion B2B</div><div class="kpi-value">${tauxConv}%</div><div class="kpi-sub">objectif 15%</div></div>
+    </div>
+    <div class="grid-2 mb-3">
+      <div class="card">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--mid);margin-bottom:.75rem">LEADS B2C — 30 derniers jours</div>
+        <canvas id="chart-b2c" height="120"></canvas>
+      </div>
+      <div class="card">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--mid);margin-bottom:.75rem">PIPELINE B2B</div>
+        <canvas id="chart-b2b-funnel" height="120"></canvas>
+      </div>
+    </div>
+    <div class="grid-2 mb-3">
+      <div class="card">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--mid);margin-bottom:.75rem">PERFORMANCE SETTERS</div>
+        <canvas id="chart-setters" height="120"></canvas>
+      </div>
+      <div class="card">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--mid);margin-bottom:.75rem">RDV — HONORÉS VS NO-SHOWS</div>
+        <canvas id="chart-rdv" height="120"></canvas>
+        <div style="margin-top:.75rem;display:flex;gap:1rem;justify-content:center;font-size:12px">
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--green);border-radius:50%;display:inline-block"></span>Honorés: ${rdvHonores.length}</span>
+          <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;background:var(--red);border-radius:50%;display:inline-block"></span>No-shows: ${rdvNoShow.length}</span>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;color:var(--mid);margin-bottom:.75rem">CHIFFRE D'AFFAIRES</div>
+      <div class="grid-4">
+        <div style="text-align:center;padding:.75rem"><div class="kpi-label">CA Leads</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px">${caLeads.toFixed(0)}€</div></div>
+        <div style="text-align:center;padding:.75rem"><div class="kpi-label">CA RDV</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px">${caRDV.toFixed(0)}€</div></div>
+        <div style="text-align:center;padding:.75rem"><div class="kpi-label">Total CA</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px">${(caLeads+caRDV).toFixed(0)}€</div></div>
+        <div style="text-align:center;padding:.75rem"><div class="kpi-label">Leads livrés</div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px">${state.leads.filter(l=>l.statut==='livre').length}</div></div>
+      </div>
+    </div>
+  `
+
+  setTimeout(() => {
+    drawB2CChart(); drawFunnelChart(); drawSettersChart(); drawRDVChart(rdvHonores.length, rdvNoShow.length)
+  }, 50)
+}
+
+function drawB2CChart() {
+  const canvas = document.getElementById('chart-b2c')
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  const W = canvas.offsetWidth; canvas.width = W; canvas.height = 120
+  const days = 30
+  const data = []
+  const labels = []
+  for (let i = days - 1; i >= 0; i--) {
+    const d = new Date(); d.setDate(d.getDate() - i)
+    const ds = d.toISOString().slice(0,10)
+    data.push(state.leads.filter(l => l.created_at?.slice(0,10) === ds).length)
+    labels.push(i % 5 === 0 ? d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}) : '')
+  }
+  const maxVal = Math.max(...data, 1)
+  const barW = Math.max(W / days * 0.7, 3)
+  const gap = W / days
+  ctx.clearRect(0,0,W,120)
+  data.forEach((v,i) => {
+    const h = (v / maxVal) * 90
+    const x = gap * i + (gap - barW) / 2
+    ctx.fillStyle = '#C94A1A'
+    ctx.globalAlpha = 0.75
+    ctx.fillRect(x, 105 - h, barW, h)
+  })
+  ctx.globalAlpha = 1
+  ctx.fillStyle = '#6B5A52'
+  ctx.font = '8px DM Mono, monospace'
+  ctx.textAlign = 'center'
+  labels.forEach((l,i) => { if (l) ctx.fillText(l, gap * i + gap/2, 118) })
+}
+
+function drawFunnelChart() {
+  const canvas = document.getElementById('chart-b2b-funnel')
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  const W = canvas.offsetWidth; canvas.width = W; canvas.height = 120
+  const stages = [
+    { label: 'Prospects', val: state.clients.length, color: '#4338CA' },
+    { label: 'Intéressés', val: state.clients.filter(c => ['interesse','en_qualification'].includes(c.statut_client)).length, color: '#D4920A' },
+    { label: 'Clients', val: state.clients.filter(c => c.statut_client === 'client_actif').length, color: '#166534' },
+  ]
+  const maxVal = Math.max(stages[0].val, 1)
+  const barH = 24; const gap = 10; const labelW = 70
+  ctx.clearRect(0,0,W,120)
+  stages.forEach((s,i) => {
+    const w = ((s.val / maxVal) * (W - labelW - 40)) + 20
+    const y = i * (barH + gap) + 5
+    ctx.fillStyle = s.color
+    ctx.globalAlpha = 0.8
+    ctx.beginPath()
+    ctx.roundRect(labelW, y, w, barH, 3)
+    ctx.fill()
+    ctx.globalAlpha = 1
+    ctx.fillStyle = '#141210'
+    ctx.font = '10px DM Sans, sans-serif'
+    ctx.textAlign = 'right'
+    ctx.fillText(s.label, labelW - 6, y + 16)
+    ctx.fillStyle = '#fff'
+    ctx.textAlign = 'left'
+    ctx.fillText(s.val, labelW + w + 6, y + 16)
+  })
+}
+
+function drawSettersChart() {
+  const canvas = document.getElementById('chart-setters')
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  const W = canvas.offsetWidth; canvas.width = W; canvas.height = 120
+  const setterStats = state.setters.map(s => {
+    const total = state.leads.filter(l => l.setter_id === s.id).length
+    const qual = state.leads.filter(l => l.setter_id === s.id && l.statut === 'qualifie').length
+    return { name: s.prenom, rate: total > 0 ? Math.round(qual/total*100) : 0 }
+  })
+  const maxRate = Math.max(...setterStats.map(s => s.rate), 100)
+  const barH = 22; const labelW = 70
+  ctx.clearRect(0,0,W,120)
+  setterStats.slice(0,4).forEach((s,i) => {
+    const w = (s.rate / maxRate) * (W - labelW - 50) + 10
+    const y = i * (barH + 8) + 5
+    ctx.fillStyle = '#C94A1A'
+    ctx.globalAlpha = 0.75
+    ctx.beginPath(); ctx.roundRect(labelW, y, w, barH, 3); ctx.fill()
+    ctx.globalAlpha = 1
+    ctx.fillStyle = '#141210'; ctx.font = '10px DM Sans'; ctx.textAlign = 'right'
+    ctx.fillText(s.name, labelW - 6, y + 15)
+    ctx.fillStyle = '#6B5A52'; ctx.textAlign = 'left'
+    ctx.fillText(s.rate + '%', labelW + w + 6, y + 15)
+  })
+}
+
+function drawRDVChart(honores, noshows) {
+  const canvas = document.getElementById('chart-rdv')
+  if (!canvas) return
+  const ctx = canvas.getContext('2d')
+  const W = canvas.offsetWidth; canvas.width = W; canvas.height = 100
+  const cx = W/2, cy = 46, r = 38
+  const total = honores + noshows
+  if (total === 0) {
+    ctx.fillStyle = '#E8E0D8'; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill()
+    return
+  }
+  const startAngle = -Math.PI/2
+  const slices = [{ val: honores, color:'#166534' }, { val: noshows, color:'#991B1B' }]
+  let angle = startAngle
+  slices.forEach(s => {
+    const sweep = (s.val / total) * Math.PI * 2
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,angle,angle+sweep); ctx.closePath()
+    ctx.fillStyle = s.color; ctx.globalAlpha = 0.8; ctx.fill()
+    angle += sweep
+  })
+  ctx.globalAlpha = 1
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill()
+  ctx.fillStyle = '#141210'; ctx.font = 'bold 11px DM Mono'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillText(total > 0 ? Math.round(honores/total*100)+'%' : '—', cx, cy)
+}
+
+/* ============================================================
+   SETTINGS VIEW
+============================================================ */
+function renderSettings() {
+  const el = document.getElementById('view-settings')
+  const url = localStorage.getItem('sb_url') || ''
+  const key = localStorage.getItem('sb_key') || ''
+  const notConfigured = !url
+  el.innerHTML = `
+    <!-- Alerte si non configuré -->
+    ${notConfigured ? `
+    <div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:6px;padding:1rem 1.25rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:.75rem">
+      <span style="font-size:22px">⚠️</span>
+      <div>
+        <div style="font-weight:600;color:#92400E">Supabase non configuré</div>
+        <div style="font-size:12.5px;color:#78350F;margin-top:2px">Entrez votre URL et clé Supabase ci-dessous pour connecter le CRM à votre base de données.</div>
+      </div>
+    </div>` : ''}
+
+    <!-- Supabase connexion -->
+    <div class="settings-section">
+      <div class="settings-section-title">CONNEXION SUPABASE</div>
+      <div class="card">
+        <div class="form-group mb-2">
+          <label class="form-label">Project URL</label>
+          <input class="input" id="cfg-url" value="${escHtml(url)}" placeholder="https://xxxx.supabase.co" />
+        </div>
+        <div class="form-group mb-2">
+          <label class="form-label">Anon Key</label>
+          <input class="input" id="cfg-key" type="password" value="${escHtml(key)}" placeholder="eyJhbGci..." />
+        </div>
+        <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="saveSupabaseConfig()">💾 Enregistrer & Reconnecter</button>
+          <button class="btn btn-secondary" onclick="testConnection()">🔍 Tester la connexion</button>
+          <div class="sidebar-status">
+            <div class="status-dot ${db ? 'connected' : 'error'}"></div>
+            <span class="text-mono text-muted" id="conn-status-label">${db ? `CONNECTÉ · ${state.leads.length} leads · ${state.clients.length} clients` : 'NON CONNECTÉ'}</span>
+          </div>
+        </div>
+        <div id="conn-test-result" style="margin-top:.75rem;display:none"></div>
+      </div>
+    </div>
+
+    <!-- SQL Migration -->
+    <div class="settings-section">
+      <div class="settings-section-title">SQL — COLONNES SUPPLÉMENTAIRES REQUISES</div>
+      <div class="card">
+        <div style="font-size:13px;color:var(--mid);margin-bottom:.75rem">
+          Exécutez ce SQL dans <strong>Supabase → SQL Editor</strong> pour ajouter les colonnes manquantes (note étoiles + statut contact client) :
+        </div>
+        <pre id="sql-migration" style="background:var(--dark);color:#E2E8F0;border-radius:4px;padding:.9rem;font-family:'DM Mono',monospace;font-size:11px;overflow-x:auto;line-height:1.6">-- Colonne note étoiles sur les clients B2B
+ALTER TABLE clients ADD COLUMN IF NOT EXISTS score_interet INTEGER DEFAULT 0;
+
+-- Colonne statut de contact côté espace client
+ALTER TABLE leads_b2c ADD COLUMN IF NOT EXISTS statut_contact TEXT DEFAULT 'a_appeler'
+  CHECK (statut_contact IN ('a_appeler','appele','devis_envoye','signe','perdu'));</pre>
+        <button class="btn btn-secondary btn-sm mt-1" onclick="copyCode('sql-migration')">📋 Copier le SQL</button>
+      </div>
+    </div>
+
+    <!-- Test import B2B -->
+    <div class="settings-section">
+      <div class="settings-section-title">TEST — SIMULER UN LEAD META ADS</div>
+      <div class="card">
+        <div style="font-size:13px;color:var(--mid);margin-bottom:.75rem">
+          Insère un prospect B2B de test dans Supabase pour vérifier que le pipeline fonctionne et que le realtime se déclenche.
+        </div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <button class="btn btn-b2b" onclick="injectTestB2B()">🧪 Injecter prospect B2B test</button>
+          <button class="btn btn-primary" onclick="injectTestB2C()">🧪 Injecter lead B2C test</button>
+        </div>
+        <div id="inject-result" style="margin-top:.75rem;display:none"></div>
+      </div>
+    </div>
+
+    <!-- Make.com B2B -->
+    <div class="settings-section">
+      <div class="settings-section-title">INTÉGRATIONS MAKE.COM</div>
+      <div class="card mb-2">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem">
+          <span class="badge badge-prospect_b2b">B2B</span>
+          <strong>Prospects artisans — Meta Ads → Supabase</strong>
+        </div>
+        <div class="info-row"><span class="info-row-label">URL</span><span class="info-row-value text-mono">${escHtml(url||'https://...')}/rest/v1/clients</span></div>
+        <div class="info-row"><span class="info-row-label">Méthode</span><span class="info-row-value">POST</span></div>
+        <div style="margin-top:.75rem">
+          <div class="form-label mb-1">Headers</div>
+          <pre style="background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:.75rem;font-family:'DM Mono',monospace;font-size:11px;overflow-x:auto">apikey: ${escHtml(key||'ANON_KEY')}
+Authorization: Bearer ${escHtml(key||'ANON_KEY')}
+Content-Type: application/json
+Prefer: return=representation</pre>
+        </div>
+        <div style="margin-top:.75rem">
+          <div class="form-label mb-1">Body (Make.com variables)</div>
+          <pre id="b2b-body" style="background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:.75rem;font-family:'DM Mono',monospace;font-size:11px;overflow-x:auto">{
+  "nom_entreprise": "{{company_name}}",
+  "telephone": "{{phone_number}}",
+  "email": "{{email}}",
+  "secteur": "autre",
+  "statut_client": "prospect_b2b",
+  "source": "meta_ads_b2b",
+  "meta_lead_id": "{{id}}"
+}</pre>
+          <button class="btn btn-secondary btn-sm mt-1" onclick="copyCode('b2b-body')">📋 Copier le body B2B</button>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem">
+          <span class="badge badge-nouveau">B2C</span>
+          <strong>Leads particuliers — Meta Ads → Supabase</strong>
+        </div>
+        <div class="info-row"><span class="info-row-label">URL</span><span class="info-row-value text-mono">${escHtml(url||'https://...')}/rest/v1/leads_b2c</span></div>
+        <div class="info-row"><span class="info-row-label">Méthode</span><span class="info-row-value">POST</span></div>
+        <div style="margin-top:.75rem">
+          <div class="form-label mb-1">Body (Make.com variables)</div>
+          <pre id="b2c-body" style="background:var(--cream);border:1px solid var(--border);border-radius:4px;padding:.75rem;font-family:'DM Mono',monospace;font-size:11px;overflow-x:auto">{
+  "nom_complet": "{{full_name}}",
+  "telephone": "{{phone_number}}",
+  "email": "{{email}}",
+  "type_travaux": "autre",
+  "zone": "{{ville}}",
+  "statut": "nouveau",
+  "source": "meta_ads_b2c",
+  "meta_lead_id": "{{id}}",
+  "meta_form_id": "{{form_id}}",
+  "meta_ad_id": "{{ad_id}}",
+  "meta_campaign_id": "{{campaign_id}}"
+}</pre>
+          <button class="btn btn-secondary btn-sm mt-1" onclick="copyCode('b2c-body')">📋 Copier le body B2C</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Données -->
+    <div class="settings-section">
+      <div class="settings-section-title">DONNÉES</div>
+      <div class="card" style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="exportCSV_B2C()">↓ Exporter leads B2C (CSV)</button>
+        <button class="btn btn-secondary" onclick="exportCSV_B2B()">↓ Exporter clients B2B (CSV)</button>
+      </div>
+    </div>
+  `
+}
+
+function saveSupabaseConfig() {
+  const url = document.getElementById('cfg-url').value.trim()
+  const key = document.getElementById('cfg-key').value.trim()
+  if (!url || !key) { toast('URL et clé requis', '', 'error'); return }
+  localStorage.setItem('sb_url', url)
+  localStorage.setItem('sb_key', key)
+  location.reload()
+}
+
+/* ============================================================
+   TEST CONNECTION
+============================================================ */
+async function testConnection() {
+  const url = document.getElementById('cfg-url').value.trim()
+  const key = document.getElementById('cfg-key').value.trim()
+  const resultEl = document.getElementById('conn-test-result')
+  const labelEl = document.getElementById('conn-status-label')
+  if (!url || !key) { toast('Entrez URL et clé d\'abord', '', 'error'); return }
+
+  resultEl.style.display = 'block'
+  resultEl.innerHTML = `<span style="color:var(--mid);font-size:12.5px">⏳ Test en cours…</span>`
+
+  try {
+    const testDb = window.supabase.createClient(url, key)
+    const [c, l, s] = await Promise.all([
+      testDb.from('clients').select('id,nom_entreprise,statut_client', { count: 'exact' }),
+      testDb.from('leads_b2c').select('id,nom_complet,statut', { count: 'exact' }),
+      testDb.from('setters').select('id,prenom', { count: 'exact' })
+    ])
+
+    if (c.error) {
+      resultEl.innerHTML = `<div style="padding:.75rem;background:var(--red-light);border:1px solid var(--red-border);border-radius:4px;font-size:12.5px;color:var(--red)">
+        ❌ <strong>Erreur table clients :</strong> ${escHtml(c.error.message)}<br>
+        <span style="margin-top:4px;display:block;opacity:.8">→ Vérifiez que vous avez bien exécuté le SQL de création des tables.</span>
+      </div>`
+      return
+    }
+
+    const clients = c.data || []
+    const leads = l.data || []
+    const setters = s.data || []
+
+    resultEl.innerHTML = `
+      <div style="padding:.75rem;background:var(--green-light);border:1px solid var(--green-border);border-radius:4px;font-size:12.5px;color:var(--green);margin-bottom:.5rem">
+        ✅ <strong>Connexion réussie !</strong>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:.5rem">
+        <div style="padding:.6rem;background:var(--b2b-light);border:1px solid var(--b2b-border);border-radius:4px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--b2b)">${clients.length}</div>
+          <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.07em;font-family:'DM Mono',monospace">Clients B2B</div>
+          ${clients.length > 0 ? `<div style="font-size:11px;color:var(--mid);margin-top:3px">${escHtml(clients[0].nom_entreprise)}</div>` : ''}
+        </div>
+        <div style="padding:.6rem;background:var(--orange-light);border:1px solid #FCA17D;border-radius:4px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--orange)">${leads.length}</div>
+          <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.07em;font-family:'DM Mono',monospace">Leads B2C</div>
+          ${leads.length > 0 ? `<div style="font-size:11px;color:var(--mid);margin-top:3px">${escHtml(leads[0].nom_complet)}</div>` : ''}
+        </div>
+        <div style="padding:.6rem;background:var(--cream);border:1px solid var(--border);border-radius:4px;text-align:center">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--dark)">${setters.length}</div>
+          <div style="font-size:10px;color:var(--mid);text-transform:uppercase;letter-spacing:.07em;font-family:'DM Mono',monospace">Setters</div>
+        </div>
+      </div>
+      ${clients.length === 0 && leads.length === 0 ? `
+      <div style="margin-top:.5rem;padding:.6rem;background:var(--gold-light);border:1px solid #FCD34D;border-radius:4px;font-size:12px;color:var(--gold)">
+        ⚠️ Tables vides — exécutez le SQL de données de démo dans Supabase → SQL Editor
+      </div>` : ''}
+    `
+    if (labelEl) labelEl.textContent = `CONNECTÉ · ${clients.length} clients · ${leads.length} leads`
+  } catch(e) {
+    resultEl.innerHTML = `<div style="padding:.75rem;background:var(--red-light);border:1px solid var(--red-border);border-radius:4px;font-size:12.5px;color:var(--red)">
+      ❌ <strong>Impossible de contacter Supabase</strong><br>
+      <span style="opacity:.8">${escHtml(String(e.message||e))}</span>
+    </div>`
+  }
+}
+
+/* ============================================================
+   INJECT TEST DATA
+============================================================ */
+async function injectTestB2B() {
+  if (!db) { toast('Supabase non connecté', 'Configurez d\'abord vos credentials', 'error'); return }
+  const resultEl = document.getElementById('inject-result')
+  resultEl.style.display = 'block'
+  resultEl.innerHTML = `<span style="color:var(--mid);font-size:12.5px">⏳ Injection…</span>`
+
+  const ts = Date.now()
+  const email = `test.artisan.${ts}@demo.acqora.fr`
+  const { data, error } = await db.from('clients').insert({
+    nom_entreprise: `Artisan Test ${new Date().toLocaleTimeString('fr-FR')}`,
+    prenom_dirigeant: 'Test',
+    nom_dirigeant: 'Demo',
+    telephone: '+33600000000',
+    email,
+    secteur: 'plomberie',
+    zone_intervention: 'Bordeaux + 30km',
+    statut_client: 'prospect_b2b',
+    source: 'meta_ads_b2b',
+    meta_lead_id: `test_${ts}`
+  }).select().single()
+
+  if (error) {
+    resultEl.innerHTML = `<div style="padding:.75rem;background:var(--red-light);border:1px solid var(--red-border);border-radius:4px;font-size:12.5px;color:var(--red)">
+      ❌ <strong>Erreur :</strong> ${escHtml(error.message)}
+    </div>`
+    return
+  }
+
+  await reloadClients()
+  updateBadges()
+  if (state.view === 'b2b') renderB2B()
+  if (state.view === 'dashboard') renderDashboard()
+
+  resultEl.innerHTML = `<div style="padding:.75rem;background:var(--green-light);border:1px solid var(--green-border);border-radius:4px;font-size:12.5px;color:var(--green)">
+    ✅ <strong>Prospect B2B injecté !</strong> "${escHtml(data.nom_entreprise)}" visible dans le Pôle B2B (colonne Nouveau).
+    <div style="margin-top:4px"><a href="#" onclick="navigate('b2b');return false" style="color:var(--green);text-decoration:underline">→ Aller au Pôle B2B</a></div>
+  </div>`
+
+  toast('🏢 Prospect B2B injecté !', data.nom_entreprise, 'success')
+}
+
+async function injectTestB2C() {
+  if (!db) { toast('Supabase non connecté', 'Configurez d\'abord vos credentials', 'error'); return }
+  const resultEl = document.getElementById('inject-result')
+  resultEl.style.display = 'block'
+  resultEl.innerHTML = `<span style="color:var(--mid);font-size:12.5px">⏳ Injection…</span>`
+
+  const ts = Date.now()
+  const { data, error } = await db.from('leads_b2c').insert({
+    nom_complet: `Particulier Test ${new Date().toLocaleTimeString('fr-FR')}`,
+    telephone: '+33600000001',
+    email: `test.lead.${ts}@demo.fr`,
+    zone: 'Bordeaux',
+    type_travaux: 'pac',
+    statut: 'nouveau',
+    source: 'meta_ads_b2c',
+    meta_lead_id: `testb2c_${ts}`
+  }).select().single()
+
+  if (error) {
+    resultEl.innerHTML = `<div style="padding:.75rem;background:var(--red-light);border:1px solid var(--red-border);border-radius:4px;font-size:12.5px;color:var(--red)">
+      ❌ <strong>Erreur :</strong> ${escHtml(error.message)}
+    </div>`
+    return
+  }
+
+  await reloadLeads()
+  updateBadges()
+  if (state.view === 'b2c') renderB2C()
+  if (state.view === 'dashboard') renderDashboard()
+
+  resultEl.innerHTML = `<div style="padding:.75rem;background:var(--green-light);border:1px solid var(--green-border);border-radius:4px;font-size:12.5px;color:var(--green)">
+    ✅ <strong>Lead B2C injecté !</strong> "${escHtml(data.nom_complet)}" visible dans le Pôle B2C (statut Nouveau).
+    <div style="margin-top:4px"><a href="#" onclick="navigate('b2c');return false" style="color:var(--green);text-decoration:underline">→ Aller au Pôle B2C</a></div>
+  </div>`
+
+  toast('🔥 Lead B2C injecté !', data.nom_complet, 'success')
+}
+
+function copyCode(id) {
+  const el = document.getElementById(id)
+  if (el) navigator.clipboard.writeText(el.textContent)
+  toast('Copié !', '', 'success')
+}
+
+/* ============================================================
+   CSV EXPORT
+============================================================ */
+function exportCSV_B2C() {
+  const cols = ['id','nom_complet','telephone','email','zone','type_travaux','statut','crit_identite','crit_besoin','crit_decideur','crit_budget','crit_delai','crit_decision_proche','budget_estime','delai_projet','prix_facturation','date_livraison','created_at']
+  const rows = [cols, ...state.leads.map(l => cols.map(c => JSON.stringify(l[c]??'')))]
+  dlCSV(rows.map(r => r.join(',')).join('\n'), 'leads_b2c.csv')
+}
+
+function exportCSV_B2B() {
+  const cols = ['id','nom_entreprise','prenom_dirigeant','nom_dirigeant','telephone','email','secteur','zone_intervention','offre','statut_client','date_premier_contact','date_signature','created_at']
+  const rows = [cols, ...state.clients.map(c => cols.map(k => JSON.stringify(c[k]??'')))]
+  dlCSV(rows.map(r => r.join(',')).join('\n'), 'clients_b2b.csv')
+}
+
+function dlCSV(content, filename) {
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+}
+
+/* ============================================================
+   SEARCH
+============================================================ */
+function handleSearch(query) {
+  if (!query || query.length < 2) return
+  const q = query.toLowerCase()
+  const clients = state.clients.filter(c =>
+    (c.nom_entreprise||'').toLowerCase().includes(q) || (c.telephone||'').includes(q) || (c.email||'').toLowerCase().includes(q))
+  const leads = state.leads.filter(l =>
+    (l.nom_complet||'').toLowerCase().includes(q) || (l.telephone||'').includes(q))
+  if (clients.length > 0) { navigate('b2b'); if (clients.length === 1) setTimeout(() => openPanelB2B(clients[0].id), 100) }
+  else if (leads.length > 0) { navigate('b2c'); if (leads.length === 1) setTimeout(() => openPanelB2C(leads[0].id), 100) }
+}
+
+/* ============================================================
+   REALTIME
+============================================================ */
+function initRealtime() {
+  if (!db) return
+  try {
+    db.channel('b2b-live')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'clients' }, async (payload) => {
+        if (payload.new.source === 'meta_ads_b2b') {
+          toast('🏢 Nouveau prospect B2B', `${payload.new.nom_entreprise} — ${payload.new.telephone||''}`, 'info', 6000)
+          await reloadClients(); updateBadges()
+          if (state.view === 'b2b') renderB2B()
+          if (state.view === 'dashboard') renderDashboard()
+        }
+      }).subscribe()
+
+    db.channel('b2c-live')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'leads_b2c' }, async (payload) => {
+        toast('🔥 Nouveau lead B2C', `${payload.new.nom_complet} — ${payload.new.type_travaux||''}`, 'default', 6000)
+        await reloadLeads()
+        // Auto-assigner au setter avec le moins de leads ouverts
+        const assignee = await autoAssignLead(payload.new.id)
+        await reloadLeads() // reload again after assignment
+        updateBadges()
+        if (state.view === 'b2c') renderB2C()
+        if (state.view === 'dashboard') renderDashboard()
+      }).subscribe()
+  } catch(e) {}
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Restaurer le setter depuis localStorage
+  try {
+    const saved = localStorage.getItem('crm_setter')
+    if (saved) {
+      state.currentSetter = JSON.parse(saved)
+      // Les setters (pas managers) voient leur pipeline par défaut
+      if (state.currentSetter?.role === 'setter') state.b2cMyLeadsOnly = true
+    }
+  } catch(e) {}
+
+  // Init Supabase
+  initSupabase()
+  setTimeout(initRealtime, 2000)
+  navigate('dashboard')
+
+  // Afficher le login si personne n'est connecté
+  if (!state.currentSetter) {
+    showLoginOverlay()
+  } else {
+    updateHeaderSetter()
+  }
+})
+</script>
+</body>
+</html>
