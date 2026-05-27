@@ -10,53 +10,35 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     /* ============================================================
-       CSS VARIABLES — Dark Premium Theme
+       CSS VARIABLES
     ============================================================ */
     :root {
-      /* === DARK BASE === */
-      --cream:       #08090F;       /* page background */
-      --white:       #111318;       /* card / surface */
-      --dark:        #F0F2F8;       /* primary text */
-      --dark-2:      #1D2130;
-      --mid:         #7C8298;       /* secondary text */
-      --border:      rgba(255,255,255,0.08);
-      --border-mid:  rgba(255,255,255,0.14);
-
-      /* === PRIMARY ACTION — Purple === */
-      --primary:     #7C3AED;
-      --primary-mid: #6D28D9;
-      --primary-lt:  rgba(124,58,237,0.18);
-      --primary-glow:0 0 24px rgba(124,58,237,0.35);
-
-      /* === BRAND ORANGE — B2C === */
-      --orange:      #F97316;
-      --orange-mid:  #FB923C;
-      --orange-light:rgba(249,115,22,0.12);
-      --orange-pale: rgba(249,115,22,0.06);
-
-      /* === B2B — Indigo === */
-      --b2b:        #818CF8;
-      --b2b-light:  rgba(129,140,248,0.10);
-      --b2b-border: rgba(129,140,248,0.28);
-
-      /* === STATUS COLORS === */
-      --green:       #10B981;
-      --green-light: rgba(16,185,129,0.12);
-      --green-border:rgba(16,185,129,0.30);
-      --red:         #F87171;
-      --red-light:   rgba(248,113,113,0.11);
-      --red-border:  rgba(248,113,113,0.28);
-      --gold:        #F59E0B;
-      --gold-light:  rgba(245,158,11,0.12);
-      --blue:        #60A5FA;
-      --blue-light:  rgba(96,165,250,0.10);
-      --blue-border: rgba(96,165,250,0.28);
-      --gray:        #9CA3AF;
-      --gray-light:  rgba(156,163,175,0.10);
-
-      /* === SIDEBAR === */
-      --sidebar-bg:  #07080E;
-      --sidebar-border: rgba(255,255,255,0.06);
+      --orange: #C94A1A;
+      --orange-mid: #E8622E;
+      --orange-light: #FDEEE7;
+      --orange-pale: #FFF8F5;
+      --dark: #141210;
+      --dark-2: #211D1A;
+      --mid: #6B5A52;
+      --gold: #D4920A;
+      --gold-light: #FDF3DC;
+      --cream: #FAF6F2;
+      --border: #E8E0D8;
+      --white: #FFFFFF;
+      --green: #166534;
+      --green-light: #DCFCE7;
+      --green-border: #86EFAC;
+      --red: #991B1B;
+      --red-light: #FEF2F2;
+      --red-border: #FECACA;
+      --blue: #1E3A5F;
+      --blue-light: #EFF6FF;
+      --blue-border: #BFDBFE;
+      --b2b: #4338CA;
+      --b2b-light: #EEF2FF;
+      --b2b-border: #C7D2FE;
+      --gray: #6B7280;
+      --gray-light: #F3F4F6;
     }
 
     /* ============================================================
@@ -81,7 +63,6 @@
       background: var(--cream);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      color-scheme: dark;
     }
 
     a {
@@ -141,25 +122,22 @@
     }
 
     .btn-primary {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
-      box-shadow: 0 2px 12px rgba(124,58,237,0.4);
+      background: var(--orange);
+      color: var(--white);
+      border-color: var(--orange);
     }
     .btn-primary:hover:not(:disabled) {
-      background: var(--primary-mid);
-      border-color: var(--primary-mid);
-      box-shadow: 0 2px 18px rgba(124,58,237,0.55);
+      background: var(--orange-mid);
+      border-color: var(--orange-mid);
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,0.06);
+      background: var(--white);
       color: var(--dark);
       border-color: var(--border);
     }
     .btn-secondary:hover:not(:disabled) {
-      background: rgba(255,255,255,0.1);
-      border-color: var(--border-mid);
+      background: var(--cream);
     }
 
     .btn-ghost {
@@ -168,7 +146,7 @@
       border-color: transparent;
     }
     .btn-ghost:hover:not(:disabled) {
-      background: rgba(255,255,255,0.06);
+      background: var(--cream);
       color: var(--dark);
     }
 
@@ -178,18 +156,17 @@
       border-color: var(--red-border);
     }
     .btn-danger:hover:not(:disabled) {
-      background: rgba(248,113,113,0.22);
+      background: var(--red-border);
     }
 
     .btn-b2b {
       background: var(--b2b);
-      color: #08090F;
+      color: var(--white);
       border-color: var(--b2b);
-      box-shadow: 0 2px 12px rgba(129,140,248,0.35);
     }
     .btn-b2b:hover:not(:disabled) {
-      background: #6366F1;
-      border-color: #6366F1;
+      background: #3730A3;
+      border-color: #3730A3;
     }
 
     .btn-sm {
@@ -235,7 +212,7 @@
     .badge-interesse {
       background: var(--gold-light);
       color: var(--gold);
-      border-color: rgba(245,158,11,0.3);
+      border-color: #FCD34D;
     }
     .badge-client_actif {
       background: var(--green-light);
@@ -245,7 +222,7 @@
     .badge-client_pause {
       background: var(--orange-light);
       color: var(--orange);
-      border-color: rgba(249,115,22,0.3);
+      border-color: #FCA17D;
     }
     .badge-perdu {
       background: var(--red-light);
@@ -257,7 +234,7 @@
     .badge-nouveau {
       background: var(--orange-light);
       color: var(--orange);
-      border-color: rgba(249,115,22,0.3);
+      border-color: #FCA17D;
     }
     .badge-en_cours {
       background: var(--blue-light);
@@ -272,12 +249,12 @@
     .badge-partiellement_qualifie {
       background: var(--gold-light);
       color: var(--gold);
-      border-color: rgba(245,158,11,0.3);
+      border-color: #FCD34D;
     }
     .badge-non_qualifie {
       background: var(--gray-light);
       color: var(--gray);
-      border-color: rgba(156,163,175,0.25);
+      border-color: #D1D5DB;
     }
     .badge-livre {
       background: var(--b2b-light);
@@ -304,10 +281,9 @@
        SIDEBAR
     ============================================================ */
     #sidebar {
-      width: 242px;
-      min-width: 242px;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--sidebar-border);
+      width: 240px;
+      min-width: 240px;
+      background: var(--dark);
       display: flex;
       flex-direction: column;
       height: 100vh;
@@ -372,15 +348,13 @@
     }
 
     .nav-item.active {
-      background: var(--primary-lt);
-      color: #C4B5FD;
-      font-weight: 600;
-      border-left: 2px solid var(--primary);
-      padding-left: calc(1.4rem - 2px);
+      background: var(--orange);
+      color: var(--white);
+      font-weight: 500;
     }
 
     .nav-item.active:hover {
-      background: rgba(124,58,237,0.25);
+      background: var(--orange-mid);
     }
 
     .nav-icon {
@@ -397,7 +371,7 @@
 
     .nav-badge {
       background: var(--orange);
-      color: #fff;
+      color: var(--white);
       font-family: 'DM Mono', monospace;
       font-size: 10px;
       font-weight: 500;
@@ -467,8 +441,7 @@
     #header {
       height: 58px;
       min-height: 58px;
-      background: rgba(17,19,24,0.92);
-      backdrop-filter: blur(12px);
+      background: var(--white);
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -598,17 +571,12 @@
        KPI CARDS
     ============================================================ */
     .kpi-card {
-      background: linear-gradient(135deg, #141720 0%, #0F1117 100%);
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 1.25rem;
+      border-radius: 4px;
+      padding: 1.1rem;
       position: relative;
       overflow: hidden;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .kpi-card:hover {
-      border-color: var(--border-mid);
     }
 
     .kpi-card::before {
@@ -618,21 +586,6 @@
       top: 0;
       bottom: 0;
       width: 3px;
-      border-radius: 8px 0 0 8px;
-    }
-
-    .kpi-card::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: var(--card-glow, transparent);
-      filter: blur(30px);
-      opacity: 0.35;
-      pointer-events: none;
     }
 
     .kpi-label {
@@ -665,7 +618,7 @@
     .tbl-wrap {
       overflow-x: auto;
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       background: var(--white);
     }
 
@@ -681,8 +634,8 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--mid);
-      background: rgba(255,255,255,0.03);
-      padding: 10px 14px;
+      background: var(--cream);
+      padding: 9px 14px;
       text-align: left;
       border-bottom: 1px solid var(--border);
       white-space: nowrap;
@@ -693,7 +646,6 @@
       font-size: 13.5px;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
-      color: var(--dark);
     }
 
     .tbl tr:last-child td {
@@ -706,7 +658,7 @@
     }
 
     .tbl tbody tr:hover {
-      background: rgba(124,58,237,0.05);
+      background: var(--orange-pale);
     }
 
     /* ============================================================
@@ -738,9 +690,9 @@
       align-items: center;
       gap: 8px;
       padding: 10px 12px;
-      background: rgba(255,255,255,0.03);
+      background: var(--cream);
       border: 1px solid var(--border);
-      border-radius: 6px 6px 0 0;
+      border-radius: 4px 4px 0 0;
       border-bottom: none;
     }
 
@@ -768,25 +720,26 @@
       flex-direction: column;
       gap: 0.6rem;
       padding: 0.6rem;
-      background: rgba(255,255,255,0.02);
+      background: rgba(232,224,216,0.25);
       border: 1px solid var(--border);
       border-top: none;
-      border-radius: 0 0 6px 6px;
+      border-radius: 0 0 4px 4px;
       min-height: 60px;
     }
 
     .kanban-card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 4px;
       padding: 1rem;
       cursor: pointer;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: background 0.12s, border-color 0.12s, box-shadow 0.12s;
     }
 
     .kanban-card:hover {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 1px var(--primary), 0 4px 16px rgba(124,58,237,0.15);
+      background: var(--orange-pale);
+      border-color: #FABBAA;
+      box-shadow: 0 2px 8px rgba(201,74,26,0.08);
     }
 
     .kanban-card-title {
@@ -813,7 +766,7 @@
       background: var(--white);
       box-shadow: -4px 0 24px rgba(20,18,16,0.12);
       transform: translateX(100%);
-      transition: transform 0.28s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: transform 0.28s cubic-bezier(0.25,0.46,0.45,0.94);
       z-index: 300;
       display: flex;
       flex-direction: column;
@@ -929,12 +882,12 @@
     }
 
     .crit-item:not(.checked) {
-      background: rgba(255,255,255,0.03);
+      background: var(--cream);
     }
 
     .crit-item:not(.checked):hover {
-      background: var(--primary-lt);
-      border-color: rgba(124,58,237,0.3);
+      background: var(--orange-pale);
+      border-color: #FABBAA;
     }
 
     .crit-icon {
@@ -980,8 +933,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(4,5,10,0.8);
-      backdrop-filter: blur(4px);
+      background: rgba(20,18,16,0.6);
       z-index: 400;
       display: none;
       align-items: center;
@@ -994,10 +946,8 @@
     }
 
     .modal {
-      background: #141720;
-      border: 1px solid var(--border-mid);
-      border-radius: 10px;
-      box-shadow: 0 24px 64px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05);
+      background: var(--white);
+      border-radius: 4px;
       padding: 1.5rem;
       width: 90%;
       max-width: 520px;
@@ -1044,7 +994,7 @@
     }
 
     .modal-close:hover {
-      background: rgba(255,255,255,0.08);
+      background: var(--cream);
       color: var(--dark);
     }
 
@@ -1078,40 +1028,32 @@
       width: 100%;
       padding: 8px 11px;
       border: 1px solid var(--border);
-      border-radius: 6px;
-      background: rgba(255,255,255,0.04);
+      border-radius: 4px;
+      background: var(--white);
       color: var(--dark);
       font-size: 13.5px;
-      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+      transition: border-color 0.15s, box-shadow 0.15s;
       outline: none;
     }
 
     .input::placeholder {
-      color: var(--mid);
-      opacity: 0.6;
+      color: rgba(107,90,82,0.45);
     }
 
     .input:focus,
     .select:focus,
     .textarea:focus {
-      border-color: var(--primary);
-      background: rgba(124,58,237,0.06);
-      box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(201,74,26,0.1);
     }
 
     .select {
       appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%237C8298' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%236B5A52' d='M5 6L0 0h10z'/%3E%3C/svg%3E");
       background-repeat: no-repeat;
       background-position: right 10px center;
-      background-color: rgba(255,255,255,0.04);
       padding-right: 28px;
       cursor: pointer;
-    }
-
-    .select option {
-      background: #1A1D28;
-      color: var(--dark);
     }
 
     .textarea {
@@ -1144,12 +1086,11 @@
     }
 
     .toast {
-      background: #1A1D28;
-      border: 1px solid var(--border-mid);
+      background: var(--white);
       border-left: 3px solid var(--orange);
-      border-radius: 8px;
-      padding: 0.85rem 1rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      border-radius: 4px;
+      padding: 0.8rem 1rem;
+      box-shadow: 0 4px 16px rgba(20,18,16,0.15);
       min-width: 260px;
       max-width: 360px;
       animation: slide-in 0.25s ease-out;
@@ -1327,7 +1268,6 @@
       font-weight: 800;
       font-size: 16px;
       color: var(--dark);
-      letter-spacing: -.01em;
     }
 
     .section-actions {
@@ -1343,7 +1283,7 @@
     .card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 1.25rem;
     }
 
@@ -1475,8 +1415,8 @@
     }
 
     .tab-btn.active {
-      color: #C4B5FD;
-      border-bottom-color: var(--primary);
+      color: var(--orange);
+      border-bottom-color: var(--orange);
       font-weight: 600;
     }
 
@@ -1531,21 +1471,20 @@
       font-size: 12.5px;
       font-weight: 500;
       color: var(--mid);
-      background: rgba(255,255,255,0.04);
+      background: var(--white);
       cursor: pointer;
       transition: background 0.12s, color 0.12s, border-color 0.12s;
     }
 
     .filter-chip:hover {
-      background: rgba(255,255,255,0.08);
+      background: var(--cream);
       color: var(--dark);
-      border-color: var(--border-mid);
     }
 
     .filter-chip.active {
-      background: var(--primary);
-      color: #fff;
-      border-color: var(--primary);
+      background: var(--orange);
+      color: var(--white);
+      border-color: var(--orange);
     }
 
     /* ============================================================
@@ -1587,17 +1526,16 @@
     .setter-card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 1.25rem;
+      border-radius: 4px;
+      padding: 1.1rem 1.25rem;
       display: flex;
       align-items: center;
       gap: 1rem;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: border-color 0.12s;
     }
 
     .setter-card:hover {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 1px var(--primary-lt), 0 4px 20px rgba(124,58,237,0.12);
+      border-color: var(--orange);
     }
 
     .setter-avatar {
@@ -1638,24 +1576,24 @@
     .rdv-card {
       background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 8px;
+      border-radius: 4px;
       padding: 1rem 1.25rem;
       display: flex;
       align-items: flex-start;
       gap: 1rem;
       cursor: pointer;
-      transition: border-color 0.15s, box-shadow 0.15s;
+      transition: background 0.12s, border-color 0.12s;
     }
 
     .rdv-card:hover {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 1px var(--primary-lt);
+      background: var(--orange-pale);
+      border-color: #FABBAA;
     }
 
     .rdv-date-badge {
       background: var(--orange-light);
       color: var(--orange);
-      border-radius: 6px;
+      border-radius: 4px;
       padding: 6px 10px;
       text-align: center;
       flex-shrink: 0;
@@ -1810,9 +1748,8 @@
        SIDEBAR
   ============================================================ -->
   <div id="sidebar">
-    <div class="sidebar-brand" style="background:linear-gradient(135deg,rgba(124,58,237,0.15) 0%,transparent 100%);padding:1.4rem 1.4rem 1.1rem">
-      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:#fff;letter-spacing:-0.03em">acqora<span style="color:var(--primary)">.</span></span>
-      <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:3px">CRM · LEAD PLATFORM</div>
+    <div class="sidebar-brand">
+      <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);letter-spacing:-0.02em">acqora.</span>
     </div>
     <nav class="sidebar-nav">
       <div class="nav-sep">OPÉRATIONS</div>
@@ -1905,7 +1842,7 @@
   </div>
 
   <!-- Panel backdrop -->
-  <div id="panel-backdrop" class="hidden" onclick="closePanels()" style="position:fixed;inset:0;background:rgba(4,5,10,.65);backdrop-filter:blur(4px);z-index:299"></div>
+  <div id="panel-backdrop" class="hidden" onclick="closePanels()" style="position:fixed;inset:0;background:rgba(20,18,16,.35);z-index:299"></div>
 
   <!-- ============================================================
        MODAL — ADD B2B CLIENT
@@ -2184,16 +2121,13 @@
 <!-- ============================================================
      LOGIN OVERLAY (z-index 2000, above everything)
 ============================================================ -->
-<div id="login-overlay" style="display:none;position:fixed;inset:0;background:#07080E;z-index:2000;align-items:center;justify-content:center;overflow:auto">
-  <!-- Background glow -->
-  <div style="position:absolute;top:20%;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(ellipse,rgba(124,58,237,0.18) 0%,transparent 70%);pointer-events:none"></div>
-
-  <div style="width:100%;max-width:400px;padding:2rem;position:relative;z-index:1">
-    <div style="text-align:center;margin-bottom:2.5rem">
-      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:42px;color:#fff;letter-spacing:-.03em;margin-bottom:.5rem">acqora<span style="color:#7C3AED">.</span></div>
-      <div style="font-size:10px;color:rgba(255,255,255,.3);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.14em">LEAD PLATFORM · CONNEXION</div>
+<div id="login-overlay" style="display:none;position:fixed;inset:0;background:var(--cream);z-index:2000;align-items:center;justify-content:center">
+  <div style="width:100%;max-width:400px;padding:1.5rem">
+    <div style="text-align:center;margin-bottom:2rem">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:38px;color:var(--orange);letter-spacing:-.02em;margin-bottom:.35rem">acqora.</div>
+      <div style="font-size:11px;color:var(--mid);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em">CRM — Connexion équipe</div>
     </div>
-    <div style="background:#141720;border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:2rem;box-shadow:0 32px 80px rgba(0,0,0,0.6),0 0 0 1px rgba(124,58,237,0.15)">
+    <div class="card" style="padding:1.5rem;box-shadow:0 4px 24px rgba(20,18,16,.08)">
       <div class="form-group mb-2">
         <label class="form-label">Email</label>
         <input class="input" id="login-email" type="email" placeholder="prenom@acqora.fr" autocomplete="email" />
@@ -2203,12 +2137,12 @@
         <input class="input" id="login-password" type="password" placeholder="••••••••" autocomplete="current-password"
           onkeydown="if(event.key==='Enter')doLogin()" />
       </div>
-      <div id="login-error" style="display:none;padding:.65rem .8rem;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.25);border-radius:7px;font-size:12.5px;color:#F87171;margin-bottom:.85rem"></div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;font-size:14.5px;border-radius:8px;letter-spacing:.01em"
+      <div id="login-error" style="display:none;padding:.6rem .75rem;background:var(--red-light);border:1px solid var(--red-border);border-radius:4px;font-size:12.5px;color:var(--red);margin-bottom:.75rem"></div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:10px;font-size:14px"
         onclick="doLogin()" id="login-btn">Se connecter →</button>
     </div>
-    <p style="text-align:center;color:rgba(255,255,255,.2);font-size:9.5px;margin-top:1.25rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.1em">
-      Acqora · Usage interne uniquement
+    <p style="text-align:center;color:var(--mid);font-size:10px;margin-top:1rem;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.08em">
+      Usage interne uniquement
     </p>
   </div>
 </div>
@@ -2591,15 +2525,15 @@ function updateHeaderSetter() {
   }
 
   const ini = ((setter.prenom||'?')[0] + (setter.nom||'?')[0]).toUpperCase()
-  const roleColors = { admin:'#F97316', manager:'#7C3AED', setter:'#10B981', closer:'#F59E0B' }
-  const color = roleColors[setter.role] || '#7C3AED'
+  const roleColors = { admin:'#C94A1A', manager:'#4338CA', setter:'#166534', closer:'#D4920A' }
+  const color = roleColors[setter.role] || 'var(--orange)'
 
   el.innerHTML = `
     <div style="display:flex;align-items:center;gap:8px">
-      <div style="width:32px;height:32px;border-radius:8px;background:${color};color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;flex-shrink:0;box-shadow:0 2px 8px ${color}55" title="${escHtml(setter.prenom)} ${escHtml(setter.nom)}">${ini}</div>
-      <div style="line-height:1.3">
-        <div style="font-size:13px;font-weight:600;color:rgba(255,255,255,.92)">${escHtml(setter.prenom)}</div>
-        <div style="font-size:9.5px;color:rgba(255,255,255,.38);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em">${setter.role}</div>
+      <div style="width:30px;height:30px;border-radius:50%;background:${color};color:white;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;flex-shrink:0" title="${escHtml(setter.prenom)} ${escHtml(setter.nom)}">${ini}</div>
+      <div style="line-height:1.25">
+        <div style="font-size:12.5px;font-weight:600;color:rgba(255,255,255,.92)">${escHtml(setter.prenom)}</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.45);font-family:'DM Mono',monospace;text-transform:uppercase">${setter.role}</div>
       </div>
     </div>
   `
@@ -2689,7 +2623,7 @@ function renderDashboard() {
           <span class="section-title" style="color:var(--b2b)">🏢 Derniers prospects B2B</span>
           <button class="btn btn-b2b btn-sm" onclick="navigate('b2b')">Voir tout →</button>
         </div>
-        <div class="tbl-wrap" style="border-color:var(--b2b-border)">
+        <div class="tbl-wrap" style="border-color:var(--b2b-border);background:var(--b2b-light)">
           <table class="tbl">
             <thead><tr><th>Entreprise</th><th>Secteur</th><th>Statut</th><th>Entrée</th></tr></thead>
             <tbody id="dash-b2b-rows"></tbody>
@@ -2701,7 +2635,7 @@ function renderDashboard() {
           <span class="section-title" style="color:var(--orange)">🔥 Derniers leads B2C</span>
           <button class="btn btn-primary btn-sm" onclick="navigate('b2c')">Voir tout →</button>
         </div>
-        <div class="tbl-wrap" style="border-color:rgba(249,115,22,0.3)">
+        <div class="tbl-wrap" style="border-color:#FCA17D;background:var(--orange-light)">
           <table class="tbl">
             <thead><tr><th>Nom</th><th>Travaux</th><th>Statut</th><th>Entrée</th></tr></thead>
             <tbody id="dash-b2c-rows"></tbody>
@@ -2779,7 +2713,7 @@ function drawDashChart() {
     ctx.fillRect(x, 65 - h, barW, h)
   })
   ctx.globalAlpha = 1
-  ctx.fillStyle = '#7C8298'
+  ctx.fillStyle = '#6B5A52'
   ctx.font = '9px DM Mono, monospace'
   ctx.textAlign = 'center'
   labels.forEach((l,i) => {
@@ -2801,7 +2735,7 @@ const B2B_COLUMNS = [
 function renderB2B() {
   const el = document.getElementById('view-b2b')
   el.innerHTML = `
-    <div class="pole-banner" style="background:var(--b2b-light);color:var(--b2b);border:1px solid var(--b2b-border);border-radius:10px">
+    <div class="pole-banner" style="background:var(--b2b-light);color:var(--b2b)">
       <span class="pole-banner-icon">🏢</span>
       <div>
         <div class="pole-banner-title">PÔLE B2B — ACQUISITION CLIENTS ARTISANS</div>
@@ -3112,7 +3046,7 @@ function renderB2C() {
     : 0
 
   el.innerHTML = `
-    <div class="pole-banner" style="background:var(--orange-light);color:var(--orange);border:1px solid rgba(249,115,22,0.25);border-radius:10px">
+    <div class="pole-banner" style="background:var(--orange-light);color:var(--orange)">
       <span class="pole-banner-icon">🔥</span>
       <div>
         <div class="pole-banner-title">PÔLE B2C — LEADS PARTICULIERS</div>
@@ -3588,12 +3522,12 @@ async function renderSetters() {
         const prospectsTraites = state.clients.filter(c => c.setter_id === s.id).length
         const clientsSigne = state.clients.filter(c => c.setter_id === s.id && c.statut_client === 'client_actif').length
         const tauxSign = prospectsTraites > 0 ? Math.round(clientsSigne/prospectsTraites*100) : 0
-        const avatarColors = ['#7C3AED','#F97316','#10B981','#F59E0B','#60A5FA','#F87171']
+        const avatarColors = ['#C94A1A','#4338CA','#166534','#D4920A','#1E3A5F']
         const color = avatarColors[state.setters.indexOf(s) % avatarColors.length]
         const isMe = state.currentSetter?.id === s.id
         return `
-          <div class="setter-card" style="border-left:3px solid ${color};${isMe ? 'box-shadow:0 0 0 1px rgba(124,58,237,0.3),0 4px 20px rgba(124,58,237,0.12)' : ''}">
-            <div class="setter-avatar" style="background:${color};border-radius:10px;width:44px;height:44px;font-size:16px">${initials(s.prenom,s.nom)}</div>
+          <div class="setter-card" style="border-left:3px solid ${color}">
+            <div class="setter-avatar" style="background:${color}">${initials(s.prenom,s.nom)}</div>
             <div class="setter-info">
               <div style="display:flex;align-items:center;gap:8px">
                 <div class="setter-name">${escHtml(s.prenom)} ${escHtml(s.nom)}</div>
@@ -3812,7 +3746,7 @@ function drawB2CChart() {
     ctx.fillRect(x, 105 - h, barW, h)
   })
   ctx.globalAlpha = 1
-  ctx.fillStyle = '#7C8298'
+  ctx.fillStyle = '#6B5A52'
   ctx.font = '8px DM Mono, monospace'
   ctx.textAlign = 'center'
   labels.forEach((l,i) => { if (l) ctx.fillText(l, gap * i + gap/2, 118) })
@@ -3840,11 +3774,11 @@ function drawFunnelChart() {
     ctx.roundRect(labelW, y, w, barH, 3)
     ctx.fill()
     ctx.globalAlpha = 1
-    ctx.fillStyle = '#7C8298'
+    ctx.fillStyle = '#141210'
     ctx.font = '10px DM Sans, sans-serif'
     ctx.textAlign = 'right'
     ctx.fillText(s.label, labelW - 6, y + 16)
-    ctx.fillStyle = '#F0F2F8'
+    ctx.fillStyle = '#fff'
     ctx.textAlign = 'left'
     ctx.fillText(s.val, labelW + w + 6, y + 16)
   })
@@ -3870,9 +3804,9 @@ function drawSettersChart() {
     ctx.globalAlpha = 0.75
     ctx.beginPath(); ctx.roundRect(labelW, y, w, barH, 3); ctx.fill()
     ctx.globalAlpha = 1
-    ctx.fillStyle = '#7C8298'; ctx.font = '10px DM Sans'; ctx.textAlign = 'right'
+    ctx.fillStyle = '#141210'; ctx.font = '10px DM Sans'; ctx.textAlign = 'right'
     ctx.fillText(s.name, labelW - 6, y + 15)
-    ctx.fillStyle = '#F0F2F8'; ctx.textAlign = 'left'
+    ctx.fillStyle = '#6B5A52'; ctx.textAlign = 'left'
     ctx.fillText(s.rate + '%', labelW + w + 6, y + 15)
   })
 }
@@ -3885,7 +3819,7 @@ function drawRDVChart(honores, noshows) {
   const cx = W/2, cy = 46, r = 38
   const total = honores + noshows
   if (total === 0) {
-    ctx.fillStyle = 'rgba(255,255,255,0.07)'; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill()
+    ctx.fillStyle = '#E8E0D8'; ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill()
     return
   }
   const startAngle = -Math.PI/2
@@ -3898,8 +3832,8 @@ function drawRDVChart(honores, noshows) {
     angle += sweep
   })
   ctx.globalAlpha = 1
-  ctx.fillStyle = '#141720'; ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill()
-  ctx.fillStyle = '#F0F2F8'; ctx.font = 'bold 11px DM Mono'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(cx,cy,18,0,Math.PI*2); ctx.fill()
+  ctx.fillStyle = '#141210'; ctx.font = 'bold 11px DM Mono'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'
   ctx.fillText(total > 0 ? Math.round(honores/total*100)+'%' : '—', cx, cy)
 }
 
@@ -3953,7 +3887,7 @@ function renderSettings() {
         <div style="font-size:13px;color:var(--mid);margin-bottom:.75rem">
           Exécutez ce SQL dans <strong>Supabase → SQL Editor</strong> pour ajouter les colonnes manquantes (note étoiles + statut contact client) :
         </div>
-        <pre id="sql-migration" style="background:#0A0B12;color:#C4B5FD;border:1px solid rgba(124,58,237,0.2);border-radius:6px;padding:.9rem;font-family:'DM Mono',monospace;font-size:11px;overflow-x:auto;line-height:1.6">-- Colonne note étoiles sur les clients B2B
+        <pre id="sql-migration" style="background:var(--dark);color:#E2E8F0;border-radius:4px;padding:.9rem;font-family:'DM Mono',monospace;font-size:11px;overflow-x:auto;line-height:1.6">-- Colonne note étoiles sur les clients B2B
 ALTER TABLE clients ADD COLUMN IF NOT EXISTS score_interet INTEGER DEFAULT 0;
 
 -- Colonne statut de contact côté espace client
