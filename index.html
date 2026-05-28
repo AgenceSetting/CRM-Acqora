@@ -4316,12 +4316,24 @@ async function renderPanelB2C(lead) {
 
     <!-- Setter + tentatives -->
     <div style="margin-bottom:1rem">
-      <div class="form-group mb-1">
-        <label class="form-label">Setter assigné</label>
-        <select class="select" onchange="updateLeadField('${lead.id}','setter_id',this.value)">
-          <option value="">— Aucun —</option>${setterOpts}
-        </select>
-      </div>
+      ${(() => {
+        const role = state.currentSetter?.role
+        const isRestricted = role === 'setter' || role === 'closer'
+        if (isRestricted) {
+          // Mode setter : affichage lecture seule
+          const myName = setterName(lead.setter_id)
+          return `<div style="padding:.5rem .7rem;background:var(--cream);border-radius:4px;font-size:12.5px;color:var(--mid);margin-bottom:.5rem">
+            👤 Setter assigné : <strong style="color:var(--dark)">${escHtml(myName)}</strong>
+          </div>`
+        } else {
+          return `<div class="form-group mb-1">
+            <label class="form-label">Setter assigné</label>
+            <select class="select" onchange="updateLeadField('${lead.id}','setter_id',this.value)">
+              <option value="">— Aucun —</option>${setterOpts}
+            </select>
+          </div>`
+        }
+      })()}
       <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.4rem">TENTATIVES D'APPEL (${lead.nb_tentatives_appel||0}/3)</div>
       <button class="btn btn-secondary btn-sm" onclick="enregistrerTentative('${lead.id}')">📞 Enregistrer tentative</button>
       ${lead.derniere_tentative ? `<div class="text-small text-muted mt-1">Dernière : ${fmtDateTime(lead.derniere_tentative)}</div>` : ''}
@@ -4436,10 +4448,18 @@ async function qSave(leadId, key, value, directCol = null) {
 }
 
 // Handle radio selection — updates UI + saves
-function qRadio(leadId, key, value) {
-  // Save
+// Capture + restore open accordion sections around re-render
+function qOpenIds() {
+  return [...document.querySelectorAll('.qual-block.open')].map(el => el.id)
+}
+function qRestoreOpen(ids) {
+  ids.forEach(id => { const el = document.getElementById(id); if (el) el.classList.add('open') })
+}
+
+// Handle radio selection — saves + re-renders WITHOUT closing current section
+async function qRadio(leadId, key, value) {
+  const openIds = qOpenIds()          // ← mémoriser les sections ouvertes
   qSave(leadId, key, value)
-  // Update local state immediately for UI refresh
   const lead = state.leads.find(l => l.id === leadId)
   if (lead) {
     let qd = {}
@@ -4452,13 +4472,15 @@ function qRadio(leadId, key, value) {
     }
     target[parts[parts.length-1]] = value
     lead.qual_data = JSON.stringify(qd)
+    state.activeLead = lead
+    await renderPanelB2C(lead)
+    qRestoreOpen(openIds)             // ← réouvrir les mêmes sections
   }
-  // Re-render just the panel
-  if (lead) { state.activeLead = lead; renderPanelB2C(lead) }
 }
 
-// Handle délai selection — saves + re-renders to show/hide warning
-function qHandleDelai(leadId, value) {
+// Handle délai selection — saves + re-renders WITHOUT closing current section
+async function qHandleDelai(leadId, value) {
+  const openIds = qOpenIds()
   qSave(leadId, 'delai.option', value, 'delai_projet')
   const lead = state.leads.find(l => l.id === leadId)
   if (lead) {
@@ -4469,7 +4491,8 @@ function qHandleDelai(leadId, value) {
     lead.qual_data = JSON.stringify(qd)
     lead.delai_projet = value
     state.activeLead = lead
-    renderPanelB2C(lead)
+    await renderPanelB2C(lead)
+    qRestoreOpen(openIds)
   }
 }
 
