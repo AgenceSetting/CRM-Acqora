@@ -2289,6 +2289,10 @@
         <span class="nav-icon">🔥</span><span class="nav-label">Pôle B2C — Leads</span>
         <span class="nav-badge" id="badge-b2c">0</span>
       </a>
+      <a class="nav-item" data-view="livrables" onclick="navigate('livrables')" id="nav-livrables" style="background:rgba(22,101,52,.15)">
+        <span class="nav-icon">📦</span><span class="nav-label">Leads livrables</span>
+        <span class="nav-badge" id="badge-livrables" style="background:var(--green);color:#fff">0</span>
+      </a>
       <a class="nav-item" data-view="rdv" onclick="navigate('rdv')" id="nav-rdv">
         <span class="nav-icon">📅</span><span class="nav-label">Rendez-vous</span>
       </a>
@@ -2340,6 +2344,7 @@
     <div id="content">
       <div id="view-dashboard" class="view"></div>
       <div id="view-setter-home" class="view hidden"></div>
+      <div id="view-livrables" class="view hidden"></div>
       <div id="view-b2b" class="view hidden"></div>
       <div id="view-b2c" class="view hidden"></div>
       <div id="view-rdv" class="view hidden"></div>
@@ -2503,13 +2508,12 @@
         <span class="modal-title">📦 Livrer ce lead</span>
         <button class="modal-close" onclick="closeModal('modal-deliver')">✕</button>
       </div>
+      <div style="background:var(--green-light);border:1px solid var(--green-border);border-radius:5px;padding:.5rem .8rem;margin-bottom:.8rem;font-size:12px;color:var(--green)">
+        ✅ Ce lead remplit les 6 critères de qualification
+      </div>
       <div class="form-group">
         <label class="form-label">Client artisan destinataire *</label>
         <select class="select" id="deliver-client-id"><option value="">— Sélectionner —</option></select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Prix de facturation (€)</label>
-        <input class="input" id="deliver-prix" type="number" value="89" step="0.01" />
       </div>
       <div id="deliver-lead-id" style="display:none"></div>
       <div class="form-actions">
@@ -2796,7 +2800,8 @@ function toast(title, msg='', type='default', duration=4000) {
    NAVIGATION
 ============================================================ */
 const PAGE_TITLES = {
-  'setter-home': 'Mon Espace', dashboard: 'Dashboard', b2b: 'Pôle B2B — Clients', b2c: 'Pôle B2C — Leads',
+  'setter-home': 'Mon Espace', dashboard: 'Dashboard', livrables: '📦 Leads livrables',
+  b2b: 'Pôle B2B — Clients', b2c: 'Pôle B2C — Leads',
   rdv: 'Rendez-vous', setters: 'Setters', stats: 'Statistiques', settings: 'Paramètres & Intégrations'
 }
 function navigate(view) {
@@ -2816,7 +2821,7 @@ function navigate(view) {
   state.view = view
   const renders = {
     'setter-home': renderSetterHome,
-    dashboard: renderDashboard, b2b: renderB2B, b2c: renderB2C,
+    dashboard: renderDashboard, livrables: renderLivrables, b2b: renderB2B, b2c: renderB2C,
     rdv: renderRDV, setters: renderSetters, stats: renderStats, settings: renderSettings
   }
   if (renders[view]) renders[view]()
@@ -2834,7 +2839,7 @@ function updateNavForRole() {
   if (navSetterSep)  navSetterSep.style.display  = isRestrictedRole ? '' : 'none'
   if (navSetterHome) navSetterHome.style.display = isRestrictedRole ? '' : 'none'
   // Admin-only nav items (hide for restricted roles)
-  const adminOnlyIds = ['nav-dashboard','nav-sep-ops','nav-b2b','nav-b2c','nav-rdv','nav-sep-team','nav-setters','nav-stats','nav-sep-sys','nav-settings']
+  const adminOnlyIds = ['nav-dashboard','nav-sep-ops','nav-b2b','nav-b2c','nav-livrables','nav-rdv','nav-sep-team','nav-setters','nav-stats','nav-sep-sys','nav-settings']
   adminOnlyIds.forEach(id => {
     const el = document.getElementById(id)
     if (el) el.style.display = isRestrictedRole ? 'none' : ''
@@ -2941,8 +2946,17 @@ async function reloadSetters() {
 function updateBadges() {
   const b2bNew = state.clients.filter(c => c.statut_client === 'prospect_b2b').length
   const b2cNew = state.leads.filter(l => l.statut === 'nouveau').length
+  const livrablesCount = state.leads.filter(l => l.statut === 'qualifie').length
   document.getElementById('badge-b2b').textContent = b2bNew
   document.getElementById('badge-b2c').textContent = b2cNew
+  const badgeLiv = document.getElementById('badge-livrables')
+  if (badgeLiv) {
+    badgeLiv.textContent = livrablesCount
+    badgeLiv.style.display = livrablesCount > 0 ? '' : 'none'
+    // Pulse nav item if livrables waiting
+    const navLiv = document.getElementById('nav-livrables')
+    if (navLiv) navLiv.style.background = livrablesCount > 0 ? 'rgba(22,101,52,.2)' : 'rgba(22,101,52,.08)'
+  }
 }
 
 function populateSetterSelects() {
@@ -3463,6 +3477,160 @@ async function autoAssignLead(leadId) {
 }
 
 /* ============================================================
+   LEADS LIVRABLES — Vue dédiée
+============================================================ */
+function renderLivrables() {
+  const el = document.getElementById('view-livrables')
+  if (!el) return
+  const livrables = state.leads.filter(l => l.statut === 'qualifie')
+  const role = state.currentSetter?.role
+  const isAdmin = role !== 'setter' && role !== 'closer'
+
+  el.innerHTML = `
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:.75rem">
+      <div>
+        <h2 style="font-size:20px;letter-spacing:-.01em">📦 Leads livrables</h2>
+        <div style="font-size:12.5px;color:var(--mid);margin-top:3px">Leads 6/6 qualifiés — prêts à transmettre à un client artisan</div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;background:var(--green-light);color:var(--green);border:1px solid var(--green-border);border-radius:20px;padding:3px 12px">${livrables.length} leads en attente</span>
+        <button class="btn btn-secondary btn-sm" onclick="reloadLeads().then(()=>{updateBadges();renderLivrables()})">⟳ Actualiser</button>
+      </div>
+    </div>
+
+    ${livrables.length === 0 ? `
+      <div style="text-align:center;padding:4rem 2rem;background:var(--white);border:1px solid var(--border);border-radius:8px">
+        <div style="font-size:48px;margin-bottom:1rem">📭</div>
+        <div style="font-size:16px;font-weight:600;color:var(--dark);margin-bottom:.5rem">Aucun lead livrable pour l'instant</div>
+        <div style="font-size:13px;color:var(--mid)">Les leads atteignant 6/6 critères apparaîtront ici automatiquement.</div>
+      </div>
+    ` : `
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:1rem">
+        ${livrables.map(l => {
+          const setter = state.setters.find(s => s.id === l.setter_id)
+          const score = [l.crit_identite,l.crit_besoin,l.crit_decideur,l.crit_budget,l.crit_delai,l.crit_decision_proche].filter(Boolean).length
+          let qd = {}
+          try { if (l.qual_data) qd = JSON.parse(l.qual_data) } catch(e) {}
+          const budget = qd.budget?.fourchette || l.budget_estime || '—'
+          const delai = qd.delai?.option || l.delai_projet || '—'
+          const travaux = SECTEUR_LABELS[l.type_travaux] || '—'
+          const joursSince = l.created_at ? Math.floor((Date.now() - new Date(l.created_at)) / 86400000) : 0
+
+          return `
+            <div style="background:var(--white);border:1px solid var(--green-border);border-radius:8px;overflow:hidden;transition:box-shadow .15s" onmouseenter="this.style.boxShadow='0 4px 20px rgba(22,101,52,.12)'" onmouseleave="this.style.boxShadow='none'">
+              <!-- Card header -->
+              <div style="background:linear-gradient(135deg,var(--green) 0%,#15803D 100%);padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between">
+                <div>
+                  <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#fff">${escHtml(l.nom_complet||'—')}</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:1px">${escHtml(travaux)} · ${escHtml(l.zone||'—')}</div>
+                </div>
+                <div style="background:rgba(255,255,255,.15);border-radius:20px;padding:3px 10px;font-family:'DM Mono',monospace;font-size:10px;color:#fff">✅ 6/6</div>
+              </div>
+
+              <!-- Card body -->
+              <div style="padding:.9rem 1rem">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.8rem">
+                  <div style="background:var(--cream);border-radius:5px;padding:.45rem .6rem">
+                    <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Téléphone</div>
+                    <a href="tel:${escHtml(l.telephone||'')}" style="color:var(--orange);font-weight:600;font-size:13px">📞 ${escHtml(l.telephone||'—')}</a>
+                  </div>
+                  <div style="background:var(--cream);border-radius:5px;padding:.45rem .6rem">
+                    <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Budget</div>
+                    <div style="font-size:12.5px;font-weight:600;color:var(--dark)">${escHtml(budget)}</div>
+                  </div>
+                  <div style="background:var(--cream);border-radius:5px;padding:.45rem .6rem">
+                    <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Délai</div>
+                    <div style="font-size:12.5px;font-weight:600;color:var(--dark)">${escHtml(delai)}</div>
+                  </div>
+                  <div style="background:var(--cream);border-radius:5px;padding:.45rem .6rem">
+                    <div style="font-size:9px;font-family:'DM Mono',monospace;color:var(--mid);text-transform:uppercase;letter-spacing:.06em">Setter</div>
+                    <div style="font-size:12.5px;font-weight:600;color:var(--dark)">${setter ? escHtml(setter.prenom+' '+setter.nom) : '—'}</div>
+                  </div>
+                </div>
+                ${l.type_logement ? `<div style="font-size:12px;color:var(--mid);margin-bottom:.6rem">🏠 ${escHtml(l.type_logement)} ${l.surface_m2 ? '· '+l.surface_m2+'m²' : ''}</div>` : ''}
+                <div style="font-size:11px;color:var(--gray);font-family:'DM Mono',monospace;margin-bottom:.8rem">Qualifié il y a ${joursSince === 0 ? "aujourd'hui" : joursSince+' j'}</div>
+
+                <!-- Actions -->
+                <div style="display:flex;gap:.5rem">
+                  <button class="btn btn-sm" style="flex:1;background:var(--green);color:#fff;border-color:var(--green);font-size:12.5px;font-weight:600" onclick="openPanelB2C('${l.id}');openDeliverModal('${l.id}')">
+                    📦 Livrer ce lead →
+                  </button>
+                  <button class="btn btn-sm btn-secondary" onclick="openPanelB2C('${l.id}')" title="Voir la fiche">🔍</button>
+                  ${isAdmin ? `<button class="btn btn-sm btn-danger" onclick="deleteLead('${l.id}')" title="Supprimer">🗑️</button>` : ''}
+                </div>
+              </div>
+            </div>
+          `
+        }).join('')}
+      </div>
+
+      <!-- Tableau récap compact -->
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:8px;margin-top:1.5rem;overflow:hidden">
+        <div style="padding:.75rem 1rem;border-bottom:1px solid var(--border);background:var(--cream);font-family:'DM Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--mid)">
+          RÉCAPITULATIF RAPIDE
+        </div>
+        <div style="overflow-x:auto">
+          <table style="width:100%;border-collapse:collapse;font-size:13px">
+            <thead>
+              <tr style="background:var(--cream)">
+                <th style="text-align:left;padding:8px 12px;font-size:11px;color:var(--mid);font-weight:500">Lead</th>
+                <th style="text-align:left;padding:8px 12px;font-size:11px;color:var(--mid);font-weight:500">Téléphone</th>
+                <th style="text-align:left;padding:8px 12px;font-size:11px;color:var(--mid);font-weight:500">Travaux</th>
+                <th style="text-align:left;padding:8px 12px;font-size:11px;color:var(--mid);font-weight:500">Budget</th>
+                <th style="text-align:left;padding:8px 12px;font-size:11px;color:var(--mid);font-weight:500">Setter</th>
+                <th style="padding:8px 12px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              ${livrables.map(l => {
+                const setter = state.setters.find(s => s.id === l.setter_id)
+                let qd = {}; try { if (l.qual_data) qd = JSON.parse(l.qual_data) } catch(e) {}
+                const budget = qd.budget?.fourchette || l.budget_estime || '—'
+                return `
+                  <tr onclick="openPanelB2C('${l.id}')" style="cursor:pointer;border-top:1px solid var(--border)" onmouseenter="this.style.background='var(--green-light)'" onmouseleave="this.style.background=''">
+                    <td style="padding:9px 12px;font-weight:600">${escHtml(l.nom_complet||'—')}</td>
+                    <td style="padding:9px 12px"><a href="tel:${escHtml(l.telephone||'')}" onclick="event.stopPropagation()" style="color:var(--orange)">${escHtml(l.telephone||'—')}</a></td>
+                    <td style="padding:9px 12px;font-size:12px;color:var(--mid)">${escHtml(SECTEUR_LABELS[l.type_travaux]||'—')}</td>
+                    <td style="padding:9px 12px;font-size:12px">${escHtml(budget)}</td>
+                    <td style="padding:9px 12px;font-size:12px;color:var(--mid)">${setter ? escHtml(setter.prenom) : '—'}</td>
+                    <td style="padding:9px 12px" onclick="event.stopPropagation()">
+                      <button class="btn btn-sm" style="background:var(--green);color:#fff;border-color:var(--green)" onclick="openDeliverModal('${l.id}')">📦 Livrer</button>
+                    </td>
+                  </tr>
+                `
+              }).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `}
+  `
+}
+
+/* ============================================================
+   DELETE LEAD B2C
+============================================================ */
+async function deleteLead(leadId) {
+  const lead = state.leads.find(l => l.id === leadId)
+  if (!lead) return
+  const name = escHtml(lead.nom_complet || '—')
+  if (!confirm(`Supprimer définitivement le lead "${lead.nom_complet || leadId}" ?\n\nCette action est irréversible.`)) return
+  if (!db) return
+  const { error } = await db.from('leads_b2c').delete().eq('id', leadId)
+  if (error) { toast('Erreur', error.message, 'error'); return }
+  // Nettoyer les notes/historique liés
+  await db.from('notes').delete().eq('type_cible','lead_b2c').eq('cible_id', leadId)
+  await reloadLeads(); updateBadges()
+  closePanels()
+  if (state.view === 'b2c') renderB2C()
+  if (state.view === 'livrables') renderLivrables()
+  if (state.view === 'dashboard') renderDashboard()
+  if (state.view === 'setter-home') renderSetterHome()
+  toast('🗑️ Lead supprimé', lead.nom_complet || leadId, 'info')
+}
+
+/* ============================================================
    DASHBOARD
 ============================================================ */
 function renderDashboard() {
@@ -3480,7 +3648,24 @@ function renderDashboard() {
   const last5B2B = state.clients.slice(0,5)
   const last5B2C = state.leads.slice(0,5)
 
+  const livrablesCount = state.leads.filter(l => l.statut === 'qualifie').length
+
   el.innerHTML = `
+    ${livrablesCount > 0 ? `
+    <div onclick="navigate('livrables')" style="cursor:pointer;background:linear-gradient(135deg,#14532d,#166534);border:1.5px solid #16a34a;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1rem;box-shadow:0 4px 20px rgba(22,163,74,.25)">
+      <div style="font-size:2rem;line-height:1">📦</div>
+      <div style="flex:1">
+        <div style="font-weight:700;color:#4ade80;font-size:1rem;letter-spacing:.01em">
+          ${livrablesCount} lead${livrablesCount > 1 ? 's' : ''} prêt${livrablesCount > 1 ? 's' : ''} à livrer !
+        </div>
+        <div style="color:#86efac;font-size:.82rem;margin-top:.15rem">
+          Ces leads ont été qualifiés 6/6 — cliquer pour les livrer aux clients artisans
+        </div>
+      </div>
+      <div style="background:#16a34a;color:#fff;font-weight:700;font-size:1.1rem;padding:.4rem .9rem;border-radius:8px;white-space:nowrap">
+        Voir →
+      </div>
+    </div>` : ''}
     <div class="grid-4 mb-3">
       <div class="kpi-card" style="--card-glow:var(--b2b)">
         <style>.kpi-card:nth-child(1)::before{background:var(--b2b)}.kpi-card:nth-child(2)::before{background:var(--orange)}.kpi-card:nth-child(3)::before{background:var(--green)}.kpi-card:nth-child(4)::before{background:var(--gold)}.kpi-card:nth-child(1)::after{background:var(--b2b)}.kpi-card:nth-child(2)::after{background:var(--orange)}.kpi-card:nth-child(3)::after{background:var(--green)}.kpi-card:nth-child(4)::after{background:var(--gold)}</style>
@@ -4361,10 +4546,12 @@ async function renderPanelB2C(lead) {
     </div>` : ''}
   `
 
+  const canAdmin = state.currentSetter?.role !== 'setter' && state.currentSetter?.role !== 'closer'
   footer.innerHTML = `
     <a href="https://wa.me/${(lead.telephone||'').replace(/\D/g,'')}" target="_blank" class="btn btn-secondary btn-sm">💬 WhatsApp</a>
     ${score === 6 && lead.statut !== 'livre' ? `<button class="btn btn-primary btn-sm" onclick="openDeliverModal('${lead.id}')">📦 Livrer</button>` : ''}
     <button class="btn btn-danger btn-sm" onclick="updateLeadStatut('${lead.id}','non_qualifie')">✗ Non qualifié</button>
+    ${canAdmin ? `<button class="btn btn-sm" style="background:var(--red-light);color:var(--red);border-color:var(--red-border);margin-left:auto" onclick="deleteLead('${lead.id}')" title="Supprimer ce lead définitivement">🗑️ Supprimer</button>` : ''}
   `
 }
 
@@ -4566,21 +4753,19 @@ function openDeliverModal(leadId) {
     .map(c => `<option value="${c.id}">${escHtml(c.nom_entreprise)} (${SECTEUR_LABELS[c.secteur]||'—'})</option>`).join('')
   document.getElementById('deliver-client-id').innerHTML = `<option value="">— Sélectionner —</option>${clientOpts}`
   document.getElementById('deliver-lead-id').textContent = leadId
-  document.getElementById('deliver-prix').value = '89'
   openModal('modal-deliver')
 }
 
 async function submitDeliverLead() {
   const leadId = document.getElementById('deliver-lead-id').textContent
   const clientId = document.getElementById('deliver-client-id').value
-  const prix = parseFloat(document.getElementById('deliver-prix').value) || 89
   if (!clientId) { toast('Client requis', 'Sélectionner un client', 'error'); return }
   if (!db) return
   await db.from('leads_b2c').update({
     statut: 'livre', client_id: clientId,
-    date_livraison: new Date().toISOString(), prix_facturation: prix
+    date_livraison: new Date().toISOString()
   }).eq('id', leadId)
-  await log('lead_b2c', leadId, `Lead livré à ${clientName(clientId)}`, `Prix: ${prix}€`)
+  await log('lead_b2c', leadId, `Lead livré à ${clientName(clientId)}`)
   closeModal('modal-deliver')
   await reloadLeads(); updateBadges()
   if (state.view === 'b2c') renderB2C()
