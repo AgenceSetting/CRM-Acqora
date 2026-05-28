@@ -1739,6 +1739,339 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+
+    /* ============================================================
+       SETTER HOME — Espace dédié setter
+    ============================================================ */
+
+    /* Greeting banner */
+    .sh-greeting {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
+      border-radius: 10px;
+      padding: 1.4rem 1.6rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .sh-greeting::before {
+      content: '';
+      position: absolute;
+      top: -20px; right: -20px;
+      width: 120px; height: 120px;
+      background: var(--orange);
+      border-radius: 50%;
+      opacity: 0.08;
+    }
+    .sh-greeting-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .sh-greeting-sub {
+      font-size: 12.5px;
+      color: rgba(255,255,255,.45);
+      margin-top: 3px;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.04em;
+    }
+    .sh-greeting-badge {
+      padding: 6px 14px;
+      background: var(--orange);
+      color: #fff;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: 'DM Mono', monospace;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* KPI grid for setter */
+    .sh-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .sh-kpi {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.1rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow .15s;
+    }
+    .sh-kpi:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .sh-kpi::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--sh-accent, var(--orange));
+      border-radius: 8px 8px 0 0;
+    }
+    .sh-kpi-icon {
+      font-size: 22px;
+      margin-bottom: 6px;
+    }
+    .sh-kpi-val {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--dark);
+      letter-spacing: -0.03em;
+    }
+    .sh-kpi-label {
+      font-size: 12px;
+      color: var(--mid);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+    .sh-kpi-trend {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      margin-top: 6px;
+      color: var(--gray);
+    }
+
+    /* Two-column layout */
+    .sh-row {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: start;
+    }
+
+    /* Card container */
+    .sh-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .sh-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .9rem 1.2rem;
+      border-bottom: 1px solid var(--border);
+      background: var(--cream);
+    }
+    .sh-card-title {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 14px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .sh-card-body { padding: 1rem 1.2rem; }
+
+    /* Mission items */
+    .sh-mission-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background .12s;
+      margin: 0 -1.2rem;
+      padding-left: 1.2rem;
+      padding-right: 1.2rem;
+    }
+    .sh-mission-item:last-child { border-bottom: none; }
+    .sh-mission-item:hover { background: var(--cream); }
+    .sh-mission-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+    .sh-mission-dot.urgent { background: var(--red); box-shadow: 0 0 6px rgba(153,27,27,.4); }
+    .sh-mission-dot.normal { background: var(--orange); }
+    .sh-mission-dot.cold   { background: var(--gray); }
+    .sh-mission-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .sh-mission-meta {
+      font-size: 11.5px;
+      color: var(--mid);
+      margin-top: 2px;
+    }
+    .sh-mission-actions {
+      display: flex;
+      gap: 5px;
+      flex-shrink: 0;
+      margin-left: auto;
+      align-items: center;
+    }
+
+    /* Palier / remuneration */
+    .sh-palier-bar-wrap {
+      margin: .6rem 0;
+    }
+    .sh-palier-bar-track {
+      height: 8px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 4px 0;
+    }
+    .sh-palier-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 1s cubic-bezier(.25,.46,.45,.94);
+      background: linear-gradient(90deg, var(--orange) 0%, var(--gold) 100%);
+    }
+    .sh-palier-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .6rem;
+      margin-top: .8rem;
+    }
+    .sh-palier-card {
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      padding: .6rem .8rem;
+      text-align: center;
+      transition: all .15s;
+      position: relative;
+    }
+    .sh-palier-card.active {
+      border-color: var(--gold);
+      background: var(--gold-light);
+    }
+    .sh-palier-card.achieved {
+      border-color: var(--green-border);
+      background: var(--green-light);
+    }
+    .sh-palier-card.locked {
+      opacity: .55;
+    }
+    .sh-palier-val {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 16px;
+      color: var(--dark);
+    }
+    .sh-palier-label {
+      font-size: 10.5px;
+      color: var(--mid);
+      margin-top: 1px;
+      font-family: 'DM Mono', monospace;
+    }
+    .sh-gains-total {
+      background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
+      border-radius: 8px;
+      padding: 1rem 1.1rem;
+      margin-top: .9rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sh-gains-label {
+      font-size: 12px;
+      color: rgba(255,255,255,.55);
+      font-family: 'DM Mono', monospace;
+      letter-spacing: .04em;
+    }
+    .sh-gains-amount {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    /* Pipeline table */
+    .sh-pipeline-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .sh-pipeline-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--mid);
+      border-bottom: 2px solid var(--border);
+      background: var(--cream);
+    }
+    .sh-pipeline-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .sh-pipeline-table tr:last-child td { border-bottom: none; }
+    .sh-pipeline-table tr:hover td { background: var(--orange-pale); }
+    .sh-pipeline-table tr { cursor: pointer; transition: background .1s; }
+
+    /* Performance bars */
+    .sh-perf-bar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 6px 0;
+    }
+    .sh-perf-bar-label {
+      font-size: 11.5px;
+      color: var(--mid);
+      width: 80px;
+      flex-shrink: 0;
+      font-family: 'DM Mono', monospace;
+    }
+    .sh-perf-bar-track {
+      flex: 1;
+      height: 10px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .sh-perf-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      background: linear-gradient(90deg, var(--orange) 0%, var(--orange-mid) 100%);
+      transition: width 1s ease;
+    }
+    .sh-perf-bar-val {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark);
+      width: 28px;
+      text-align: right;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* Empty state */
+    .sh-empty {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--mid);
+    }
+    .sh-empty-icon { font-size: 32px; margin-bottom: 8px; }
+    .sh-empty-text { font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .sh-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .sh-row { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -1752,30 +2085,35 @@
       <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--white);letter-spacing:-0.02em">acqora.</span>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-sep">OPÉRATIONS</div>
-      <a class="nav-item active" data-view="dashboard" onclick="navigate('dashboard')">
+      <!-- Nav setter uniquement -->
+      <div class="nav-sep" id="nav-sep-setter" style="display:none">MON ESPACE</div>
+      <a class="nav-item" id="nav-setter-home" data-view="setter-home" onclick="navigate('setter-home')" style="display:none">
+        <span class="nav-icon">🚀</span><span class="nav-label">Mon Dashboard</span>
+      </a>
+      <div class="nav-sep" id="nav-sep-ops">OPÉRATIONS</div>
+      <a class="nav-item active" data-view="dashboard" onclick="navigate('dashboard')" id="nav-dashboard">
         <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
       </a>
-      <a class="nav-item" data-view="b2b" onclick="navigate('b2b')">
+      <a class="nav-item" data-view="b2b" onclick="navigate('b2b')" id="nav-b2b">
         <span class="nav-icon">🏢</span><span class="nav-label">Pôle B2B — Clients</span>
         <span class="nav-badge" id="badge-b2b">0</span>
       </a>
-      <a class="nav-item" data-view="b2c" onclick="navigate('b2c')">
+      <a class="nav-item" data-view="b2c" onclick="navigate('b2c')" id="nav-b2c">
         <span class="nav-icon">🔥</span><span class="nav-label">Pôle B2C — Leads</span>
         <span class="nav-badge" id="badge-b2c">0</span>
       </a>
-      <a class="nav-item" data-view="rdv" onclick="navigate('rdv')">
+      <a class="nav-item" data-view="rdv" onclick="navigate('rdv')" id="nav-rdv">
         <span class="nav-icon">📅</span><span class="nav-label">Rendez-vous</span>
       </a>
-      <div class="nav-sep">ÉQUIPE</div>
-      <a class="nav-item" data-view="setters" onclick="navigate('setters')">
+      <div class="nav-sep" id="nav-sep-team">ÉQUIPE</div>
+      <a class="nav-item" data-view="setters" onclick="navigate('setters')" id="nav-setters">
         <span class="nav-icon">👤</span><span class="nav-label">Setters</span>
       </a>
-      <a class="nav-item" data-view="stats" onclick="navigate('stats')">
+      <a class="nav-item" data-view="stats" onclick="navigate('stats')" id="nav-stats">
         <span class="nav-icon">📈</span><span class="nav-label">Statistiques</span>
       </a>
-      <div class="nav-sep">SYSTÈME</div>
-      <a class="nav-item" data-view="settings" onclick="navigate('settings')">
+      <div class="nav-sep" id="nav-sep-sys">SYSTÈME</div>
+      <a class="nav-item" data-view="settings" onclick="navigate('settings')" id="nav-settings">
         <span class="nav-icon">⚙️</span><span class="nav-label">Paramètres</span>
       </a>
     </nav>
@@ -1814,6 +2152,7 @@
 
     <div id="content">
       <div id="view-dashboard" class="view"></div>
+      <div id="view-setter-home" class="view hidden"></div>
       <div id="view-b2b" class="view hidden"></div>
       <div id="view-b2c" class="view hidden"></div>
       <div id="view-rdv" class="view hidden"></div>
@@ -2270,23 +2609,49 @@ function toast(title, msg='', type='default', duration=4000) {
    NAVIGATION
 ============================================================ */
 const PAGE_TITLES = {
-  dashboard: 'Dashboard', b2b: 'Pôle B2B — Clients', b2c: 'Pôle B2C — Leads',
+  'setter-home': 'Mon Espace', dashboard: 'Dashboard', b2b: 'Pôle B2B — Clients', b2c: 'Pôle B2C — Leads',
   rdv: 'Rendez-vous', setters: 'Setters', stats: 'Statistiques', settings: 'Paramètres & Intégrations'
 }
 function navigate(view) {
+  // Redirige les setters vers leur espace personnel si besoin
+  const role = state.currentSetter?.role
+  const isRestrictedRole = role === 'setter' || role === 'closer'
+  if (isRestrictedRole && view === 'dashboard') view = 'setter-home'
+
   closePanels()
   document.querySelectorAll('.nav-item').forEach(el => {
     el.classList.toggle('active', el.dataset.view === view)
   })
   document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'))
-  document.getElementById('view-' + view).classList.remove('hidden')
+  const viewEl = document.getElementById('view-' + view)
+  if (viewEl) viewEl.classList.remove('hidden')
   document.getElementById('page-title').textContent = PAGE_TITLES[view] || view
   state.view = view
-  const renders = { dashboard: renderDashboard, b2b: renderB2B, b2c: renderB2C,
-                    rdv: renderRDV, setters: renderSetters, stats: renderStats, settings: renderSettings }
+  const renders = {
+    'setter-home': renderSetterHome,
+    dashboard: renderDashboard, b2b: renderB2B, b2c: renderB2C,
+    rdv: renderRDV, setters: renderSetters, stats: renderStats, settings: renderSettings
+  }
   if (renders[view]) renders[view]()
   document.getElementById('sidebar').classList.remove('mobile-open')
   document.getElementById('sidebar-overlay').style.display = 'none'
+}
+
+/* Show/hide nav items based on role */
+function updateNavForRole() {
+  const role = state.currentSetter?.role
+  const isRestrictedRole = role === 'setter' || role === 'closer'
+  // Setter-only nav
+  const navSetterSep  = document.getElementById('nav-sep-setter')
+  const navSetterHome = document.getElementById('nav-setter-home')
+  if (navSetterSep)  navSetterSep.style.display  = isRestrictedRole ? '' : 'none'
+  if (navSetterHome) navSetterHome.style.display = isRestrictedRole ? '' : 'none'
+  // Admin-only nav items (hide for restricted roles)
+  const adminOnlyIds = ['nav-dashboard','nav-sep-ops','nav-b2b','nav-b2c','nav-rdv','nav-sep-team','nav-setters','nav-stats','nav-sep-sys','nav-settings']
+  adminOnlyIds.forEach(id => {
+    const el = document.getElementById(id)
+    if (el) el.style.display = isRestrictedRole ? 'none' : ''
+  })
 }
 
 function toggleSidebar() {
@@ -2494,9 +2859,13 @@ function loginSuccess(setter) {
   state.currentSetter = setter
   localStorage.setItem('crm_setter', JSON.stringify(setter))
   updateHeaderSetter()
+  updateNavForRole()
   hideLoginOverlay()
   // Les setters voient uniquement leur pipeline par défaut
   state.b2cMyLeadsOnly = setter.role === 'setter'
+  // Redirection vers l'espace personnel pour les setters/closers
+  const isRestrictedRole = setter.role === 'setter' || setter.role === 'closer'
+  navigate(isRestrictedRole ? 'setter-home' : 'dashboard')
 }
 
 function logoutSetter() {
@@ -2507,6 +2876,8 @@ function logoutSetter() {
   if (logoutBtn) logoutBtn.style.display = 'none'
   const el = document.getElementById('header-setter-info')
   if (el) el.innerHTML = `<div class="header-avatar" style="background:rgba(255,255,255,.08);color:var(--mid)">?</div>`
+  // Reset nav to full visibility
+  updateNavForRole()
   showLoginOverlay()
 }
 
@@ -2543,6 +2914,335 @@ function updateHeaderSetter() {
     logoutBtn.style.display = 'block'
     if (logoutLabel) logoutLabel.textContent = `↩ ${escHtml(setter.prenom)} — Déconnexion`
   }
+}
+
+/* ============================================================
+   SETTER HOME — Espace personnel du setter
+============================================================ */
+function renderSetterHome() {
+  const el = document.getElementById('view-setter-home')
+  if (!el) return
+  const me = state.currentSetter
+  if (!me) return
+
+  const now = new Date()
+  const thisMonth = now.getMonth()
+  const thisYear  = now.getFullYear()
+
+  // Mes leads (uniquement les miens)
+  const allMyLeads = state.leads.filter(l => l.setter_id === me.id)
+  const activeStatuts = ['nouveau','en_cours','partiellement_qualifie']
+  const myActive     = allMyLeads.filter(l => activeStatuts.includes(l.statut))
+  const myQualThisMonth = allMyLeads.filter(l => {
+    if (!['qualifie','livre'].includes(l.statut)) return false
+    const d = l.updated_at ? new Date(l.updated_at) : null
+    return d && d.getMonth() === thisMonth && d.getFullYear() === thisYear
+  })
+  const myTotalThisMonth = allMyLeads.filter(l => {
+    const d = l.created_at ? new Date(l.created_at) : null
+    return d && d.getMonth() === thisMonth && d.getFullYear() === thisYear
+  })
+  const tauxQual = myTotalThisMonth.length > 0
+    ? Math.round(myQualThisMonth.length / myTotalThisMonth.length * 100)
+    : 0
+
+  // Rémunération (palier système)
+  const TARIF_COURS     = 5    // €/lead en cours
+  const TARIF_QUALIFIE  = 15   // €/lead qualifié
+  const TARIF_LIVRE     = 25   // €/lead livré
+  const qualCount  = allMyLeads.filter(l => l.statut === 'qualifie').length
+  const livreCount = allMyLeads.filter(l => l.statut === 'livre').length
+  const coursCount = allMyLeads.filter(l => l.statut === 'en_cours').length
+  let baseGains = coursCount * TARIF_COURS + qualCount * TARIF_QUALIFIE + livreCount * TARIF_LIVRE
+  // Paliers bonus (basés sur qualifiés total)
+  const PALIERS = [
+    { seuil: 5,  bonus: 50,  label: '5 qualif.' },
+    { seuil: 10, bonus: 100, label: '10 qualif.' },
+    { seuil: 20, bonus: 200, label: '20 qualif.' },
+  ]
+  let bonusTotal = 0
+  PALIERS.forEach(p => { if (qualCount + livreCount >= p.seuil) bonusTotal += p.bonus })
+  const totalGains = baseGains + bonusTotal
+
+  // Missions urgentes (leads nouveaux ou injoignable ou en_cours depuis > 3j)
+  const missions = allMyLeads
+    .filter(l => activeStatuts.includes(l.statut) || l.statut === 'injoignable')
+    .sort((a, b) => {
+      // Priorité: nouveau > injoignable > en_cours
+      const prio = { nouveau: 0, injoignable: 1, partiellement_qualifie: 2, en_cours: 3 }
+      return (prio[a.statut] ?? 9) - (prio[b.statut] ?? 9)
+    })
+    .slice(0, 8)
+
+  // Formatage date
+  function fmtDate(d) {
+    if (!d) return '—'
+    const dt = new Date(d)
+    return dt.toLocaleDateString('fr-FR', { day:'2-digit', month:'short' })
+  }
+
+  // Label statut
+  const STATUT_LABELS = {
+    nouveau: 'Nouveau', en_cours: 'En cours', qualifie: 'Qualifié',
+    partiellement_qualifie: 'Partiel', non_qualifie: 'Non qual.', livre: 'Livré', injoignable: 'Injoignable'
+  }
+
+  // Greeter
+  const heure = now.getHours()
+  const salut = heure < 12 ? 'Bonjour' : heure < 18 ? 'Bon après-midi' : 'Bonsoir'
+  const dateStr = now.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' })
+
+  // Performance hebdo (7 derniers jours)
+  const perfDays = []
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(now)
+    d.setDate(d.getDate() - i)
+    const day = d.toLocaleDateString('fr-FR', { weekday: 'short' })
+    const count = allMyLeads.filter(l => {
+      const lDate = l.updated_at ? new Date(l.updated_at) : null
+      return lDate && lDate.toDateString() === d.toDateString() && ['qualifie','livre'].includes(l.statut)
+    }).length
+    perfDays.push({ day, count })
+  }
+  const maxPerf = Math.max(...perfDays.map(d => d.count), 1)
+
+  // Build palier cards
+  const totalQualAll = qualCount + livreCount
+  const nextPalier = PALIERS.find(p => totalQualAll < p.seuil)
+  const progressPct = nextPalier
+    ? Math.min(100, Math.round(totalQualAll / nextPalier.seuil * 100))
+    : 100
+
+  el.innerHTML = `
+    <!-- Greeting -->
+    <div class="sh-greeting">
+      <div>
+        <div class="sh-greeting-title">${salut}, ${escHtml(me.prenom)} 👋</div>
+        <div class="sh-greeting-sub">${dateStr.charAt(0).toUpperCase() + dateStr.slice(1)}</div>
+      </div>
+      <div class="sh-greeting-badge">Setter B2C</div>
+    </div>
+
+    <!-- KPI Cards -->
+    <div class="sh-kpi-grid">
+      <div class="sh-kpi" style="--sh-accent:var(--orange)">
+        <div class="sh-kpi-icon">🔥</div>
+        <div class="sh-kpi-val">${myActive.length}</div>
+        <div class="sh-kpi-label">Leads actifs</div>
+        <div class="sh-kpi-trend">${myActive.filter(l=>l.statut==='nouveau').length} nouveaux à appeler</div>
+      </div>
+      <div class="sh-kpi" style="--sh-accent:var(--green)">
+        <div class="sh-kpi-icon">✅</div>
+        <div class="sh-kpi-val">${myQualThisMonth.length}</div>
+        <div class="sh-kpi-label">Qualifiés ce mois</div>
+        <div class="sh-kpi-trend">sur ${myTotalThisMonth.length} reçus ce mois</div>
+      </div>
+      <div class="sh-kpi" style="--sh-accent:var(--blue)">
+        <div class="sh-kpi-icon">📊</div>
+        <div class="sh-kpi-val">${tauxQual}%</div>
+        <div class="sh-kpi-label">Taux de qualification</div>
+        <div class="sh-kpi-trend">${tauxQual >= 50 ? '🟢 Excellent' : tauxQual >= 30 ? '🟡 Correct' : '🔴 À améliorer'}</div>
+      </div>
+      <div class="sh-kpi" style="--sh-accent:var(--gold)">
+        <div class="sh-kpi-icon">💰</div>
+        <div class="sh-kpi-val">${totalGains}€</div>
+        <div class="sh-kpi-label">Gains estimés</div>
+        <div class="sh-kpi-trend">base ${baseGains}€ + bonus ${bonusTotal}€</div>
+      </div>
+    </div>
+
+    <!-- Row: Missions + Rémunération -->
+    <div class="sh-row">
+      <!-- Missions du jour -->
+      <div class="sh-card">
+        <div class="sh-card-header">
+          <div class="sh-card-title">🎯 Missions — À traiter en priorité</div>
+          <span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--mid)">${missions.length} leads</span>
+        </div>
+        <div class="sh-card-body" style="padding:0">
+          ${missions.length === 0 ? `
+            <div class="sh-empty">
+              <div class="sh-empty-icon">🎉</div>
+              <div class="sh-empty-text">Toutes tes missions sont à jour !</div>
+            </div>
+          ` : missions.map(l => {
+            const isUrgent = l.statut === 'nouveau' || l.statut === 'injoignable'
+            const dotClass = l.statut === 'nouveau' ? 'urgent' : l.statut === 'injoignable' ? 'cold' : 'normal'
+            const phone = l.telephone ? `<a href="tel:${escHtml(l.telephone)}" onclick="event.stopPropagation()" style="color:var(--orange);font-weight:600">📞 ${escHtml(l.telephone)}</a>` : ''
+            return `
+              <div class="sh-mission-item" onclick="openPanelB2C('${l.id}')">
+                <div class="sh-mission-dot ${dotClass}"></div>
+                <div style="flex:1;min-width:0">
+                  <div class="sh-mission-name">${escHtml(l.prenom||'')} ${escHtml(l.nom||'')}</div>
+                  <div class="sh-mission-meta">${badgeStatutB2C(l.statut)} · ${phone || 'Pas de tél.'} · Reçu le ${fmtDate(l.created_at)}</div>
+                </div>
+                <div class="sh-mission-actions">
+                  <button class="btn btn-sm" style="background:var(--green-light);color:var(--green);border-color:var(--green-border)" onclick="event.stopPropagation();shQuickStatus('${l.id}','qualifie')" title="Marquer qualifié">✅</button>
+                  <button class="btn btn-sm btn-ghost" onclick="event.stopPropagation();shQuickStatus('${l.id}','injoignable')" title="Injoignable">📵</button>
+                </div>
+              </div>
+            `
+          }).join('')}
+        </div>
+      </div>
+
+      <!-- Ma rémunération -->
+      <div class="sh-card">
+        <div class="sh-card-header">
+          <div class="sh-card-title">💰 Ma rémunération</div>
+        </div>
+        <div class="sh-card-body">
+          <!-- Progress vers palier suivant -->
+          ${nextPalier ? `
+            <div style="font-size:12px;color:var(--mid);margin-bottom:4px">
+              Prochain palier : <strong style="color:var(--dark)">${nextPalier.label}</strong> → +${nextPalier.bonus}€
+            </div>
+            <div class="sh-palier-bar-wrap">
+              <div class="sh-palier-bar-track">
+                <div class="sh-palier-bar-fill" style="width:0%" data-target="${progressPct}%"></div>
+              </div>
+              <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--gray);font-family:'DM Mono',monospace">
+                <span>${totalQualAll} / ${nextPalier.seuil} qualifiés</span>
+                <span>${progressPct}%</span>
+              </div>
+            </div>
+          ` : `<div style="font-size:12.5px;color:var(--green);font-weight:600;margin-bottom:.8rem">🏆 Tous les paliers atteints !</div>`}
+
+          <!-- Palier cards -->
+          <div class="sh-palier-grid">
+            ${PALIERS.map(p => {
+              const done = totalQualAll >= p.seuil
+              const cls  = done ? 'achieved' : (nextPalier && nextPalier.seuil === p.seuil ? 'active' : 'locked')
+              return `
+                <div class="sh-palier-card ${cls}">
+                  <div style="font-size:16px">${done ? '✅' : '🔒'}</div>
+                  <div class="sh-palier-val">+${p.bonus}€</div>
+                  <div class="sh-palier-label">${p.label}</div>
+                </div>
+              `
+            }).join('')}
+          </div>
+
+          <!-- Barème -->
+          <div style="background:var(--cream);border-radius:6px;padding:.7rem .9rem;margin-top:.9rem">
+            <div style="font-size:10px;font-family:'DM Mono',monospace;color:var(--mid);text-transform:uppercase;letter-spacing:.06em;margin-bottom:.5rem">Barème unitaire</div>
+            <div style="display:flex;flex-direction:column;gap:3px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mid)">Lead en cours</span><span style="font-weight:600">${TARIF_COURS}€ × ${coursCount} = <span style="color:var(--orange)">${coursCount*TARIF_COURS}€</span></span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mid)">Lead qualifié</span><span style="font-weight:600">${TARIF_QUALIFIE}€ × ${qualCount} = <span style="color:var(--green)">${qualCount*TARIF_QUALIFIE}€</span></span></div>
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:var(--mid)">Lead livré</span><span style="font-weight:600">${TARIF_LIVRE}€ × ${livreCount} = <span style="color:var(--b2b)">${livreCount*TARIF_LIVRE}€</span></span></div>
+            </div>
+          </div>
+
+          <!-- Total -->
+          <div class="sh-gains-total">
+            <div>
+              <div class="sh-gains-label">GAINS ESTIMÉS</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.35);font-family:'DM Mono',monospace">base + bonus paliers</div>
+            </div>
+            <div class="sh-gains-amount">${totalGains}€</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Performances hebdo -->
+    <div class="sh-card" style="margin-bottom:1.5rem">
+      <div class="sh-card-header">
+        <div class="sh-card-title">📈 Performances — 7 derniers jours</div>
+        <span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--mid)">${perfDays.reduce((a,b)=>a+b.count,0)} qualifications</span>
+      </div>
+      <div class="sh-card-body">
+        ${perfDays.map(d => `
+          <div class="sh-perf-bar-row">
+            <div class="sh-perf-bar-label">${d.day}</div>
+            <div class="sh-perf-bar-track">
+              <div class="sh-perf-bar-fill" style="width:0%" data-target="${Math.round(d.count / maxPerf * 100)}%"></div>
+            </div>
+            <div class="sh-perf-bar-val">${d.count}</div>
+          </div>
+        `).join('')}
+        ${perfDays.every(d=>d.count===0) ? `<div style="font-size:12px;color:var(--mid);text-align:center;padding:.5rem">Pas encore de qualifications cette semaine — allez, on y va ! 💪</div>` : ''}
+      </div>
+    </div>
+
+    <!-- Mon pipeline complet -->
+    <div class="sh-card">
+      <div class="sh-card-header">
+        <div class="sh-card-title">📋 Mon Pipeline B2C complet</div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:11px;font-family:'DM Mono',monospace;color:var(--mid)">${allMyLeads.length} leads</span>
+          <button class="btn btn-sm btn-primary" onclick="shRefresh()">⟳ Actualiser</button>
+        </div>
+      </div>
+      ${allMyLeads.length === 0 ? `
+        <div class="sh-empty">
+          <div class="sh-empty-icon">📭</div>
+          <div class="sh-empty-text">Aucun lead assigné pour l'instant</div>
+        </div>
+      ` : `
+        <div style="overflow-x:auto">
+          <table class="sh-pipeline-table">
+            <thead>
+              <tr>
+                <th>Lead</th>
+                <th>Statut</th>
+                <th>Téléphone</th>
+                <th>Reçu le</th>
+                <th>Actions rapides</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${allMyLeads.map(l => `
+                <tr onclick="openPanelB2C('${l.id}')">
+                  <td>
+                    <div style="font-weight:600;font-size:13.5px">${escHtml(l.prenom||'')} ${escHtml(l.nom||'')}</div>
+                    ${l.email ? `<div style="font-size:11px;color:var(--mid)">${escHtml(l.email)}</div>` : ''}
+                  </td>
+                  <td>${badgeStatutB2C(l.statut)}</td>
+                  <td>
+                    ${l.telephone
+                      ? `<a href="tel:${escHtml(l.telephone)}" onclick="event.stopPropagation()" style="color:var(--orange);font-weight:500;font-size:12.5px">📞 ${escHtml(l.telephone)}</a>`
+                      : '<span style="color:var(--gray);font-size:12px">—</span>'
+                    }
+                  </td>
+                  <td style="font-size:12px;color:var(--mid);font-family:'DM Mono',monospace">${fmtDate(l.created_at)}</td>
+                  <td>
+                    <div style="display:flex;gap:4px" onclick="event.stopPropagation()">
+                      ${l.statut !== 'qualifie' && l.statut !== 'livre' ? `<button class="btn btn-sm" style="background:var(--green-light);color:var(--green);border-color:var(--green-border)" onclick="shQuickStatus('${l.id}','qualifie')" title="Qualifié">✅ Qualifié</button>` : ''}
+                      ${l.statut === 'nouveau' || l.statut === 'injoignable' ? `<button class="btn btn-sm btn-secondary" onclick="shQuickStatus('${l.id}','en_cours')" title="Marquer en cours">📞 En cours</button>` : ''}
+                      ${l.statut !== 'injoignable' && l.statut !== 'qualifie' && l.statut !== 'livre' ? `<button class="btn btn-sm btn-ghost" onclick="shQuickStatus('${l.id}','injoignable')" title="Injoignable">📵</button>` : ''}
+                    </div>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `}
+    </div>
+  `
+
+  // Animate bars after render
+  requestAnimationFrame(() => {
+    el.querySelectorAll('[data-target]').forEach(bar => {
+      setTimeout(() => { bar.style.width = bar.dataset.target }, 80)
+    })
+  })
+}
+
+async function shQuickStatus(leadId, newStatut) {
+  if (!db) return
+  const { error } = await db.from('leads_b2c').update({ statut: newStatut, updated_at: new Date().toISOString() }).eq('id', leadId)
+  if (error) { toast('Erreur', error.message, 'error'); return }
+  await reloadLeads()
+  renderSetterHome()
+  toast('✅ Statut mis à jour', `Lead → ${newStatut}`, 'success', 2500)
+}
+
+async function shRefresh() {
+  await reloadLeads()
+  renderSetterHome()
+  toast('⟳ Actualisé', 'Pipeline mis à jour', 'info', 2000)
 }
 
 /* ============================================================
@@ -4229,13 +4929,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Init Supabase
   initSupabase()
   setTimeout(initRealtime, 2000)
-  navigate('dashboard')
 
   // Afficher le login si personne n'est connecté
   if (!state.currentSetter) {
     showLoginOverlay()
+    navigate('dashboard')
   } else {
     updateHeaderSetter()
+    updateNavForRole()
+    // Redirige les setters vers leur espace
+    const role = state.currentSetter?.role
+    const isRestricted = role === 'setter' || role === 'closer'
+    navigate(isRestricted ? 'setter-home' : 'dashboard')
   }
 })
 </script>
