@@ -2072,6 +2072,193 @@
       .sh-kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .sh-row { grid-template-columns: 1fr; }
     }
+
+    /* ============================================================
+       QUALIFICATION FORM — Accordion interactif
+    ============================================================ */
+    .qual-score-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    .qual-score-track {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .qual-score-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width .5s ease, background .3s;
+    }
+    .qual-score-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      flex-shrink: 0;
+    }
+
+    .qual-block {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: .4rem;
+      overflow: hidden;
+      transition: border-color .15s;
+    }
+    .qual-block.done {
+      border-color: var(--green-border);
+    }
+    .qual-block-header {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .65rem .9rem;
+      cursor: pointer;
+      background: var(--cream);
+      user-select: none;
+      transition: background .12s;
+    }
+    .qual-block-header:hover { background: var(--orange-pale); }
+    .qual-block.done .qual-block-header {
+      background: var(--green-light);
+    }
+    .qual-block-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 9px;
+      background: var(--dark);
+      color: #fff;
+      border-radius: 3px;
+      padding: 2px 5px;
+      flex-shrink: 0;
+      letter-spacing: .04em;
+    }
+    .qual-block.done .qual-block-num { background: var(--green); }
+    .qual-block-title {
+      flex: 1;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .qual-block-status { font-size: 14px; flex-shrink: 0; }
+    .qual-block-arrow {
+      font-size: 10px;
+      color: var(--mid);
+      transition: transform .2s;
+      flex-shrink: 0;
+    }
+    .qual-block.open .qual-block-arrow { transform: rotate(180deg); }
+
+    .qual-block-body {
+      padding: .85rem .9rem;
+      border-top: 1px solid var(--border);
+      display: none;
+      background: white;
+    }
+    .qual-block.open .qual-block-body { display: block; }
+    .qual-block.done .qual-block-body { border-top-color: var(--green-border); }
+
+    .qual-hint {
+      font-size: 11px;
+      color: var(--mid);
+      margin-top: 2px;
+      font-style: italic;
+    }
+    .qual-rule {
+      font-size: 11px;
+      color: var(--mid);
+      margin-bottom: .6rem;
+      padding: .4rem .6rem;
+      background: var(--gray-light);
+      border-radius: 4px;
+      border-left: 2px solid var(--gray);
+      font-style: italic;
+      line-height: 1.4;
+    }
+    .qual-fields { display: flex; flex-direction: column; gap: .55rem; }
+    .qual-field-2col { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+
+    .qual-alert {
+      display: flex;
+      gap: 6px;
+      align-items: flex-start;
+      padding: .45rem .6rem;
+      border-radius: 4px;
+      font-size: 12px;
+      line-height: 1.35;
+      margin: .3rem 0;
+    }
+    .qual-alert.warn  { background: var(--gold-light);  border: 1px solid #FCD34D; color: #92400E; }
+    .qual-alert.danger{ background: var(--red-light);   border: 1px solid var(--red-border); color: var(--red); }
+    .qual-alert.ok    { background: var(--green-light); border: 1px solid var(--green-border); color: var(--green); }
+    .qual-alert.info  { background: var(--blue-light);  border: 1px solid var(--blue-border); color: var(--blue); }
+
+    .qual-radio-group { display: flex; gap: .4rem; flex-wrap: wrap; }
+    .qual-radio-btn {
+      flex: 1;
+      min-width: 80px;
+      padding: .4rem .5rem;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      text-align: center;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all .12s;
+      background: white;
+      font-family: inherit;
+    }
+    .qual-radio-btn:hover { background: var(--cream); }
+    .qual-radio-btn.sel-yes { background: var(--green-light); border-color: var(--green-border); color: var(--green); font-weight: 600; }
+    .qual-radio-btn.sel-no  { background: var(--red-light); border-color: var(--red-border); color: var(--red); font-weight: 600; }
+    .qual-radio-btn.sel-mid { background: var(--gold-light); border-color: #FCD34D; color: #92400E; font-weight: 600; }
+
+    .qual-validate-btn {
+      width: 100%;
+      padding: .6rem;
+      background: var(--dark);
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: .6rem;
+      transition: background .12s;
+      font-family: inherit;
+    }
+    .qual-validate-btn:hover:not(:disabled) { background: #2a2520; }
+    .qual-validate-btn.done {
+      background: var(--green);
+      cursor: default;
+      pointer-events: none;
+    }
+    .qual-validate-btn:disabled { opacity: .7; }
+    .qual-ecarter-btn {
+      width: 100%;
+      padding: .45rem;
+      background: transparent;
+      color: var(--red);
+      border: 1px solid var(--red-border);
+      border-radius: 5px;
+      font-size: 11.5px;
+      cursor: pointer;
+      margin-top: .3rem;
+      font-family: inherit;
+      transition: background .12s;
+    }
+    .qual-ecarter-btn:hover { background: var(--red-light); }
+
+    .qual-form-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--mid);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 3px;
+      font-family: 'DM Mono', monospace;
+    }
   </style>
 </head>
 <body>
@@ -3856,6 +4043,241 @@ async function renderPanelB2C(lead) {
     { key: 'crit_decision_proche', label: "Pas encore signé ailleurs", desc: 'Ne compare pas encore' },
   ]
 
+  // Parse qualification data (qual_data column as JSON)
+  let qd = {}
+  try { if (lead.qual_data) qd = JSON.parse(lead.qual_data) } catch(e) {}
+  const qi   = qd.identite  || {}
+  const qb   = qd.besoin    || {}
+  const qdec = qd.decideur  || {}
+  const qbu  = qd.budget    || {}
+  const qdel = qd.delai     || {}
+  const qde2 = qd.decision  || {}
+
+  const lid = lead.id
+
+  // Helper for radio selection display
+  const qRad = (section, key, val) => {
+    const cur = (section === 'identite' ? qi : section === 'besoin' ? qb : section === 'decideur' ? qdec : section === 'budget' ? qbu : section === 'delai' ? qdel : qde2)[key]
+    if (cur === val) return val === 'oui' ? 'sel-yes' : val === 'non' ? 'sel-no' : 'sel-mid'
+    return ''
+  }
+
+  const delaiVal = qdel.option || lead.delai_projet || ''
+  const delaiTropLong = delaiVal === '>6mois' || delaiVal === 'indetermine'
+
+  const qualAccordion = `
+    <!-- 1. IDENTITÉ -->
+    <div class="qual-block ${lead.crit_identite ? 'done' : ''}" id="qb1-${lid}">
+      <div class="qual-block-header" onclick="qToggle('qb1-${lid}')">
+        <span class="qual-block-num">01</span>
+        <span class="qual-block-title">Identité vérifiée</span>
+        <span class="qual-block-status">${lead.crit_identite ? '✅' : '☐'}</span>
+        <span class="qual-block-arrow">▼</span>
+      </div>
+      <div class="qual-block-body">
+        <div class="qual-rule">Nom, prénom, numéro confirmés par appel direct · Messagerie après 2 tentatives → lead écarté</div>
+        <div class="qual-fields">
+          <div class="qual-field-2col">
+            <div><div class="qual-form-label">Prénom</div><input class="input" placeholder="Jean" value="${escHtml(qi.prenom || '')}" onblur="qSave('${lid}','identite.prenom',this.value)" /></div>
+            <div><div class="qual-form-label">Nom de famille</div><input class="input" placeholder="Dupont" value="${escHtml(qi.nom || '')}" onblur="qSave('${lid}','identite.nom',this.value)" /></div>
+          </div>
+          <div><div class="qual-form-label">Téléphone (confirmé)</div><input class="input" placeholder="+33 6 XX XX XX XX" value="${escHtml(qi.tel || lead.telephone || '')}" onblur="qSave('${lid}','identite.tel',this.value,'telephone')" /></div>
+          <div style="display:flex;align-items:center;gap:.5rem;padding:.45rem .6rem;background:var(--cream);border-radius:4px;cursor:pointer" onclick="qToggleCheck('${lid}','identite.tel_confirme')">
+            <input type="checkbox" id="telc-${lid}" ${qi.tel_confirme ? 'checked' : ''} onclick="event.stopPropagation();qSave('${lid}','identite.tel_confirme',this.checked)" style="width:15px;height:15px;accent-color:var(--green);cursor:pointer" />
+            <label for="telc-${lid}" style="font-size:12.5px;cursor:pointer;user-select:none">📞 Numéro confirmé par appel direct</label>
+          </div>
+          ${(lead.nb_tentatives_appel||0) >= 2 ? `
+            <div class="qual-alert warn">⚠️ <div><strong>${lead.nb_tentatives_appel} tentatives</strong> sans réponse — envisager d'écarter ce lead</div></div>
+            <button class="qual-ecarter-btn" onclick="qEcarter('${lid}','Messagerie vocale après ${lead.nb_tentatives_appel} tentatives')">❌ Écarter — Messagerie vocale</button>
+          ` : ''}
+        </div>
+        ${lead.crit_identite
+          ? `<button class="qual-validate-btn done" disabled>✅ Identité déjà vérifiée</button>`
+          : `<button class="qual-validate-btn" onclick="qValidate('${lid}','crit_identite')">✓ Valider l'identité</button>`}
+      </div>
+    </div>
+
+    <!-- 2. BESOIN TECHNIQUE -->
+    <div class="qual-block ${lead.crit_besoin ? 'done' : ''}" id="qb2-${lid}">
+      <div class="qual-block-header" onclick="qToggle('qb2-${lid}')">
+        <span class="qual-block-num">02</span>
+        <span class="qual-block-title">Besoin technique</span>
+        <span class="qual-block-status">${lead.crit_besoin ? '✅' : '☐'}</span>
+        <span class="qual-block-arrow">▼</span>
+      </div>
+      <div class="qual-block-body">
+        <div class="qual-rule">Type de travaux précis, surface, logement · Vague ou flou → creuser ou écarter</div>
+        <div class="qual-fields">
+          <div><div class="qual-form-label">Type de travaux</div>
+            <select class="select" onchange="qSave('${lid}','besoin.type_travaux',this.value,'type_travaux')">
+              <option value="">— Sélectionner —</option>
+              ${Object.entries(SECTEUR_LABELS).map(([k,v]) => `<option value="${k}" ${(lead.type_travaux||qb.type_travaux)===k?'selected':''}>${escHtml(v)}</option>`).join('')}
+            </select>
+          </div>
+          <div><div class="qual-form-label">Description précise des travaux</div>
+            <textarea class="textarea" rows="2" placeholder="Ex : pose 6 panneaux solaires 400Wc, toiture sud, pente 30°…" onblur="qSave('${lid}','besoin.description',this.value)">${escHtml(qb.description||'')}</textarea>
+          </div>
+          <div class="qual-field-2col">
+            <div><div class="qual-form-label">Surface approx. (m²)</div><input class="input" type="number" min="0" placeholder="120" value="${escHtml(String(qb.surface_m2 || lead.surface_m2 || ''))}" onblur="qSave('${lid}','besoin.surface_m2',this.value,'surface_m2')" /></div>
+            <div><div class="qual-form-label">Année de construction</div><input class="input" placeholder="Ex : 1985" value="${escHtml(qb.annee_construction||'')}" onblur="qSave('${lid}','besoin.annee_construction',this.value)" /></div>
+          </div>
+          <div><div class="qual-form-label">Type de logement</div>
+            <select class="select" onchange="qSave('${lid}','besoin.type_logement',this.value,'type_logement')">
+              <option value="">— Type —</option>
+              <option value="maison" ${(lead.type_logement||qb.type_logement)==='maison'?'selected':''}>🏠 Maison individuelle</option>
+              <option value="maison_mitoy" ${(lead.type_logement||qb.type_logement)==='maison_mitoy'?'selected':''}>🏘️ Maison mitoyenne</option>
+              <option value="appartement" ${(lead.type_logement||qb.type_logement)==='appartement'?'selected':''}>🏢 Appartement</option>
+              <option value="autre" ${(lead.type_logement||qb.type_logement)==='autre'?'selected':''}>Autre</option>
+            </select>
+          </div>
+        </div>
+        ${lead.crit_besoin
+          ? `<button class="qual-validate-btn done" disabled>✅ Besoin technique confirmé</button>`
+          : `<button class="qual-validate-btn" onclick="qValidate('${lid}','crit_besoin')">✓ Valider le besoin technique</button>`}
+      </div>
+    </div>
+
+    <!-- 3. DÉCIDEUR -->
+    <div class="qual-block ${lead.crit_decideur ? 'done' : ''}" id="qb3-${lid}">
+      <div class="qual-block-header" onclick="qToggle('qb3-${lid}')">
+        <span class="qual-block-num">03</span>
+        <span class="qual-block-title">Décideur propriétaire</span>
+        <span class="qual-block-status">${lead.crit_decideur ? '✅' : '☐'}</span>
+        <span class="qual-block-arrow">▼</span>
+      </div>
+      <div class="qual-block-body">
+        <div class="qual-rule">Propriétaire du bien ET décisionnaire · Locataire sans accord proprio → écarté · "Pour ma femme" → qualifier ensemble</div>
+        <div class="qual-fields">
+          <div>
+            <div class="qual-form-label" style="margin-bottom:5px">Propriétaire du bien ?</div>
+            <div class="qual-radio-group">
+              <button class="qual-radio-btn ${qRad('decideur','proprietaire','oui')}" onclick="qRadio('${lid}','decideur.proprietaire','oui')">✅ Oui</button>
+              <button class="qual-radio-btn ${qRad('decideur','proprietaire','non')}" onclick="qRadio('${lid}','decideur.proprietaire','non')">❌ Non (locataire)</button>
+            </div>
+            ${qdec.proprietaire === 'non' ? `
+              <div class="qual-alert danger" style="margin-top:.4rem">🚫 <div><strong>Locataire sans accord du propriétaire</strong> → lead écarté</div></div>
+              <button class="qual-ecarter-btn" onclick="qEcarter('${lid}','Locataire — non propriétaire')">❌ Écarter — Locataire</button>
+            ` : ''}
+          </div>
+          <div>
+            <div class="qual-form-label" style="margin-bottom:5px">Décisionnaire du devis ?</div>
+            <div class="qual-radio-group">
+              <button class="qual-radio-btn ${qRad('decideur','decideur','oui')}" onclick="qRadio('${lid}','decideur.decideur','oui')">✅ Seul</button>
+              <button class="qual-radio-btn ${qRad('decideur','decideur','conjoint')}" onclick="qRadio('${lid}','decideur.decideur','conjoint')">👫 Avec conjoint</button>
+              <button class="qual-radio-btn ${qRad('decideur','decideur','non')}" onclick="qRadio('${lid}','decideur.decideur','non')">❌ Non</button>
+            </div>
+            ${qdec.decideur === 'conjoint' ? `<div class="qual-alert warn" style="margin-top:.4rem">⚠️ <div>"C'est pour ma femme" → qualifier les deux décideurs ensemble — noter les deux noms</div></div>` : ''}
+          </div>
+          <div><div class="qual-form-label">Note complémentaire</div><input class="input" placeholder="Remarque sur la situation du décideur…" value="${escHtml(qdec.note||'')}" onblur="qSave('${lid}','decideur.note',this.value)" /></div>
+        </div>
+        ${lead.crit_decideur
+          ? `<button class="qual-validate-btn done" disabled>✅ Décideur confirmé</button>`
+          : `<button class="qual-validate-btn" onclick="qValidate('${lid}','crit_decideur')">✓ Valider — Décideur propriétaire</button>`}
+      </div>
+    </div>
+
+    <!-- 4. BUDGET -->
+    <div class="qual-block ${lead.crit_budget ? 'done' : ''}" id="qb4-${lid}">
+      <div class="qual-block-header" onclick="qToggle('qb4-${lid}')">
+        <span class="qual-block-num">04</span>
+        <span class="qual-block-title">Budget confirmé</span>
+        <span class="qual-block-status">${lead.crit_budget ? '✅' : '☐'}</span>
+        <span class="qual-block-arrow">▼</span>
+      </div>
+      <div class="qual-block-body">
+        <div class="qual-rule">Fourchette validée verbalement · "Je sais pas" → creuser : "vous pensez plutôt 500€ ou 5 000€ ?" · Budget insuffisant → écarté</div>
+        <div class="qual-fields">
+          <div><div class="qual-form-label">Fourchette budget validée verbalement</div>
+            <input class="input" placeholder="Ex : 8 000 – 12 000 €" value="${escHtml(qbu.fourchette || lead.budget_estime || '')}" onblur="qSave('${lid}','budget.fourchette',this.value,'budget_estime')" />
+            <div class="qual-hint">Obtenue et confirmée pendant l'appel</div>
+          </div>
+          <div><div class="qual-form-label">Commentaire budget</div>
+            <input class="input" placeholder="MaPrimeRénov, TVA réduite, financement envisagé…" value="${escHtml(qbu.note||'')}" onblur="qSave('${lid}','budget.note',this.value)" />
+          </div>
+          <div class="qual-alert info">💡 <div>Technique : <em>"Vous pensez plutôt 500€ ou plutôt 5 000€ ?"</em> pour débloquer un budget flou</div></div>
+        </div>
+        ${lead.crit_budget
+          ? `<button class="qual-validate-btn done" disabled>✅ Budget confirmé</button>`
+          : `<button class="qual-validate-btn" onclick="qValidate('${lid}','crit_budget')">✓ Valider le budget</button>`}
+        <button class="qual-ecarter-btn" onclick="qEcarter('${lid}','Budget clairement insuffisant')">❌ Écarter — Budget insuffisant</button>
+      </div>
+    </div>
+
+    <!-- 5. DÉLAI -->
+    <div class="qual-block ${lead.crit_delai ? 'done' : ''}" id="qb5-${lid}">
+      <div class="qual-block-header" onclick="qToggle('qb5-${lid}')">
+        <span class="qual-block-num">05</span>
+        <span class="qual-block-title">Délai &lt; 90 jours</span>
+        <span class="qual-block-status">${lead.crit_delai ? '✅' : '☐'}</span>
+        <span class="qual-block-arrow">▼</span>
+      </div>
+      <div class="qual-block-body">
+        <div class="qual-rule">Projet dans les 90 jours maximum · "Dans 2 ans" → non livré, non facturé</div>
+        <div class="qual-fields">
+          <div><div class="qual-form-label">Délai envisagé pour le projet</div>
+            <select class="select" onchange="qHandleDelai('${lid}',this.value)">
+              <option value="">— Sélectionner —</option>
+              <option value="<1mois"     ${ delaiVal === '<1mois'     ?'selected':''}>🟢 Moins d'1 mois</option>
+              <option value="1-3mois"    ${ delaiVal === '1-3mois'    ?'selected':''}>🟢 1 à 3 mois</option>
+              <option value="3-6mois"    ${ delaiVal === '3-6mois'    ?'selected':''}>🟡 3 à 6 mois (limite)</option>
+              <option value=">6mois"     ${ delaiVal === '>6mois'     ?'selected':''}>🔴 Plus de 6 mois</option>
+              <option value="indetermine"${ delaiVal === 'indetermine' ?'selected':''}>⚫ Indéterminé</option>
+            </select>
+          </div>
+          ${delaiTropLong ? `
+            <div class="qual-alert danger">🚫 <div><strong>Délai > 90 jours</strong> — non livré, non facturé · Envisager d'écarter</div></div>
+            <button class="qual-ecarter-btn" onclick="qEcarter('${lid}','Délai > 90 jours — projet trop lointain')">❌ Écarter — Délai trop long</button>
+          ` : ''}
+          <div><div class="qual-form-label">Date de début envisagée</div>
+            <input class="input" type="date" value="${escHtml(qdel.date_debut||'')}" onblur="qSave('${lid}','delai.date_debut',this.value)" />
+          </div>
+          <div><div class="qual-form-label">Note délai</div>
+            <input class="input" placeholder="Contraintes particulières, travaux en attente de devis…" value="${escHtml(qdel.note||'')}" onblur="qSave('${lid}','delai.note',this.value)" />
+          </div>
+        </div>
+        ${lead.crit_delai
+          ? `<button class="qual-validate-btn done" disabled>✅ Délai confirmé</button>`
+          : `<button class="qual-validate-btn" onclick="qValidate('${lid}','crit_delai')">✓ Valider le délai</button>`}
+      </div>
+    </div>
+
+    <!-- 6. DÉCISION -->
+    <div class="qual-block ${lead.crit_decision_proche ? 'done' : ''}" id="qb6-${lid}">
+      <div class="qual-block-header" onclick="qToggle('qb6-${lid}')">
+        <span class="qual-block-num">06</span>
+        <span class="qual-block-title">Pas encore signé ailleurs</span>
+        <span class="qual-block-status">${lead.crit_decision_proche ? '✅' : '☐'}</span>
+        <span class="qual-block-arrow">▼</span>
+      </div>
+      <div class="qual-block-body">
+        <div class="qual-rule">A déjà signé → écarté · Encore en recherche → lead qualifié ✅</div>
+        <div class="qual-fields">
+          <div>
+            <div class="qual-form-label" style="margin-bottom:5px">A déjà signé avec un concurrent ?</div>
+            <div class="qual-radio-group">
+              <button class="qual-radio-btn ${qRad('decision','a_signe','oui')}" onclick="qRadio('${lid}','decision.a_signe','oui')">❌ Oui → Écarté</button>
+              <button class="qual-radio-btn ${qRad('decision','a_signe','non')}" onclick="qRadio('${lid}','decision.a_signe','non')">✅ Non — Encore en recherche</button>
+            </div>
+            ${qde2.a_signe === 'oui' ? `
+              <div class="qual-alert danger" style="margin-top:.4rem">🚫 <div><strong>A déjà signé</strong> avec un concurrent → lead écarté</div></div>
+              <button class="qual-ecarter-btn" onclick="qEcarter('${lid}','A déjà signé avec un concurrent')">❌ Écarter — Déjà signé</button>
+            ` : ''}
+            ${qde2.a_signe === 'non' ? `<div class="qual-alert ok" style="margin-top:.4rem">✅ <div>Encore en recherche → <strong>lead qualifié !</strong></div></div>` : ''}
+          </div>
+          <div><div class="qual-form-label">Concurrents mentionnés</div>
+            <input class="input" placeholder="Ex : Engie, Total Energies, artisan local…" value="${escHtml(qde2.concurrents||'')}" onblur="qSave('${lid}','decision.concurrents',this.value)" />
+          </div>
+          <div><div class="qual-form-label">Note décision</div>
+            <input class="input" placeholder="Compare encore combien de devis, attentes particulières…" value="${escHtml(qde2.note||'')}" onblur="qSave('${lid}','decision.note',this.value)" />
+          </div>
+        </div>
+        ${lead.crit_decision_proche
+          ? `<button class="qual-validate-btn done" disabled>✅ Décision validée</button>`
+          : `<button class="qual-validate-btn" onclick="qValidate('${lid}','crit_decision_proche')">✓ Valider — Pas encore signé</button>`}
+      </div>
+    </div>
+  `
+
   body.innerHTML = `
     <!-- Coordonnées -->
     <div style="margin-bottom:1rem">
@@ -3867,30 +4289,14 @@ async function renderPanelB2C(lead) {
     </div>
     <div class="divider"></div>
 
-    <!-- Score -->
+    <!-- Qualification Form -->
     <div style="margin-bottom:1rem">
       <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--mid);margin-bottom:.5rem">QUALIFICATION — Score ${score}/6</div>
-      <div class="score-bar mb-1">
-        <div class="score-bar-track"><div class="score-bar-fill" style="width:${score/6*100}%;background:${scoreColor(score,6)}"></div></div>
-        <span class="score-bar-label" style="color:${scoreColor(score,6)}">${Math.round(score/6*100)}%</span>
+      <div class="qual-score-bar mb-1">
+        <div class="qual-score-track"><div class="qual-score-fill" style="width:${score/6*100}%;background:${scoreColor(score,6)}"></div></div>
+        <span class="qual-score-label" style="color:${scoreColor(score,6)}">${score}/6</span>
       </div>
-      <div class="crit-grid">
-        ${criteres.map(c => `
-          <div class="crit-item ${lead[c.key] ? 'checked' : ''}" onclick="toggleCritere('${lead.id}','${c.key}',${!lead[c.key]})">
-            <span class="crit-icon">${lead[c.key] ? '✅' : '☐'}</span>
-            <div class="crit-label">
-              <div>${c.label}</div>
-              <div style="font-size:11px;color:var(--mid);font-weight:400;margin-top:1px">${c.desc}</div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-      ${score >= 4 ? `
-        <div class="mt-1">
-          <div class="form-group mb-1"><label class="form-label">Budget estimé</label><input class="input" value="${escHtml(lead.budget_estime||'')}" placeholder="8000-12000€" onblur="updateLeadField('${lead.id}','budget_estime',this.value)" /></div>
-          <div class="form-group"><label class="form-label">Délai projet</label><input class="input" value="${escHtml(lead.delai_projet||'')}" placeholder="< 2 mois" onblur="updateLeadField('${lead.id}','delai_projet',this.value)" /></div>
-        </div>
-      ` : ''}
+      ${qualAccordion}
     </div>
 
     <!-- Livraison si qualifié -->
@@ -3965,6 +4371,138 @@ async function toggleCritere(leadId, critere, valeur) {
     const l = state.leads.find(x => x.id === leadId)
     if (l) { state.activeLead = l; renderPanelB2C(l) }
   }
+}
+
+/* ============================================================
+   QUALIFICATION FORM — Fonctions interactives
+============================================================ */
+
+// Toggle accordion section
+function qToggle(id) {
+  const el = document.getElementById(id)
+  if (!el) return
+  el.classList.toggle('open')
+}
+
+// Toggle checkbox + save
+function qToggleCheck(leadId, key) {
+  const parts = key.split('.')
+  const lead = state.leads.find(l => l.id === leadId)
+  let qd = {}
+  try { if (lead?.qual_data) qd = JSON.parse(lead.qual_data) } catch(e) {}
+  let target = qd
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!target[parts[i]]) target[parts[i]] = {}
+    target = target[parts[i]]
+  }
+  target[parts[parts.length-1]] = !target[parts[parts.length-1]]
+  qSave(leadId, key, target[parts[parts.length-1]])
+}
+
+// Save a field to qual_data (JSON) + optionally a direct column
+async function qSave(leadId, key, value, directCol = null) {
+  if (!db) return
+  const lead = state.leads.find(l => l.id === leadId)
+  let qd = {}
+  try { if (lead?.qual_data) qd = JSON.parse(lead.qual_data) } catch(e) {}
+  // Set nested key via dot notation
+  const parts = key.split('.')
+  let target = qd
+  for (let i = 0; i < parts.length - 1; i++) {
+    if (!target[parts[i]]) target[parts[i]] = {}
+    target = target[parts[i]]
+  }
+  target[parts[parts.length-1]] = value
+
+  // Optimistic local update
+  if (lead) {
+    lead.qual_data = JSON.stringify(qd)
+    if (directCol) lead[directCol] = value || null
+  }
+
+  // Save to Supabase — try qual_data + direct col together
+  const updates = { qual_data: JSON.stringify(qd) }
+  if (directCol) updates[directCol] = value || null
+  const { error } = await db.from('leads_b2c').update(updates).eq('id', leadId)
+  if (error) {
+    // qual_data column may not exist yet — save direct col only
+    if (directCol) await db.from('leads_b2c').update({ [directCol]: value || null }).eq('id', leadId)
+    // Show migration hint once
+    if (error.message?.includes('qual_data') && !window._qualDataHintShown) {
+      window._qualDataHintShown = true
+      toast('💡 Conseil', 'Ajoutez la colonne qual_data (text) à leads_b2c dans Supabase pour persister les données de qualification', 'info', 8000)
+    }
+  }
+}
+
+// Handle radio selection — updates UI + saves
+function qRadio(leadId, key, value) {
+  // Save
+  qSave(leadId, key, value)
+  // Update local state immediately for UI refresh
+  const lead = state.leads.find(l => l.id === leadId)
+  if (lead) {
+    let qd = {}
+    try { if (lead.qual_data) qd = JSON.parse(lead.qual_data) } catch(e) {}
+    const parts = key.split('.')
+    let target = qd
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (!target[parts[i]]) target[parts[i]] = {}
+      target = target[parts[i]]
+    }
+    target[parts[parts.length-1]] = value
+    lead.qual_data = JSON.stringify(qd)
+  }
+  // Re-render just the panel
+  if (lead) { state.activeLead = lead; renderPanelB2C(lead) }
+}
+
+// Handle délai selection — saves + re-renders to show/hide warning
+function qHandleDelai(leadId, value) {
+  qSave(leadId, 'delai.option', value, 'delai_projet')
+  const lead = state.leads.find(l => l.id === leadId)
+  if (lead) {
+    let qd = {}
+    try { if (lead.qual_data) qd = JSON.parse(lead.qual_data) } catch(e) {}
+    if (!qd.delai) qd.delai = {}
+    qd.delai.option = value
+    lead.qual_data = JSON.stringify(qd)
+    lead.delai_projet = value
+    state.activeLead = lead
+    renderPanelB2C(lead)
+  }
+}
+
+// Validate a criterion — set boolean true + auto-calc score + update statut
+async function qValidate(leadId, critKey) {
+  if (!db) return
+  const CRIT_KEYS = ['crit_identite','crit_besoin','crit_decideur','crit_budget','crit_delai','crit_decision_proche']
+  const lead = state.leads.find(l => l.id === leadId)
+  const newScore = CRIT_KEYS.map(k => k === critKey ? true : (lead?.[k] || false)).filter(Boolean).length
+  const statut = newScore === 6 ? 'qualifie' : newScore >= 4 ? 'partiellement_qualifie' : newScore > 0 ? 'en_cours' : 'nouveau'
+  await db.from('leads_b2c').update({ [critKey]: true, statut, updated_at: new Date().toISOString() }).eq('id', leadId)
+  await log('lead_b2c', leadId, `✅ Critère validé: ${critKey}`, `Score: ${newScore}/6`)
+  await reloadLeads(); updateBadges()
+  if (state.view === 'b2c') renderB2C()
+  if (state.view === 'setter-home') renderSetterHome()
+  const l = state.leads.find(x => x.id === leadId)
+  if (l) { state.activeLead = l; renderPanelB2C(l) }
+  toast(`✅ Critère validé !`, `Score : ${newScore}/6`, 'success')
+}
+
+// Écarter un lead — statut non_qualifie + note automatique
+async function qEcarter(leadId, reason) {
+  if (!db) return
+  if (!confirm(`Écarter ce lead ?\nRaison : ${reason}`)) return
+  await db.from('leads_b2c').update({ statut: 'non_qualifie', updated_at: new Date().toISOString() }).eq('id', leadId)
+  await db.from('notes').insert({ type_cible: 'lead_b2c', cible_id: leadId, contenu: `❌ Lead écarté — ${reason}` })
+  await log('lead_b2c', leadId, `❌ Lead écarté`, reason)
+  await reloadLeads(); updateBadges()
+  if (state.view === 'b2c') renderB2C()
+  if (state.view === 'setter-home') renderSetterHome()
+  const l = state.leads.find(x => x.id === leadId)
+  if (l) { state.activeLead = l; renderPanelB2C(l) }
+  toast('❌ Lead écarté', reason, 'error', 5000)
 }
 
 async function updateLeadStatut(id, statut) {
@@ -4592,7 +5130,17 @@ ALTER TABLE clients ADD COLUMN IF NOT EXISTS score_interet INTEGER DEFAULT 0;
 
 -- Colonne statut de contact côté espace client
 ALTER TABLE leads_b2c ADD COLUMN IF NOT EXISTS statut_contact TEXT DEFAULT 'a_appeler'
-  CHECK (statut_contact IN ('a_appeler','appele','devis_envoye','signe','perdu'));</pre>
+  CHECK (statut_contact IN ('a_appeler','appele','devis_envoye','signe','perdu'));
+
+-- 🔑 Formulaire de qualification interactif (données détaillées par critère)
+ALTER TABLE leads_b2c ADD COLUMN IF NOT EXISTS qual_data TEXT;
+-- qual_data stocke un objet JSON avec les réponses détaillées du setter :
+-- identite  → { prenom, nom, tel, tel_confirme }
+-- besoin    → { type_travaux, description, surface_m2, annee_construction, type_logement }
+-- decideur  → { proprietaire, decideur, note }
+-- budget    → { fourchette, note }
+-- delai     → { option, date_debut, note }
+-- decision  → { a_signe, concurrents, note }</pre>
         <button class="btn btn-secondary btn-sm mt-1" onclick="copyCode('sql-migration')">📋 Copier le SQL</button>
       </div>
     </div>
